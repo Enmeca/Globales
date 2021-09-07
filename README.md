@@ -1,0 +1,2 @@
+# Globales
+Respositorio Aplicaciones Globales
