@@ -41,7 +41,7 @@ center {
   margin-left: 10vw;
 }
 p {
-  font-size: 22px;
+  font-size: 20px;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);

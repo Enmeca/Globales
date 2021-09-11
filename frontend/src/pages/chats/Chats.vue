@@ -23,14 +23,12 @@ export default {};
 <style scoped>
 center {
   margin: 5vw;
-  margin-right: 10vw;
-  margin-left: 10vw;
-}
-p {
-  font-size: 22px;
+  margin-inline: 15vw;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
-  min-height: 30vw;
+}
+p {
+  font-size: 20px;
 }
 </style>

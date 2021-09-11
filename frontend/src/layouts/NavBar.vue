@@ -6,11 +6,11 @@
     class="bg-navbar container-fluid p-0"
     sticky
   >
-    <b-navbar-brand class="ml-3 mr-3">
-      <h4>
+    <b-navbar-brand class="ml-3 mr-3" href="/home">
+      <div class="display-4">
         UFriends
         <b-icon-people-fill />
-      </h4>
+      </div>
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse">
       <template #default="{ expanded }">
@@ -91,4 +91,7 @@ export default {
 
 
 <style scoped>
+.display-4 {
+  font-size: 1.5em;
+}
 </style>

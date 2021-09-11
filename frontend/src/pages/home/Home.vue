@@ -2,7 +2,7 @@
   <div id="home-page">
     <center>
       <b-card class="main-card text-light">
-        <b-card-title class="h2">
+        <b-card-title class="display-4">
           UFriends
           <b-icon-people-fill />
         </b-card-title>
@@ -16,8 +16,8 @@
               a los tuyos
             </p>
             <p>
-              Nuestros mentores y tutores podrán ayudarte con asignaciones de
-              los cursos
+              Nuestros mentores y tutores podrán ayudarte con las asignaciones
+              de los cursos
             </p>
             <p>
               Podrás participar y crear foros de discusión, inclusive de forma
@@ -37,14 +37,15 @@ export default {};
 <style scoped>
 center {
   margin: 5vw;
-  margin-right: 10vw;
-  margin-left: 10vw;
-}
-p {
-  font-size: 22px;
+  margin-inline: 15vw;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
-  min-height: 30vw;
+}
+p {
+  font-size: 20px;
+}
+.display-4 {
+  font-size: 2.4em;
 }
 </style>

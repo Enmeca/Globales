@@ -22,11 +22,9 @@ export default {};
 <style scoped>
 center {
   margin: 5vw;
-  margin-right: 10vw;
-  margin-left: 10vw;
+  margin-inline: 15vw;
 }
 .card-opacity {
   background-color: rgba(255, 0, 0, 0.3);
-  min-height: 30vw;
 }
 </style>
