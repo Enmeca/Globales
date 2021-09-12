@@ -12,6 +12,7 @@ drop table TUTOR_REVIEWS cascade constraints;
 drop table FORUM_TOPICS cascade constraints;
 drop table FORUM_COMMENTS cascade constraints;
 drop table COMMENT_REPORTS cascade constraints;
+drop table USER_PHOTOS cascade constraints;
 drop table USERS cascade constraints;
 
 --=================================================
@@ -49,10 +50,13 @@ create table USERS(ID varchar2(20) not null,
 				LAST_NAME_1 varchar2(25) not null, 
 				LAST_NAME_2 varchar2(25) not null, 
 				DATE_OF_BIRTH date not null,
-				PROFILE_PIC blob, 
 				DESCRIPTION varchar2(200),
 				IS_TUTOR number(1) not null,
 				IS_ADMIN number(1) not null) tablespace system;
+				
+				
+create table USER_PHOTOS(USER_UID varchar2(20) not null, 
+					PROFILE_PIC blob) tablespace system;
 				
 				
 create table TUTOR_REVIEWS(USER_UID varchar2(20) not null,
@@ -107,6 +111,8 @@ alter table TAGS add constraint TAGS_PK primary key(NAME) using index tablespace
 
 alter table USERS add constraint USERS_PK primary key(ID) using index tablespace system;
 
+alter table USER_PHOTOS add constraint USERS_PHOTOS_PK primary key(USER_UID) using index tablespace system;
+
 alter table TUTOR_REVIEWS add constraint TUTOR_REVIEWS_PK primary key(USER_UID,TUTOR_ID) using index tablespace system;
 
 alter table USER_TAGS add constraint USER_TAGS_PK primary key(USER_UID,TAG_ID) using index tablespace system;
@@ -124,6 +130,8 @@ alter table COMMENT_REPORTS add constraint COMMENT_REPORTS_PK primary key(COMMEN
 
 alter table USERS add constraint CAREER_FK foreign key (CAREER_ID) references CAREERS;
 alter table USERS add constraint UNIVERSITY_FK foreign key (UNIVERSITY_ID) references UNIVERSITIES;
+
+alter table USER_PHOTOS add constraint USERS_PHOTOS_FK foreign key (USER_UID) references USERS;
 
 alter table TUTOR_REVIEWS add constraint REVIEWS_USER_FK foreign key (USER_UID) references USERS;
 alter table TUTOR_REVIEWS add constraint REVIEWS_TUTOR_FK foreign key (TUTOR_ID) references USERS;
@@ -171,10 +179,10 @@ insert into TAGS values ('Futbol');
 insert into TAGS values ('Basketbol');
 -- Hay que meter un montón de tags despues
 				
-insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Javier','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),null,
+insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Javier','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Estudiante de Ingenieria de Sistemas en la UNA. Actualmente en el ultimo semestre', 0, 1);
 				
-insert into USERS values ('615283905','ADM','TEC','javo64@gmail','123','Alberto','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),null,
+insert into USERS values ('615283905','ADM','TEC','javo64@gmail','123','Alberto','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Deprecado', 0, 0);
 				
 
