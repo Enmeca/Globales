@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>198</y>
+      <w>189</w>
+      <h>225</h>
+    </coordinates>
+    <panel_attributes>Usuario
+--
+-Id (Cédula): String / PK
+-Nombre: String
+-Apellido 1: String
+-Apellido 2: String
+-Fecha de Nacimiento: Date
+-Correo: String
+- Password: String
+-Carrera: String / FK
+-Universidad: String / FK
+-Descripcion: String
+-Tutor: Boolean
+-Administrador: Boolean
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>936</x>
+      <y>36</y>
+      <w>189</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Admin puede ser
+otra entidad en vez
+de user..
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>945</x>
+      <y>216</y>
+      <w>189</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>Tags
+--
+-Nombre: String / PK
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>675</x>
+      <y>198</y>
+      <w>189</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Tags de Usuario
+--
+-Usuario: String / PK / FK
+-Tag: String / PK / FK
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>216</y>
+      <w>135</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>855</x>
+      <y>216</y>
+      <w>108</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>675</x>
+      <y>315</y>
+      <w>198</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Tema de Foro
+--
+-Id: Int / PK
+-Autor: String / FK
+-Titulo: String
+-Descripción: String
+-Fecha de creación: Date (Time)
+-Anon Mode: Boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>342</y>
+      <w>135</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>130.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>675</x>
+      <y>504</y>
+      <w>198</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Comentario de Foro
+--
+-Id: Int / PK
+-IdForo: Int / FK
+-Autor: String / FK
+-Comentario: String
+-Fecha de creación: Date (Time)
+-Anon Mode: Boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>423</y>
+      <w>45</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>477</x>
+      <y>414</y>
+      <w>216</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>220.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>9</y>
+      <w>189</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>Universidad
+--
+-Id: String / PK
+-Nombre: String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>459</x>
+      <y>54</y>
+      <w>45</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>63</x>
+      <y>180</y>
+      <w>189</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>Carrera
+--
+-Id: String / PK
+-Nombre: String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>243</x>
+      <y>189</y>
+      <w>153</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>150.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>351</x>
+      <y>504</y>
+      <w>225</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Reporte de Comentario
+--
+-Comentario: Int / PK / FK
+-UsuarioQueReporta: String / PK / FK
+-Motivo: String
+-Fecha de reporte: Date (Time)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>423</x>
+      <y>414</y>
+      <w>45</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>567</x>
+      <y>549</y>
+      <w>126</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>72</x>
+      <y>288</y>
+      <w>171</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>LikedUsers
+--
+-User: String / FK / PK
+-UserLiked: String / FK / PK</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>72</x>
+      <y>396</y>
+      <w>171</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>MatchedUsers / Chats
+--
+-User: String / PK / FK
+-UserMatched: String / PK / FK
+-Day of Match: Date
+-IsActive: Boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>234</x>
+      <y>288</y>
+      <w>162</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>
+m1=2
+m2=0..n</panel_attributes>
+    <additional_attributes>160.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>234</x>
+      <y>414</y>
+      <w>162</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>
+m1=2
+m2=0..n</panel_attributes>
+    <additional_attributes>160.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>63</x>
+      <y>576</y>
+      <w>198</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>ChatMessages
+--
+-UID: Int / PK
+-Chat: Int / FK a MatchedUsers
+-User: String / FK
+-Message: String
+-TimeSent: Date (Time)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>144</x>
+      <y>486</y>
+      <w>45</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>
+m1=1
+m2=0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>675</x>
+      <y>72</y>
+      <w>189</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>TutorReviews
+--
+-User: String / FK / PK
+-Tutor: String / FK / PK
+-Score: Float
+-Comment: String (Optional)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>153</y>
+      <w>135</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>
+m1=0..n
+m2=2</panel_attributes>
+    <additional_attributes>130.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>153</x>
+      <y>9</y>
+      <w>189</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>FotoUsuario
+--
+-UserId: String / PK / FK
+-Foto: Blob
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>333</x>
+      <y>54</y>
+      <w>63</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>50.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
