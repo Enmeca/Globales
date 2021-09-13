@@ -39,7 +39,7 @@ public class UserController {
         return service.getUser(id);
     }
 
-    @GetMapping(path = "/All")
+    @GetMapping(path = "/AllTutors")
     public List<User> findAllTutors() {
         return service.getAllTutors();
     }
