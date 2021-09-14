@@ -22,28 +22,28 @@
     <!-- Opciones de rutas -->
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto h5">
-        <b-nav-item class="mr-3" href="/home" title="Pagina principal">
+        <b-nav-item class="mr-3" href="#/home" title="Pagina principal">
           <b-icon-house-fill />
         </b-nav-item>
-        <b-nav-item class="mr-3" href="/login" title="Iniciar Sesión">
+        <b-nav-item class="mr-3" href="#/login" title="Iniciar Sesión">
           <b-icon-person-fill />
         </b-nav-item>
-        <b-nav-item class="mr-3" href="./signup" title="Registrarse">
+        <b-nav-item class="mr-3" href="#/signup" title="Registrarse">
           <b-icon-person-plus-fill />
         </b-nav-item>
-        <b-nav-item class="mr-3" href="/matchs" title="Matchs">
+        <b-nav-item class="mr-3" href="#/matchs" title="Matchs">
           <b-icon-bell-fill />
           <span> {{ cantMatchs }} </span>
         </b-nav-item>
-        <b-nav-item class="mr-3" href="/chats" title="Chats">
+        <b-nav-item class="mr-3" href="#/chats" title="Chats">
           <b-icon-chat-dots-fill />
           <span> {{ cantChats }} </span>
         </b-nav-item>
-        <b-nav-item class="mr-3" href="/forums" title="Foros">
+        <b-nav-item class="mr-3" href="#/forums" title="Foros">
           <b-icon-signpost-fill />
           <span> {{ cantForums }} </span>
         </b-nav-item>
-        <b-nav-item class="mr-3" href="/mentors" title="Mentores">
+        <b-nav-item class="mr-3" href="#/mentors" title="Mentores">
           <b-icon-people-fill />
           <b-icon-list-stars />
         </b-nav-item>
@@ -58,8 +58,8 @@
               :text="abbreviatedName"
             ></b-avatar>
           </template>
-          <b-dropdown-item href="./profile">Perfil</b-dropdown-item>
-          <b-dropdown-item href="./logout">Cerrar Sesión</b-dropdown-item>
+          <b-dropdown-item href="#/profile">Perfil</b-dropdown-item>
+          <b-dropdown-item href="#/logout">Cerrar Sesión</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>

@@ -8,7 +8,7 @@
         </b-card-title>
         <b-card-body>
           <b-card-text>
-            <p>Desde aqui se hace sigup</p>
+            <p>Desde aqui se hace signup</p>
           </b-card-text>
         </b-card-body>
       </b-card>
