@@ -9,6 +9,9 @@
         <b-card-body>
           <b-card-text>
             <p>
+            Fecha del servidor: {{ date_server }}
+            </p>
+            <p>
               Una aplicación en la que podrás conocer amigos de tu universidad
             </p>
             <p>
@@ -31,7 +34,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      date_server : ''
+    }
+  },
+  mounted() {
+    fetch("/api/v1/home/date").
+    then((response) => response.text()).then((data) =>{
+      this.date_server = data;
+    })
+  }
+};
+
 </script>
 
 <style scoped>

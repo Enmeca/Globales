@@ -25,7 +25,7 @@ const router = new Router({
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
     { path: '/profile', component: Profile },
-    { path: '/*', alias: '/notfound', component: NotFound }
+    { path: '/*', alias: '/notfound', component: NotFound },
   ]
 })
 
