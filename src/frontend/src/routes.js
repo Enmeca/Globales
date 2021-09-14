@@ -15,7 +15,7 @@ import NotFound from './pages/error/NotFound.vue'
 
 // Create Routes
 const router = new Router({
-  mode: 'history',
+  //mode: 'history',
   routes: [
     { path: '/', alias: '/home', component: Home },
     { path: '/matchs', component: Matchs },
