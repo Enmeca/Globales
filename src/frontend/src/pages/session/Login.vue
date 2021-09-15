@@ -27,7 +27,7 @@
               v-model="user.password"
             ></b-form-input>
           </b-input-group>
-          <b-button variant="info" class="m-3" href="./signup"
+          <b-button variant="info" class="m-3" href="#/signup"
             >Registrarse</b-button
           >
           <b-button variant="info" @click="login">Iniciar sesión</b-button>
@@ -48,9 +48,19 @@ export default {
     };
   },
   methods: {
-    login() {
-      //data is bind in v-model in inputs
+    async login() {
       alert(`Email: ${this.user.email}, Password: ${this.user.password}`);
+      /*const response = await fetch('api/v1/users/authenticate', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(this.user)
+      });
+      if(response.status == 200) {
+        this.user = response.body;
+      }else{
+        alert("Credenciales invalidos");
+      }
+      */
     },
   },
 };

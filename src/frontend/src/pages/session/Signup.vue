@@ -36,7 +36,7 @@
                 <b-form-input
                   type="text"
                   placeholder="Apellido 1"
-                  v-model="user.lastname_first"
+                  v-model="user.lastname_1"
                 ></b-form-input>
               </b-input-group>
             </b-col>
@@ -47,7 +47,7 @@
                 <b-form-input
                   type="text"
                   placeholder="Apellido 2"
-                  v-model="user.lastname_second"
+                  v-model="user.lastname_2"
                 ></b-form-input>
               </b-input-group>
             </b-col>
@@ -84,7 +84,7 @@
                   <b-icon-building></b-icon-building>
                 </b-input-group-prepend>
                 <b-form-select
-                  v-model="user.university"
+                  v-model="user.university_id"
                   :options="universities"
                 >
                   <template #first>
@@ -97,9 +97,9 @@
             <b-col sm="12" lg="6">
               <b-input-group class="mb-2 input">
                 <b-input-group-prepend is-text>
-                  <b-icon-bookmark-check-fill></b-icon-bookmark-check-fill>
+                  <b-icon-journal-bookmark-fill></b-icon-journal-bookmark-fill>
                 </b-input-group-prepend>
-                <b-form-select v-model="user.career" :options="careers">
+                <b-form-select v-model="user.career_id" :options="careers">
                   <template #first>
                     <option disabled value="">Elige tu carrera</option>
                   </template>
@@ -107,11 +107,57 @@
               </b-input-group>
             </b-col>
 
-            <b-col sm="12" lg="6" align-self="stretch">
+            <b-col sm="12" lg="6" align-self="center">
+              <b-input-group class="mb-2 input">
+                <b-input-group-prepend is-text>
+                  <b-icon-image></b-icon-image>
+                </b-input-group-prepend>
+                <b-form-file
+                  accept="image/*"
+                  v-model="images"
+                  :state="Boolean(images)"
+                  placeholder="Elige una foto de perfil"
+                  browse-text=" "
+                  @change="updateImage"
+                ></b-form-file>
+              </b-input-group>
+            </b-col>
+
+            <b-col
+              v-if="this.urlProfile"
+              class="mb-2"
+              sm="12"
+              lg="6"
+              align-self="center"
+            >
+              <b-img
+                id="preview-photo"
+                :src="this.urlProfile"
+                thumbnail
+                fluid
+                rounded
+                alt="Profile image"
+              ></b-img>
+            </b-col>
+            <b-col v-else sm="12" lg="6" align-self="center">
+              (Prevista de la foto de perfil)
+            </b-col>
+
+            <b-col sm="12" lg="6" class="mb-2" align-self="center">
+              <b-input-group class="mb-2 input">
+                <b-form-datepicker
+                  v-model="user.date_of_birth"
+                  locale="es"
+                  placeholder="Fecha Nacimiento"
+                ></b-form-datepicker>
+              </b-input-group>
+            </b-col>
+
+            <b-col sm="12" lg="6" align-self="center">
               <b-input-group class="mb-2 input">
                 <b-form-tags
                   id="tags-with-dropdown"
-                  v-model="user.tags"
+                  v-model="user_tags"
                   no-outer-focus
                   class="mb-2"
                 >
@@ -181,18 +227,8 @@
               </b-input-group>
             </b-col>
 
-            <b-col sm="12" lg="6" align-self="baseline">
-              <b-input-group class="mb-2 input">
-                <b-form-datepicker
-                  v-model="user.birthday"
-                  locale="es"
-                  placeholder="Fecha Nacimiento"
-                ></b-form-datepicker>
-              </b-input-group>
-            </b-col>
-
             <b-col sm="12" lg="12">
-              <b-button variant="info" class="m-3" href="./signup" size="lg"
+              <b-button variant="info" class="mt-2" href="#/signup" size="lg"
                 >Registrarse</b-button
               >
             </b-col>
@@ -221,30 +257,38 @@ export default {
         "Basketbol",
       ],
       careers: [
-        "Ingenieria de Sistemas",
-        "Administracion de Empresas",
-        "Mecatronica",
-        "Biologia",
-        "Topografia",
+        { value: "ING-SYS", text: "Ingenieria de Sistemas" },
+        { value: "ADM", text: "Administracion de Empresas" },
+        { value: "MECTR", text: "Mecatronica" },
+        { value: "BIO", text: "Biologia" },
+        { value: "TOP", text: "Topografia" },
       ],
       universities: [
-        "Universidad de Costa Rica",
-        "Universidad Nacional de Costa Rica",
-        "Instituto Tecnologico de Costa Rica",
-        "Universidad Estatal a Distancia",
+        { value: "UCR", text: "Universidad de Costa Rica" },
+        { value: "UNA", text: "Universidad Nacional de Costa Rica" },
+        { value: "TEC", text: "Instituto Tecnologico de Costa Rica" },
+        { value: "UNED", text: "Universidad Estatal a Distancia" },
       ],
+      images: [],
+      urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: {
         id: "",
-        name: "",
-        lastname_first: "",
-        lastname_second: "",
-        birthday: "",
+        career_id: "",
+        university_id: "",
         email: "",
         password: "",
-        career: "",
-        university: "",
+        name: "",
+        lastname_1: "",
+        lastname_2: "",
+        date_of_birth: "",
         description: "",
-        tags: [],
+        is_tutor: false,
+        is_admin: false,
+      },
+      user_tags: [],
+      user_photo: {
+        user_uid: "",
+        profile_pic: "",
       },
     };
   },
@@ -259,6 +303,11 @@ export default {
       .then((data) => {
         this.universities = data;
       });
+    fetch("/api/v1/careers")
+      .then((response) => response.text())
+      .then((data) => {
+        this.careers = data;
+      });
     fetch("/api/v1/user")
       .then((response) => response.text())
       .then((data) => {
@@ -269,7 +318,7 @@ export default {
     availableOptions() {
       const criteria = this.searchTag.trim().toLowerCase();
       const options = this.tags.filter(
-        (opt) => this.user.tags.indexOf(opt) === -1
+        (opt) => this.user_tags.indexOf(opt) === -1
       );
       if (criteria) {
         return options.filter(
@@ -286,8 +335,7 @@ export default {
     },
   },
   methods: {
-    async login() {
-      //data is bind in v-model in inputs
+    async signup() {
       alert(`Email: ${this.user.email}, Password: ${this.user.password}`);
       /*const response = await fetch('http://localhost:9191/api/v1/users/authenticate', {
         method: 'POST',
@@ -298,6 +346,9 @@ export default {
     onOptionClick({ option, addTag }) {
       addTag(option);
       this.searchTag = "";
+    },
+    updateImage(e) {
+      this.urlProfile = URL.createObjectURL(e.target.files[0]);
     },
   },
 };
@@ -313,5 +364,8 @@ center {
 }
 .input {
   max-width: 350px;
+}
+#preview-photo {
+  max-height: 100px;
 }
 </style>
