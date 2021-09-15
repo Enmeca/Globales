@@ -6,7 +6,7 @@
     class="bg-navbar container-fluid p-0"
     sticky
   >
-    <b-navbar-brand class="ml-3 mr-3" href="/home">
+    <b-navbar-brand class="ml-3 mr-3" href="#/home">
       <div class="display-4">
         UFriends
         <b-icon-people-fill />
@@ -54,7 +54,7 @@
           <template #button-content>
             <b-avatar
               variant="primary"
-              :src="user.img"
+              :src="user_photo.profile_pic"
               :text="abbreviatedName"
             ></b-avatar>
           </template>
@@ -74,7 +74,9 @@ export default {
       user: {
         name: "David",
         lastname: "Villalobos",
-        img: "https://source.unsplash.com/150x150/?icon",
+      },
+      user_photo: {
+        profile_pic: "https://source.unsplash.com/150x150/?icon",
       },
       cantChats: 3,
       cantMatchs: 2,
