@@ -2,8 +2,7 @@
   <b-navbar
     toggleable="sm"
     type="dark"
-    variant="dark"
-    class="bg-navbar container-fluid p-0"
+    class="bg-navbar container-fluid p-0 navbar-background"
     sticky
   >
     <b-navbar-brand class="ml-3 mr-3" href="#/home">
@@ -95,5 +94,8 @@ export default {
 <style scoped>
 .display-4 {
   font-size: 1.5em;
+}
+.navbar-background {
+  background-color: rgba(0, 0, 0, 0.75);
 }
 </style>
