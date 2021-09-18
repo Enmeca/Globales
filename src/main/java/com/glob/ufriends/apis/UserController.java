@@ -22,7 +22,12 @@ public class UserController {
 
     @PostMapping(path = "/loginById")
     public User loginById(@RequestBody User user){
-        return service.loginById(user.getId(),user.getPassword());
+        User loggedUser = service.loginById(user.getId(),user.getPassword());
+
+        if(loggedUser == null)
+            throw new ResourceNotFoundException();
+
+        return loggedUser;
     }
 
     @PostMapping(path = "/loginByEmail")
