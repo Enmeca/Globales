@@ -1,5 +1,6 @@
 package com.glob.ufriends.apis;
 
+import com.glob.ufriends.entities.ResourceNotFoundException;
 import com.glob.ufriends.entities.User;
 import com.glob.ufriends.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,11 @@ public class UserController {
 
     @PostMapping(path = "/loginV2")
     public User loginByEmail(@RequestBody User user){
-        return service.loginByEmail(user.getEmail(),user.getPassword());
+        User loggedUser = service.loginByEmail(user.getEmail(),user.getPassword());
+        if(loggedUser == null)
+            throw new ResourceNotFoundException();
+
+        return loggedUser;
     }
 
     @GetMapping
