@@ -10,11 +10,8 @@
             <b-input-group-prepend is-text>
               <b-icon-envelope></b-icon-envelope>
             </b-input-group-prepend>
-            <b-form-input
-              type="text"
-              placeholder="Correo"
-              v-model="user.email"
-            ></b-form-input>
+            <b-form-input type="text" placeholder="Cedula" v-model="user.id">
+            </b-form-input>
           </b-input-group>
 
           <b-input-group class="mb-2 input">
@@ -30,7 +27,19 @@
           <b-button variant="info" class="m-3" href="#/signup"
             >Registrarse</b-button
           >
-          <b-button variant="info" @click="login">Iniciar sesión</b-button>
+          <b-button variant="info" @click="login" :disabled="!validForm"
+            >Iniciar sesión</b-button
+          >
+          <b-alert
+            :show="invalidCredentials"
+            variant="danger"
+            fade
+            dismissible
+            @dismissed="closeAlertError"
+          >
+            <h4 class="alert-heading">Credenciales erroneos!</h4>
+            <p>Inténtalo nuevamente.</p>
+          </b-alert>
         </b-card-body>
       </b-card>
     </center>
@@ -42,25 +51,35 @@ export default {
   data() {
     return {
       user: {
-        email: "",
+        id: "",
         password: "",
       },
+      invalidCredentials: false,
     };
+  },
+  computed: {
+    validForm() {
+      return this.user.id != "" && this.user.password != "";
+    },
   },
   methods: {
     async login() {
-      alert(`Email: ${this.user.email}, Password: ${this.user.password}`);
-      /*const response = await fetch('api/v1/users/authenticate', {
-        method: 'POST',
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify(this.user)
+      const response = await fetch("api/v1/user/loginById", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.user),
       });
-      if(response.status == 200) {
-        this.user = response.body;
-      }else{
-        alert("Credenciales invalidos");
+      if (response.status == 200) {
+        this.$store.commit("saveUser", await response.json());
+        this.$router.push({ path: "/profile" }); // redirifiendo a la pagina de perfil
+      } else {
+        this.invalidCredentials = true;
       }
-      */
+    },
+    closeAlertError() {
+      this.invalidCredentials = false;
+      this.user.id = "";
+      this.user.password = "";
     },
   },
 };

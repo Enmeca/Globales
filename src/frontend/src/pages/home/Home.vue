@@ -9,6 +9,7 @@
         <b-card-body>
           <b-card-text>
             <p>Fecha del servidor: {{ date_server }}</p>
+            <p>{{ userName }}</p>
             <p>
               Una aplicación en la que podrás conocer amigos de tu universidad
             </p>
@@ -44,6 +45,14 @@ export default {
       .then((data) => {
         this.date_server = data;
       });
+  },
+  computed: {
+    userName() {
+      if (this.$store.getters.isLoggedIn) {
+        return "Bienvenido " + this.$store.state.user.name;
+      }
+      return "";
+    },
   },
 };
 </script>
