@@ -244,31 +244,9 @@ export default {
   data() {
     return {
       searchTag: "",
-      tags: [
-        "Python",
-        "Deportes",
-        "Videojuegos",
-        "Fotografia",
-        "Cine",
-        "Teatro",
-        "Tecnologia",
-        "Naturaleza",
-        "Futbol",
-        "Basketbol",
-      ],
-      careers: [
-        { value: "ING-SYS", text: "Ingenieria de Sistemas" },
-        { value: "ADM", text: "Administracion de Empresas" },
-        { value: "MECTR", text: "Mecatronica" },
-        { value: "BIO", text: "Biologia" },
-        { value: "TOP", text: "Topografia" },
-      ],
-      universities: [
-        { value: "UCR", text: "Universidad de Costa Rica" },
-        { value: "UNA", text: "Universidad Nacional de Costa Rica" },
-        { value: "TEC", text: "Instituto Tecnologico de Costa Rica" },
-        { value: "UNED", text: "Universidad Estatal a Distancia" },
-      ],
+      tags: [],
+      careers: [],
+      universities: [],
       images: [],
       urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: {
@@ -293,26 +271,27 @@ export default {
     };
   },
   mounted() {
-    /*fetch("/api/v1/tags")
-      .then((response) => response.text())
+    fetch("/api/v1/tag")
+      .then((response) => response.json())
       .then((data) => {
-        this.tags = data;
+        this.tags = data.map((tag) => tag.name);
       });
-    fetch("/api/v1/universities")
-      .then((response) => response.text())
+    fetch("/api/v1/university")
+      .then((response) => response.json())
       .then((data) => {
-        this.universities = data;
+        this.universities = data.map((university) => ({
+          value: university.id,
+          text: university.name,
+        }));
       });
-    fetch("/api/v1/careers")
-      .then((response) => response.text())
+    fetch("/api/v1/career")
+      .then((response) => response.json())
       .then((data) => {
-        this.careers = data;
+        this.careers = data.map((career) => ({
+          value: career.id,
+          text: career.name,
+        }));
       });
-    fetch("/api/v1/user")
-      .then((response) => response.text())
-      .then((data) => {
-        this.user = data;
-      });*/
   },
   computed: {
     availableOptions() {
