@@ -105,6 +105,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit("removeUser");
+      this.$router.push({ path: "/login" }); // redirifiendo a la pagina de login
     },
   },
   computed: {

@@ -10,7 +10,11 @@
             <b-input-group-prepend is-text>
               <b-icon-envelope></b-icon-envelope>
             </b-input-group-prepend>
-            <b-form-input type="text" placeholder="Cedula" v-model="user.id">
+            <b-form-input
+              type="text"
+              placeholder="Cedula o Correo"
+              v-model="user.id"
+            >
             </b-form-input>
           </b-input-group>
 
@@ -64,7 +68,7 @@ export default {
   },
   methods: {
     async login() {
-      const response = await fetch("api/v1/user/loginById", {
+      const response = await fetch("api/v1/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
