@@ -39,7 +39,7 @@
             variant="danger"
             fade
             dismissible
-            @dismissed="closeAlertError"
+            @dismissed="cleanData"
           >
             <h4 class="alert-heading">Credenciales erroneos!</h4>
             <p>Inténtalo nuevamente.</p>
@@ -80,7 +80,7 @@ export default {
         this.invalidCredentials = true;
       }
     },
-    closeAlertError() {
+    cleanData() {
       this.invalidCredentials = false;
       this.user.id = "";
       this.user.password = "";
