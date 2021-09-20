@@ -4,9 +4,17 @@
       <b-card class="main-card text-light">
         <b-card-body>
           <b-card-title class="display-3">
-            <b-icon-person-fill />
+            <b-img
+              v-if="this.urlProfile"
+              id="preview-photo"
+              :src="this.urlProfile"
+              thumbnail
+              fluid
+              rounded
+              alt="Profile image"
+            ></b-img>
+            <b-icon-person-fill v-else />
           </b-card-title>
-
           <b-row>
             <b-col sm="12" lg="6">
               <b-input-group class="mb-2 input">
@@ -36,7 +44,7 @@
                 <b-form-input
                   type="text"
                   placeholder="Apellido 1"
-                  v-model="user.lastname_1"
+                  v-model="user.lastName1"
                 ></b-form-input>
               </b-input-group>
             </b-col>
@@ -47,7 +55,7 @@
                 <b-form-input
                   type="text"
                   placeholder="Apellido 2"
-                  v-model="user.lastname_2"
+                  v-model="user.lastName2"
                 ></b-form-input>
               </b-input-group>
             </b-col>
@@ -84,7 +92,7 @@
                   <b-icon-building></b-icon-building>
                 </b-input-group-prepend>
                 <b-form-select
-                  v-model="user.university_id"
+                  v-model="user.universityId"
                   :options="universities"
                 >
                   <template #first>
@@ -99,11 +107,33 @@
                 <b-input-group-prepend is-text>
                   <b-icon-journal-bookmark-fill></b-icon-journal-bookmark-fill>
                 </b-input-group-prepend>
-                <b-form-select v-model="user.career_id" :options="careers">
+                <b-form-select v-model="user.careerId" :options="careers">
                   <template #first>
                     <option disabled value="">Elige tu carrera</option>
                   </template>
                 </b-form-select>
+              </b-input-group>
+            </b-col>
+
+            <b-col sm="12" lg="6" class="mb-2" align-self="center">
+              <b-input-group class="mb-2 input">
+                <b-form-datepicker
+                  v-model="user.dateOfBirth"
+                  locale="es"
+                  :max="new Date()"
+                  placeholder="Fecha Nacimiento"
+                ></b-form-datepicker>
+              </b-input-group>
+            </b-col>
+
+            <b-col sm="12" lg="6">
+              <b-input-group class="mb-2 input">
+                <b-input-group-prepend is-text> </b-input-group-prepend>
+                <b-form-input
+                  type="text"
+                  placeholder="Descripcion"
+                  v-model="user.description"
+                ></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -120,36 +150,6 @@
                   browse-text=" "
                   @change="updateImage"
                 ></b-form-file>
-              </b-input-group>
-            </b-col>
-
-            <b-col
-              v-if="this.urlProfile"
-              class="mb-2"
-              sm="12"
-              lg="6"
-              align-self="center"
-            >
-              <b-img
-                id="preview-photo"
-                :src="this.urlProfile"
-                thumbnail
-                fluid
-                rounded
-                alt="Profile image"
-              ></b-img>
-            </b-col>
-            <b-col v-else sm="12" lg="6" align-self="center">
-              (Prevista de la foto de perfil)
-            </b-col>
-
-            <b-col sm="12" lg="6" class="mb-2" align-self="center">
-              <b-input-group class="mb-2 input">
-                <b-form-datepicker
-                  v-model="user.date_of_birth"
-                  locale="es"
-                  placeholder="Fecha Nacimiento"
-                ></b-form-datepicker>
               </b-input-group>
             </b-col>
 
@@ -227,12 +227,26 @@
               </b-input-group>
             </b-col>
 
-            <b-col sm="12" lg="12">
-              <b-button variant="info" class="mt-2" href="#/signup" size="lg"
+            <b-col sm="12" lg="12" class="mb-2">
+              <b-button variant="info" class="mt-2" @click="signup" size="lg"
                 >Registrarse</b-button
               >
             </b-col>
           </b-row>
+          <b-alert :show="registerSuccess" variant="success" fade dismissible>
+            <h4>
+              Registro realizado con exito
+              <b-icon-check-circle-fill scale="1" />
+            </h4>
+            Redirigiendo a iniciar sesión
+            <b-icon-arrow-clockwise animation="spin" scale="1.4" />
+          </b-alert>
+          <b-alert :show="registerError" variant="danger" fade dismissible>
+            <h4>
+              Ha ocurrido un error al realizar el registro
+              <b-icon-exclamation-octagon-fill scale="1.2" />
+            </h4>
+          </b-alert>
         </b-card-body>
       </b-card>
     </center>
@@ -243,6 +257,8 @@
 export default {
   data() {
     return {
+      registerError: false,
+      registerSuccess: false,
       searchTag: "",
       tags: [],
       careers: [],
@@ -251,17 +267,18 @@ export default {
       urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: {
         id: "",
-        career_id: "",
-        university_id: "",
+        careerId: "",
+        universityId: "",
         email: "",
         password: "",
         name: "",
-        lastname_1: "",
-        lastname_2: "",
-        date_of_birth: "",
+        lastName1: "",
+        lastName2: "",
+        dateOfBirth: "",
         description: "",
-        is_tutor: false,
-        is_admin: false,
+        isTutor: 0,
+        isAdmin: 0,
+        userPhoto: null,
       },
       user_tags: [],
       user_photo: {
@@ -315,12 +332,28 @@ export default {
   },
   methods: {
     async signup() {
-      alert(`Email: ${this.user.email}, Password: ${this.user.password}`);
-      /*const response = await fetch('http://localhost:9191/api/v1/users/authenticate', {
-        method: 'POST',
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify(this.user)
-      });*/
+      let myTags = this.user_tags.map((tag) => ({
+        user: { id: this.user.id },
+        tag: { name: tag },
+      }));
+      const response = await fetch("api/v1/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.user),
+      });
+      if (response.status == 200) {
+        fetch("api/v1/userTags/multiple", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(myTags),
+        });
+        this.registerSuccess = true;
+        this.cleanData();
+        // redirifiendo a la pagina de perfil
+        setTimeout(() => this.$router.push({ path: "/login" }), 3000);
+      } else {
+        this.registerError = true;
+      }
     },
     onOptionClick({ option, addTag }) {
       addTag(option);
@@ -328,6 +361,24 @@ export default {
     },
     updateImage(e) {
       this.urlProfile = URL.createObjectURL(e.target.files[0]);
+    },
+    cleanData() {
+      this.registerError = false;
+      this.user = {
+        id: "",
+        careerId: "",
+        universityId: "",
+        email: "",
+        password: "",
+        name: "",
+        lastName1: "",
+        lastName2: "",
+        dateOfBirth: "",
+        description: "",
+        isTutor: 0,
+        isAdmin: 0,
+        userPhoto: null,
+      };
     },
   },
 };
