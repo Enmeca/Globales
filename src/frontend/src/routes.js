@@ -1,6 +1,7 @@
 import Router from 'vue-router'
 
 // Routing configurations, import componetes
+import store from './store/store'
 import Home from './pages/home/Home.vue'
 import Matchs from './pages/matchs/Matchs.vue'
 import Chat from './pages/chats/Chats.vue'
@@ -27,6 +28,15 @@ const router = new Router({
     { path: '/profile', component: Profile },
     { path: '/*', alias: '/notfound', component: NotFound },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const authRequiredPages = ['/matchs', '/chats', '/forums', '/mentors', '/profile'];
+  const loggedIn = store.getters.isLoggedIn
+  if (authRequiredPages.includes(to.path) && !loggedIn) { // si require autorizacion y no esta logeado
+    return next('/login'); // redireccion a
+  }
+  next();
 })
 
 export default router

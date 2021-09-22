@@ -3,6 +3,7 @@ package com.glob.ufriends.apis;
 import com.glob.ufriends.entities.UserTags;
 import com.glob.ufriends.services.UserTagsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserTagsController {
         return service.saveUserTags(userTags);
     }
 
+    @Transactional
     @PostMapping(path = "/multiple")
     public void addMultipleUserTags(@RequestBody List<UserTags> userTags){
         for(int i = 0; i< userTags.size(); i++){
@@ -46,6 +48,7 @@ public class UserTagsController {
         service.deleteUserTagsByParams(id,tag);
     }
 
+    @Transactional
     @DeleteMapping(path = "/multiple")
     public void deleteUser(@RequestBody List<UserTags> userTags){
         for(int i = 0; i< userTags.size(); i++){
