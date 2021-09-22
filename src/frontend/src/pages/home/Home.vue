@@ -8,7 +8,7 @@
         </b-card-title>
         <b-card-body>
           <b-card-text>
-            <p>Fecha del servidor: {{ date_server }}</p>
+            <!--<p>Fecha del servidor: {{ date_server }}</p>-->
             <p>{{ userName }}</p>
             <p>
               Una aplicación en la que podrás conocer amigos de tu universidad
