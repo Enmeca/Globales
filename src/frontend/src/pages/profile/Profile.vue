@@ -4,9 +4,17 @@
       <b-card class="main-card text-light">
         <b-card-body>
           <b-card-title class="display-3">
-            <b-icon-person-fill />
+            <b-img
+              v-if="this.urlProfile"
+              id="preview-photo"
+              :src="this.urlProfile"
+              thumbnail
+              fluid
+              rounded
+              alt="Profile image"
+            ></b-img>
+            <b-icon-person-fill v-else />
           </b-card-title>
-
           <b-row>
             <b-col sm="12" lg="6">
               <b-input-group class="mb-2 input">
@@ -37,7 +45,7 @@
                   type="text"
                   placeholder="Apellido 1"
                   v-model="user.lastName1"
-                readonly="true"></b-form-input>
+                :readonly="true"></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -48,7 +56,7 @@
                   type="text"
                   placeholder="Apellido 2"
                   v-model="user.lastName2"
-                readonly="true"></b-form-input>
+                :readonly="true"></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -136,26 +144,6 @@
               </b-input-group>
             </b-col>
 
-            <b-col
-              v-if="this.urlProfile"
-              class="mb-2"
-              sm="12"
-              lg="6"
-              align-self="center"
-            >
-              <b-img
-                id="preview-photo"
-                :src="this.urlProfile"
-                thumbnail
-                fluid
-                rounded
-                alt="Profile image"
-              ></b-img>
-            </b-col>
-            <b-col v-else sm="12" lg="6" align-self="center">
-              (Prevista de la foto de perfil)
-            </b-col>
-
             <b-col sm="12" lg="6" class="mb-2" align-self="center">
               <b-input-group class="mb-2 input">
                 <b-form-datepicker
@@ -163,6 +151,17 @@
                   locale="es"
                   placeholder="Fecha Nacimiento"
                 :readonly="true"></b-form-datepicker>
+              </b-input-group>
+            </b-col>
+
+            <b-col sm="12" lg="6">
+              <b-input-group class="mb-2 input">
+                <b-input-group-prepend is-text> </b-input-group-prepend>
+                <b-form-input
+                  type="text"
+                  placeholder="Descripcion"
+                  v-model="user.description"
+                ></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -332,7 +331,7 @@ export default {
       .then((response) => response.json())
       .then((data) =>{
         this.user_tags = data.map( tag => tag.tag.name);
-        this.currentTags=[...this.this.user_tags]
+        this.currentTags=[...this.user_tags]
       });
   },
   computed: {
@@ -370,12 +369,32 @@ export default {
             this.$store.commit("saveUser", await response.json());
             this.user= this.$store.state.user
             this.registerSuccess = true;
-            if(this.user_tags!==this.currentTags){
+            let addtetags = this.currentTags.filter(x => this.user_tags.find(y => y === x )).map((tag) => ({
+                user: { id: this.user.id },
+                tag: { name: tag },
+              }));
+
+            if(addtetags.length>0){
               fetch("api/v1/userTags/multiple", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(myTags),
               });
+
+              let deletetags = this.currentTags.filter(x => !this.user_tags.find(y => y === x )).map((tag) => ({
+                user: { id: this.user.id },
+                tag: { name: tag },
+              }));
+
+              if(deletetags.length>0){
+                  fetch("api/v1/userTags/multiple", {
+                  method: "DELETE",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(deletetags),
+              });
+              }
+
+              setTimeout(()=>this.$router.go(0),3000)
             }
         }else{
             this.registerError=true;
