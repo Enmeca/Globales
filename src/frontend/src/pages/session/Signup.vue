@@ -355,6 +355,7 @@ export default {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(myTags),
         });
+
         this.registerSuccess = true;
         this.cleanData();
         // redirifiendo a la pagina de perfil
