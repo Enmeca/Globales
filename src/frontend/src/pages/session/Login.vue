@@ -91,7 +91,7 @@ export default {
 
 <style scoped>
 center {
-  margin: 5vw;
+  margin-block: 10vw;
   margin-inline: 15vw;
 }
 .main-card {

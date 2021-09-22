@@ -228,7 +228,12 @@
             </b-col>
 
             <b-col sm="12" lg="12" class="mb-2">
-              <b-button variant="info" class="mt-2" @click="signup" size="lg"
+              <b-button
+                variant="info"
+                class="mt-2"
+                @click="signup"
+                size="lg"
+                :disabled="!validForm"
                 >Registrarse</b-button
               >
             </b-col>
@@ -328,6 +333,9 @@ export default {
         return "No hay etiquetas que coincidan con los criterios de búsqueda.";
       }
       return "";
+    },
+    validForm() {
+      return this.user.description != "";
     },
   },
   methods: {
