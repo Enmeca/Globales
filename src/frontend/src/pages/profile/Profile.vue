@@ -23,7 +23,8 @@
                   type="text"
                   placeholder="Cedula"
                   v-model="user.id"
-                :readonly="true"></b-form-input>
+                  :readonly="true"
+                ></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -45,7 +46,8 @@
                   type="text"
                   placeholder="Apellido 1"
                   v-model="user.lastName1"
-                :readonly="true"></b-form-input>
+                  :readonly="true"
+                ></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -56,7 +58,8 @@
                   type="text"
                   placeholder="Apellido 2"
                   v-model="user.lastName2"
-                :readonly="true"></b-form-input>
+                  :readonly="true"
+                ></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -69,7 +72,8 @@
                   type="text"
                   placeholder="Correo"
                   v-model="user.email"
-                :readonly="true"></b-form-input>
+                  :readonly="true"
+                ></b-form-input>
               </b-input-group>
             </b-col>
 
@@ -91,21 +95,23 @@
                 <b-input-group-prepend is-text>
                   <b-icon-building></b-icon-building>
                 </b-input-group-prepend>
-                <div v-if="user.isTutor==false"> 
                 <b-form-select
+                  v-if="!user.isTutor"
                   v-model="user.universityId"
-                  :options="universities">
+                  :options="universities"
+                >
                   <template #first>
                     <option disabled value="">Cambia tu universidad</option>
                   </template>
                 </b-form-select>
-                </div>
-                <div v-else>
-                  <b-form-select
+                <b-form-select
+                  v-else
                   v-model="user.universityId"
-                  :options="universities.filter(x=>x.value===user.universityId)" >
+                  :options="
+                    universities.filter((x) => x.value === user.universityId)
+                  "
+                >
                 </b-form-select>
-                </div>
               </b-input-group>
             </b-col>
 
@@ -114,17 +120,21 @@
                 <b-input-group-prepend is-text>
                   <b-icon-journal-bookmark-fill></b-icon-journal-bookmark-fill>
                 </b-input-group-prepend>
-                <div v-if="user.isTutor==false">
-                  <b-form-select v-model="user.careerId" :options="careers">
-                    <template #first>
-                      <option disabled value="">Elige tu carrera</option>
-                    </template>
-                  </b-form-select>
-                </div>
-                <div v-else>
-                  <b-form-select v-model="user.careerId" :options="careers.filter(x=>x.value===user.careerId)">
-                  </b-form-select>
-                </div>
+                <b-form-select
+                  v-if="!user.isTutor"
+                  v-model="user.careerId"
+                  :options="careers"
+                >
+                  <template #first>
+                    <option disabled value="">Elige tu carrera</option>
+                  </template>
+                </b-form-select>
+                <b-form-select
+                  v-else
+                  v-model="user.careerId"
+                  :options="careers.filter((x) => x.value === user.careerId)"
+                >
+                </b-form-select>
               </b-input-group>
             </b-col>
 
@@ -150,7 +160,8 @@
                   v-model="user.dateOfBirth"
                   locale="es"
                   placeholder="Fecha Nacimiento"
-                :readonly="true"></b-form-datepicker>
+                  :readonly="true"
+                ></b-form-datepicker>
               </b-input-group>
             </b-col>
 
@@ -240,8 +251,13 @@
             </b-col>
 
             <b-col sm="12" lg="12">
-              <b-button variant="info" class="mt-2" @click="UpdateUser" size="lg"
-                >Actualizar</b-button>
+              <b-button
+                variant="info"
+                class="mt-2"
+                @click="UpdateUser"
+                size="lg"
+                >Actualizar</b-button
+              >
             </b-col>
           </b-row>
           <b-alert :show="registerSuccess" variant="success" fade dismissible>
@@ -306,7 +322,7 @@ export default {
     };
   },
   mounted() {
-      fetch("/api/v1/tag")
+    fetch("/api/v1/tag")
       .then((response) => response.json())
       .then((data) => {
         this.tags = data.map((tag) => tag.name);
@@ -327,11 +343,11 @@ export default {
           text: career.name,
         }));
       });
-      fetch("api/v1/userTags/user/"+this.user.id)
+    fetch("api/v1/userTags/user/" + this.user.id)
       .then((response) => response.json())
-      .then((data) =>{
-        this.user_tags = data.map( tag => tag.tag.name);
-        this.currentTags=[...this.user_tags]
+      .then((data) => {
+        this.user_tags = data.map((tag) => tag.tag.name);
+        this.currentTags = [...this.user_tags];
       });
   },
   computed: {
@@ -355,50 +371,55 @@ export default {
     },
   },
   methods: {
-    async UpdateUser(){
-        let myTags = this.user_tags.map((tag) => ({
+    async UpdateUser() {
+      let myTags = this.user_tags.map((tag) => ({
         user: { id: this.user.id },
-        tag: { name: tag },}));
-       
-        const response = await fetch("api/v1/user", {
+        tag: { name: tag },
+      }));
+
+      const response = await fetch("api/v1/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
-        });
-        if (response.status == 200) {
-            this.$store.commit("saveUser", await response.json());
-            this.user= this.$store.state.user
-            this.registerSuccess = true;
-            let addtetags = this.currentTags.filter(x => this.user_tags.find(y => y === x )).map((tag) => ({
-                user: { id: this.user.id },
-                tag: { name: tag },
-              }));
+      });
+      if (response.status == 200) {
+        this.$store.commit("saveUser", await response.json());
+        this.user = this.$store.state.user;
+        this.registerSuccess = true;
+        let addtetags = this.currentTags
+          .filter((x) => this.user_tags.find((y) => y === x))
+          .map((tag) => ({
+            user: { id: this.user.id },
+            tag: { name: tag },
+          }));
 
-            if(addtetags.length>0){
-              fetch("api/v1/userTags/multiple", {
-              method: "POST",
+        if (addtetags.length > 0) {
+          fetch("api/v1/userTags/multiple", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(myTags),
+          });
+
+          let deletetags = this.currentTags
+            .filter((x) => !this.user_tags.find((y) => y === x))
+            .map((tag) => ({
+              user: { id: this.user.id },
+              tag: { name: tag },
+            }));
+
+          if (deletetags.length > 0) {
+            fetch("api/v1/userTags/multiple", {
+              method: "DELETE",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(myTags),
-              });
+              body: JSON.stringify(deletetags),
+            });
+          }
 
-              let deletetags = this.currentTags.filter(x => !this.user_tags.find(y => y === x )).map((tag) => ({
-                user: { id: this.user.id },
-                tag: { name: tag },
-              }));
-
-              if(deletetags.length>0){
-                  fetch("api/v1/userTags/multiple", {
-                  method: "DELETE",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(deletetags),
-              });
-              }
-
-              setTimeout(()=>this.$router.go(0),3000)
-            }
-        }else{
-            this.registerError=true;
+          setTimeout(() => this.$router.go(0), 3000);
         }
+      } else {
+        this.registerError = true;
+      }
     },
     onOptionClick({ option, addTag }) {
       addTag(option);
