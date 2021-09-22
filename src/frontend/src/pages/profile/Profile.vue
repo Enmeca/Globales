@@ -36,7 +36,7 @@
                 <b-form-input
                   type="text"
                   placeholder="Apellido 1"
-                  v-model="user.lastname_1"
+                  v-model="user.lastName1"
                 readonly="true"></b-form-input>
               </b-input-group>
             </b-col>
@@ -47,7 +47,7 @@
                 <b-form-input
                   type="text"
                   placeholder="Apellido 2"
-                  v-model="user.lastname_2"
+                  v-model="user.lastName2"
                 readonly="true"></b-form-input>
               </b-input-group>
             </b-col>
@@ -83,9 +83,9 @@
                 <b-input-group-prepend is-text>
                   <b-icon-building></b-icon-building>
                 </b-input-group-prepend>
-                <div v-if="user.is_tutor===false"> 
+                <div v-if="user.isTutor==false"> 
                 <b-form-select
-                  v-model="user.university_id"
+                  v-model="user.universityId"
                   :options="universities">
                   <template #first>
                     <option disabled value="">Cambia tu universidad</option>
@@ -94,8 +94,8 @@
                 </div>
                 <div v-else>
                   <b-form-select
-                  v-model="user.university_id"
-                  :options="universities.filter(x=>x.value===user.university_id)" >
+                  v-model="user.universityId"
+                  :options="universities.filter(x=>x.value===user.universityId)" >
                 </b-form-select>
                 </div>
               </b-input-group>
@@ -106,15 +106,15 @@
                 <b-input-group-prepend is-text>
                   <b-icon-journal-bookmark-fill></b-icon-journal-bookmark-fill>
                 </b-input-group-prepend>
-                <div v-if="user.is_tutor===false">
-                  <b-form-select v-model="user.career_id" :options="careers">
+                <div v-if="user.isTutor==false">
+                  <b-form-select v-model="user.careerId" :options="careers">
                     <template #first>
                       <option disabled value="">Elige tu carrera</option>
                     </template>
                   </b-form-select>
                 </div>
                 <div v-else>
-                  <b-form-select v-model="user.career_id" :options="careers.filter(x=>x.value===user.career_id)">
+                  <b-form-select v-model="user.careerId" :options="careers.filter(x=>x.value===user.careerId)">
                   </b-form-select>
                 </div>
               </b-input-group>
@@ -159,7 +159,7 @@
             <b-col sm="12" lg="6" class="mb-2" align-self="center">
               <b-input-group class="mb-2 input">
                 <b-form-datepicker
-                  v-model="user.date_of_birth"
+                  v-model="user.dateOfBirth"
                   locale="es"
                   placeholder="Fecha Nacimiento"
                 :readonly="true"></b-form-datepicker>
@@ -245,6 +245,19 @@
                 >Actualizar</b-button>
             </b-col>
           </b-row>
+          <b-alert :show="registerSuccess" variant="success" fade dismissible>
+            <h4>
+              Actualizado!
+              <b-icon-check-circle-fill scale="1" />
+            </h4>
+            <b-icon-arrow-clockwise animation="spin" scale="1.4" />
+          </b-alert>
+          <b-alert :show="registerError" variant="danger" fade dismissible>
+            <h4>
+              Ha ocurrido un error al actualizar
+              <b-icon-exclamation-octagon-fill scale="1.2" />
+            </h4>
+          </b-alert>
         </b-card-body>
       </b-card>
     </center>
@@ -255,6 +268,8 @@
 export default {
   data() {
     return {
+      registerError: false,
+      registerSuccess: false,
       searchTag: "",
       tags: [
         "Python",
@@ -283,21 +298,8 @@ export default {
       ],
       images: [],
       urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
-      user: {
-        id: "402420750",
-        career_id: "ING-SYS",
-        university_id: "UNA",
-        email: "Braslynrrr999@gmail.com",
-        password: "123",
-        name: "Braslyn",
-        lastname_1: "Rodriguez",
-        lastname_2: "Ramirez",
-        date_of_birth: "1999-04-22",
-        description: "im looking for fuckin whores",
-        is_tutor: true,
-        is_admin: false,
-      },
-      user_tags: ["C++","Python","Prolog"],
+      user: this.$store.state.user,
+      user_tags: [],
       user_photo: {
         user_uid: "",
         profile_pic: "",
@@ -326,6 +328,12 @@ export default {
           text: career.name,
         }));
       });
+      fetch("api/v1/userTags/user/"+this.user.id)
+      .then((response) => response.json())
+      .then((data) =>{
+        this.user_tags = data.map( tag => tag.tag.name);
+        this.currentTags=[...this.this.user_tags]
+      });
   },
   computed: {
     availableOptions() {
@@ -352,7 +360,26 @@ export default {
         let myTags = this.user_tags.map((tag) => ({
         user: { id: this.user.id },
         tag: { name: tag },}));
-        alert(JSON.stringify(myTags))
+       
+        const response = await fetch("api/v1/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.user),
+        });
+        if (response.status == 200) {
+            this.$store.commit("saveUser", await response.json());
+            this.user= this.$store.state.user
+            this.registerSuccess = true;
+            if(this.user_tags!==this.currentTags){
+              fetch("api/v1/userTags/multiple", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(myTags),
+              });
+            }
+        }else{
+            this.registerError=true;
+        }
     },
     onOptionClick({ option, addTag }) {
       addTag(option);
