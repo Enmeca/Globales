@@ -3,7 +3,9 @@
 --=================================================
 
 -- TABLE DROPS
-
+drop table CHAT_MESSAGES cascade constraints;
+drop table MATCHED_USERS cascade constraints;
+drop table LIKED_USERS cascade constraints;
 drop table CAREERS cascade constraints;
 drop table UNIVERSITIES cascade constraints;
 drop table TAGS cascade constraints;
@@ -19,6 +21,8 @@ drop table USERS cascade constraints;
 
 -- SEQUENCE DROPS
 
+drop sequence SEQ_ID_MATCHED_USERS;
+drop sequence SEQ_ID_CHAT_MESSAGES;
 drop sequence SEQ_ID_FORUM_TOPICS;  
 drop sequence SEQ_ID_FORUM_COMMENTS;
 
@@ -91,6 +95,22 @@ create table COMMENT_REPORTS(COMMENT_ID number not null,
 						CREATION_DATE date not null) tablespace system;
 						
 						
+create table LIKED_USERS(USER_UID varchar2(20) not null,
+						LIKED_USER_UID varchar2(20) not null) tablespace system;
+						
+-- This table is used to store the matched users and also as a "chat" table						
+create table MATCHED_USERS(ID number not null,
+						USER_UID varchar2(20) not null,
+						MATCHED_USER_UID varchar2(20) not null,
+						MATCHED_DATE date not null) tablespace system;
+						
+create table CHAT_MESSAGES(ID number not null,
+						CHAT_UID number not null,
+						USER_UID varchar2(20) not null,
+						MESSAGE varchar2(200) not null,
+						DATE_SENT date not null) tablespace system;
+						
+						
 --=================================================
 
 -- CREATE SEQUENCES
@@ -98,6 +118,11 @@ create table COMMENT_REPORTS(COMMENT_ID number not null,
 create sequence SEQ_ID_FORUM_TOPICS start with 1 increment by 1 cache 2;
 
 create sequence SEQ_ID_FORUM_COMMENTS start with 1 increment by 1 cache 2;
+
+create sequence SEQ_ID_MATCHED_USERS start with 1 increment by 1 cache 2;
+
+create sequence SEQ_ID_CHAT_MESSAGES start with 1 increment by 1 cache 2;
+
 
 --=================================================
 
@@ -123,6 +148,12 @@ alter table FORUM_COMMENTS add constraint FORUM_COMMENTS_PK primary key(ID) usin
 
 alter table COMMENT_REPORTS add constraint COMMENT_REPORTS_PK primary key(COMMENT_ID,USER_UID) using index tablespace system;
 
+alter table LIKED_USERS add constraint LIKED_USERS_PK primary key(USER_UID,LIKED_USER_UID) using index tablespace system;
+
+alter table MATCHED_USERS add constraint MATCHED_USERS_PK primary key(ID) using index tablespace system;
+
+alter table CHAT_MESSAGES add constraint CHAT_MESSAGES_PK primary key(ID) using index tablespace system;
+
 
 --=================================================
 
@@ -146,6 +177,16 @@ alter table FORUM_COMMENTS add constraint COMMENTS_AUTHOR_FK foreign key (AUTHOR
 
 alter table COMMENT_REPORTS add constraint REPORTS_COMMENT_FK foreign key (COMMENT_ID) references FORUM_COMMENTS;
 alter table COMMENT_REPORTS add constraint REPORTS_USER_FK foreign key (USER_UID) references USERS;
+
+alter table LIKED_USERS add constraint LIKED_USERS_USER_FK foreign key (USER_UID) references USERS;
+alter table LIKED_USERS add constraint LIKED_USERS_L_USER_FK foreign key (LIKED_USER_UID) references USERS;
+
+alter table MATCHED_USERS add constraint MATCHED_USERS_USER_FK foreign key (USER_UID) references USERS;
+alter table MATCHED_USERS add constraint MATCHED_USERS_M_USER_FK foreign key (MATCHED_USER_UID) references USERS;
+
+alter table CHAT_MESSAGES add constraint CHAT_MESSAGES_CHAT_FK foreign key (CHAT_UID) references MATCHED_USERS;
+alter table CHAT_MESSAGES add constraint CHAT_MESSAGES_USER_FK foreign key (USER_UID) references USERS;
+
 
 
 --=================================================
