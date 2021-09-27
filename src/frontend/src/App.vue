@@ -8,7 +8,7 @@
 
 <script>
 // Import components
-import NavBar from "./layouts/NavBar.vue";
+import NavBar from "./pages/NavBar.vue";
 
 export default {
   // Specify which components you are using
