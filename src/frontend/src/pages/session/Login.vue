@@ -1,7 +1,7 @@
 <template>
   <div id="home-page">
     <center>
-      <b-card class="main-card text-light">
+      <b-card class="main-card text-light" v-on:keyup.enter="login">
         <b-card-body>
           <b-card-title class="display-4">
             <b-icon-person-fill />
@@ -68,6 +68,7 @@ export default {
   },
   methods: {
     async login() {
+      if (!this.validForm) return;
       const response = await fetch("api/v1/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
