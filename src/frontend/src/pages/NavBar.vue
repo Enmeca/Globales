@@ -19,13 +19,15 @@
     <b-collapse
       id="nav-collapse"
       is-nav
+      appear
       @show="expanded = true"
-      @hide="expanded = false"
+      @hidden="expanded = false"
+      class="text-left"
     >
-      <b-navbar-nav class="ml-auto h5">
+      <b-navbar-nav class="mx-auto h5">
         <b-nav-item class="mr-5" href="#/home" title="Pagina principal">
           <b-icon-house-fill />
-          <b-item v-if="expanded" class="ml-1">Pagina principal</b-item>
+          <template v-if="expanded">Pagina principal</template>
         </b-nav-item>
         <b-nav-item
           v-if="!isLoggedIn"
@@ -34,7 +36,7 @@
           title="Iniciar Sesión"
         >
           <b-icon-person-fill />
-          <b-item v-if="expanded" class="ml-1">Iniciar Sesión</b-item>
+          <template v-if="expanded">Iniciar Sesión </template>
         </b-nav-item>
 
         <b-nav-item
@@ -44,7 +46,7 @@
           title="Registrarse"
         >
           <b-icon-person-plus-fill />
-          <b-item v-if="expanded" class="ml-1">Registrarse</b-item>
+          <template v-if="expanded">Registrarse</template>
         </b-nav-item>
         <b-nav-item
           v-if="isLoggedIn"
@@ -54,12 +56,12 @@
         >
           <b-icon-bell-fill />
           <span> {{ cantMatchs }} </span>
-          <b-item v-if="expanded" class="ml-1">Matchs</b-item>
+          <template v-if="expanded">Matchs</template>
         </b-nav-item>
         <b-nav-item v-if="isLoggedIn" class="mr-5" href="#/chats" title="Chats">
           <b-icon-chat-dots-fill />
           <span> {{ cantChats }} </span>
-          <b-item v-if="expanded" class="ml-1">Chats</b-item>
+          <template v-if="expanded">Chats</template>
         </b-nav-item>
         <b-nav-item
           v-if="isLoggedIn"
@@ -69,7 +71,7 @@
         >
           <b-icon-signpost-fill />
           <span> {{ cantForums }} </span>
-          <b-item v-if="expanded" class="ml-1">Foros</b-item>
+          <template v-if="expanded">Foros</template>
         </b-nav-item>
         <b-nav-item
           v-if="isLoggedIn"
@@ -79,7 +81,7 @@
         >
           <b-icon-people-fill />
           <b-icon-list-stars />
-          <b-item v-if="expanded" class="ml-1">Tutores</b-item>
+          <template v-if="expanded">Tutores</template>
         </b-nav-item>
 
         <b-nav-item
@@ -89,7 +91,7 @@
           title="Administrador"
         >
           <b-icon-key-fill />
-          <b-item v-if="expanded" class="ml-1">Administrador</b-item>
+          <template v-if="expanded">Administrador</template>
         </b-nav-item>
       </b-navbar-nav>
 
@@ -98,12 +100,14 @@
           <template #button-content>
             <b-avatar variant="info" :text="userAbbreviatedName"></b-avatar>
           </template>
-          <b-dropdown-item href="#/profile">Perfil</b-dropdown-item>
-          <b-dropdown-item @click="logout">Cerrar Sesión</b-dropdown-item>
+          <b-dropdown-item href="#/profile">
+            <b-icon-person-fill variant="info" /> Perfil</b-dropdown-item
+          >
+          <b-dropdown-item @click="logout">
+            <b-icon-box-arrow-up-right variant="danger" /> Cerrar
+            Sesión</b-dropdown-item
+          >
         </b-nav-item-dropdown>
-        <template v-else>
-          <b-avatar variant="info"></b-avatar>
-        </template>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
