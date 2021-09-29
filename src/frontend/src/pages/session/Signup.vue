@@ -1,5 +1,5 @@
 <template>
-  <div id="home-page">
+  <b-overlay :show="status == 'Loading'" variant="dark">
     <center>
       <b-card class="main-card text-light">
         <b-card-body>
@@ -255,13 +255,20 @@
         </b-card-body>
       </b-card>
     </center>
-  </div>
+    <template #overlay>
+      <div class="text-center text-white">
+        <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+        <p id="cancel-label">Por favor espere...</p>
+      </div>
+    </template>
+  </b-overlay>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      status: "Ready",
       registerError: false,
       registerSuccess: false,
       searchTag: "",
@@ -344,11 +351,13 @@ export default {
         user: { id: this.user.id },
         tag: { name: tag },
       }));
+      this.status = "Loading";
       const response = await fetch("api/v1/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
       });
+      this.status = "Ready";
       if (response.status == 200) {
         fetch("api/v1/userTags/multiple", {
           method: "POST",

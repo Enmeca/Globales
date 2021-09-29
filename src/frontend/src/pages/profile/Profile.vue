@@ -1,5 +1,17 @@
 <template>
-  <div id="home-page">
+  <b-overlay :show="status == 'Loading'" variant="dark">
+    <b-alert :show="registerSuccess" variant="success" fade dismissible>
+      <h5>
+        Perfil actualizado exitosamente!
+        <b-icon-check-circle-fill scale="1" />
+      </h5>
+    </b-alert>
+    <b-alert :show="registerError" variant="danger" fade dismissible>
+      <h5>
+        Ha ocurrido un error al actualizar el perfil.
+        <b-icon-exclamation-octagon-fill scale="1.2" />
+      </h5>
+    </b-alert>
     <center>
       <b-card class="main-card text-light">
         <b-card-body>
@@ -260,57 +272,29 @@
               >
             </b-col>
           </b-row>
-          <b-alert :show="registerSuccess" variant="success" fade dismissible>
-            <h4>
-              Actualizado!
-              <b-icon-check-circle-fill scale="1" />
-            </h4>
-            <b-icon-arrow-clockwise animation="spin" scale="1.4" />
-          </b-alert>
-          <b-alert :show="registerError" variant="danger" fade dismissible>
-            <h4>
-              Ha ocurrido un error al actualizar
-              <b-icon-exclamation-octagon-fill scale="1.2" />
-            </h4>
-          </b-alert>
         </b-card-body>
       </b-card>
     </center>
-  </div>
+    <template #overlay>
+      <div class="text-center text-white">
+        <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+        <p id="cancel-label">Por favor espere...</p>
+      </div>
+    </template>
+  </b-overlay>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      status: "Ready",
       registerError: false,
       registerSuccess: false,
       searchTag: "",
-      tags: [
-        "Python",
-        "Deportes",
-        "Videojuegos",
-        "Fotografia",
-        "Cine",
-        "Teatro",
-        "Tecnologia",
-        "Naturaleza",
-        "Futbol",
-        "Basketbol",
-      ],
-      careers: [
-        { value: "ING-SYS", text: "Ingenieria de Sistemas" },
-        { value: "ADM", text: "Administracion de Empresas" },
-        { value: "MECTR", text: "Mecatronica" },
-        { value: "BIO", text: "Biologia" },
-        { value: "TOP", text: "Topografia" },
-      ],
-      universities: [
-        { value: "UCR", text: "Universidad de Costa Rica" },
-        { value: "UNA", text: "Universidad Nacional de Costa Rica" },
-        { value: "TEC", text: "Instituto Tecnologico de Costa Rica" },
-        { value: "UNED", text: "Universidad Estatal a Distancia" },
-      ],
+      tags: [],
+      careers: [],
+      universities: [],
       images: [],
       urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: this.$store.state.user,
@@ -376,12 +360,13 @@ export default {
         user: { id: this.user.id },
         tag: { name: tag },
       }));
-
+      this.status = "Loading";
       const response = await fetch("api/v1/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
       });
+      this.status = "Ready";
       if (response.status == 200) {
         this.$store.commit("saveUser", await response.json());
         this.user = this.$store.state.user;

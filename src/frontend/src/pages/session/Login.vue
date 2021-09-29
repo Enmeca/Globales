@@ -1,5 +1,5 @@
 <template>
-  <div id="home-page">
+  <b-overlay :show="status == 'Loading'" variant="dark">
     <center>
       <b-card class="main-card text-light" v-on:keyup.enter="login">
         <b-card-body>
@@ -47,13 +47,20 @@
         </b-card-body>
       </b-card>
     </center>
-  </div>
+    <template #overlay>
+      <div class="text-center text-white">
+        <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+        <p id="cancel-label">Por favor espere...</p>
+      </div>
+    </template>
+  </b-overlay>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      status: "Ready",
       user: {
         id: "",
         password: "",
@@ -69,11 +76,14 @@ export default {
   methods: {
     async login() {
       if (!this.validForm) return;
+      this.status = "Loading";
       const response = await fetch("api/v1/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
       });
+      this.status = "Ready";
+      this.responseStatus = response.status;
       if (response.status == 200) {
         this.$store.commit("saveUser", await response.json());
         this.$router.push({ path: "/profile" }); // redirifiendo a la pagina de perfil
