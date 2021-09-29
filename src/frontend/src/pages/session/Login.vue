@@ -1,6 +1,6 @@
 <template>
-  <b-overlay :show="status == 'Loading'" variant="dark">
-    <center>
+  <center>
+    <b-overlay :show="status == 'Loading'" variant="dark">
       <b-card class="main-card text-light" v-on:keyup.enter="login">
         <b-card-body>
           <b-card-title class="display-4">
@@ -46,14 +46,14 @@
           </b-alert>
         </b-card-body>
       </b-card>
-    </center>
-    <template #overlay>
-      <div class="text-center text-white">
-        <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
-        <p id="cancel-label">Por favor espere...</p>
-      </div>
-    </template>
-  </b-overlay>
+      <template #overlay>
+        <div class="text-center text-white">
+          <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+          <p id="cancel-label">Por favor espere...</p>
+        </div>
+      </template>
+    </b-overlay>
+  </center>
 </template>
 
 <script>

@@ -5,25 +5,24 @@
         <b-card-title class="display-4">
           UFriends
           <b-icon-people-fill />
+          <p>{{ welcomeUser }}</p>
         </b-card-title>
         <b-card-body>
           <b-card-text>
-            <!--<p>Fecha del servidor: {{ date_server }}</p>-->
-            <p>{{ userName }}</p>
             <p>
-              Una aplicación en la que podrás conocer amigos de tu universidad
+              Una aplicación en la que podrás conocer amigos de tu universidad.
             </p>
             <p>
               Nuestro algoritmo te emparejara con personas con gustos similares
-              a los tuyos
+              a los tuyos.
             </p>
             <p>
-              Nuestros mentores y tutores podrán ayudarte con las asignaciones
-              de los cursos
+              Conoce tutores que podrán ayudarte con las asignaciones de los
+              cursos.
             </p>
             <p>
               Podrás participar y crear foros de discusión, inclusive de forma
-              anonima
+              anonima.
             </p>
           </b-card-text>
         </b-card-body>
@@ -47,9 +46,16 @@ export default {
       });
   },
   computed: {
-    userName() {
+    welcomeUser() {
       if (this.$store.getters.isLoggedIn) {
-        return "Bienvenido " + this.$store.state.user.name;
+        return (
+          "Bienvenido " +
+          this.$store.state.user.name +
+          " " +
+          this.$store.state.user.lastName1 +
+          " " +
+          this.$store.state.user.lastName2
+        );
       }
       return "";
     },
@@ -60,7 +66,7 @@ export default {
 <style scoped>
 center {
   margin: 5vw;
-  margin-inline: 15vw;
+  margin-inline: 0vw;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
