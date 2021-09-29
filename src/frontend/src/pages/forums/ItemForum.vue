@@ -1,8 +1,60 @@
 <template>
   <b-card class="forum">
-    <strong>
-      {{ data.titulo }}
-    </strong>
+    <b-row>
+      <b-col sm="12" md="4" lg="2" align-self="center">
+        <b-row>
+          <b-col>
+            <b-avatar
+              v-if="!data.anonimo"
+              variant="info"
+              :text="authorAbbreviatedName"
+              size="lg"
+            ></b-avatar>
+            <b-avatar
+              v-else
+              variant="dark"
+              size="lg"
+              icon="sunglasses"
+            ></b-avatar>
+            <div v-if="!data.anonimo" class="text-muted">
+              {{ fullAuthorName }}
+            </div>
+            <div v-else class="text-muted">Anónimo</div>
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col sm="12" md="8" lg="8" align-self="center">
+        <b-row>
+          <b-col sm="12" lg="12">
+            <strong> {{ data.titulo }} </strong>
+          </b-col>
+          <b-col sm="12" lg="12">
+            {{ getSpoilerDescription }}
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col sm="12" md="12" lg="2" align-self="center">
+        <b-row>
+          <b-col
+            sm="12"
+            offset-sm="0"
+            offset-md="4"
+            md="4"
+            offset-lg="0"
+            lg="12"
+            class="text-muted"
+          >
+            {{ data.fecha }}
+          </b-col>
+          <b-col sm="12" md="4" lg="12">
+            <b-badge variant="info">
+              <span>{{ data.cantComentarios }}</span>
+              Comentarios
+            </b-badge>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
   </b-card>
 </template>
 
@@ -14,11 +66,31 @@ export default {
       required: true,
     },
   },
+  computed: {
+    authorAbbreviatedName() {
+      return this.data.autor.name[0] + this.data.autor.lastName1[0];
+    },
+    fullAuthorName() {
+      return (
+        this.data.autor.name.split(" ")[0] + " " + this.data.autor.lastName1
+      );
+    },
+    getSpoilerDescription() {
+      return this.data.descripcion.length < 40
+        ? this.data.descripcion
+        : this.data.descripcion.slice(0, 40) + "...";
+    },
+  },
 };
 </script>
 
 <style scoped>
+.forum {
+  border-radius: 30px;
+}
 .forum:hover {
-  background-color: rgb(235, 235, 235);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1.04);
 }
 </style>
