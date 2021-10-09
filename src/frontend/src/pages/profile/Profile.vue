@@ -268,6 +268,7 @@
                 class="mt-2"
                 @click="UpdateUser"
                 size="lg"
+                pill
                 >Actualizar</b-button
               >
             </b-col>

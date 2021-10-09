@@ -234,6 +234,7 @@
                 @click="signup"
                 size="lg"
                 :disabled="!validForm"
+                pill
                 >Registrarse</b-button
               >
             </b-col>

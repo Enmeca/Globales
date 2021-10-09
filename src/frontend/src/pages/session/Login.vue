@@ -28,10 +28,10 @@
               v-model="user.password"
             ></b-form-input>
           </b-input-group>
-          <b-button variant="info" class="m-3" href="#/signup"
+          <b-button variant="info" class="m-3" href="#/signup" pill
             >Registrarse</b-button
           >
-          <b-button variant="info" @click="login" :disabled="!validForm"
+          <b-button variant="info" @click="login" :disabled="!validForm" pill
             >Iniciar sesión</b-button
           >
           <b-alert
