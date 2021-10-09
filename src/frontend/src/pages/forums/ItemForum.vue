@@ -1,5 +1,5 @@
 <template>
-  <b-card class="forum">
+  <b-card class="forum" @click="goToForum">
     <b-row>
       <b-col sm="12" md="4" lg="2" align-self="center">
         <b-row>
@@ -23,7 +23,13 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col sm="12" md="8" lg="8" align-self="center">
+      <b-col
+        sm="12"
+        md="8"
+        lg="8"
+        align-self="center"
+        class="item-forum-content"
+      >
         <b-row>
           <b-col sm="12" lg="12">
             <strong> {{ data.titulo }} </strong>
@@ -81,16 +87,27 @@ export default {
         : this.data.descripcion.slice(0, 40) + "...";
     },
   },
+  methods: {
+    goToForum() {
+      // forums/id
+      this.$router.push({ path: "/forums/" + this.data.id });
+    },
+  },
 };
 </script>
 
 <style scoped>
 .forum {
-  border-radius: 30px;
+  border-radius: 10px;
 }
 .forum:hover {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   transform: scale(1.04);
+}
+.item-forum-content {
+  background-color: rgb(243, 243, 243);
+  border-radius: 50px;
+  padding-block: 15px;
 }
 </style>

@@ -1,7 +1,21 @@
 <template>
   <center>
-    <div class="container-forum">
-      <b-card class="create-forum">
+    <div class="container-forums">
+      <b-row class="mb-1">
+        <b-col class="text-left" align-self="start">
+          <b-button variant="secondary" @click="backHome" pill>
+            <b-icon-house-fill />
+            Regresar
+          </b-button>
+        </b-col>
+        <b-col class="text-right" align-self="end" v-if="!modeCreateForum">
+          <b-button variant="info" @click="modeCreateForum = true" pill>
+            Crear foro
+            <b-icon-pencil-fill />
+          </b-button>
+        </b-col>
+      </b-row>
+      <b-card class="create-forum" v-if="modeCreateForum">
         <b-input-group class="mt-1">
           <b-form-input
             v-model="newForum.titulo"
@@ -19,6 +33,11 @@
           ></b-form-textarea>
         </b-input-group>
         <b-row class="mt-2 justify-content-around">
+          <b-icon-trash-fill
+            class="mt-2 cancel-icon"
+            variant="danger"
+            @click="cancelCreateForum"
+          />
           <b-form-checkbox
             v-b-tooltip.hover
             title="Anónimo"
@@ -30,7 +49,12 @@
             <b-icon-sunglasses v-if="newForum.anonimo" scale="2" class="ml-2" />
             <b-icon-eyeglasses v-else scale="2" class="ml-2" />
           </b-form-checkbox>
-          <b-button variant="info" @click="publishForum" :disabled="!validForm">
+          <b-button
+            variant="info"
+            @click="publishForum"
+            :disabled="!validForm"
+            pill
+          >
             Publicar</b-button
           >
         </b-row>
@@ -55,7 +79,9 @@ export default {
   },
   data() {
     return {
+      modeCreateForum: false,
       newForum: {
+        id: 0,
         titulo: "",
         descripcion: "",
         fecha: "28.09.2021",
@@ -88,14 +114,30 @@ export default {
   },
   methods: {
     publishForum() {
+      this.modeCreateForum = false;
       this.forums.unshift(this.newForum);
       this.newForum = {
+        id: 0,
         titulo: "",
         descripcion: "",
         fecha: "28.09.2021 08:26pm",
         anonimo: false,
         autor: this.$store.state.user,
       };
+    },
+    cancelCreateForum() {
+      this.modeCreateForum = false;
+      this.newForum = {
+        id: 0,
+        titulo: "",
+        descripcion: "",
+        fecha: "28.09.2021 08:26pm",
+        anonimo: false,
+        autor: this.$store.state.user,
+      };
+    },
+    backHome() {
+      this.$router.push({ path: "/home" });
     },
   },
   computed: {
@@ -111,7 +153,7 @@ center {
   background-color: rgba(0, 0, 0, 0.4);
   min-height: 100vh;
 }
-.container-forum {
+.container-forums {
   margin-inline: 15vw;
   padding-block: 5vh;
 }
@@ -119,6 +161,11 @@ p {
   font-size: 20px;
 }
 .create-forum {
-  border-radius: 30px;
+  border-radius: 10px;
+}
+.cancel-icon:hover {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1.5);
 }
 </style>

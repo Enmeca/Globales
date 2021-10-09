@@ -2,10 +2,12 @@ import Router from 'vue-router'
 
 // Routing configurations, import componetes
 import store from './store/store'
+
 import Home from './pages/home/Home.vue'
 import Matchs from './pages/matchs/Matchs.vue'
 import Chat from './pages/chats/Chats.vue'
 import Forums from './pages/forums/Forums.vue'
+import Forum from './pages/forums/Forum.vue'
 import Mentors from './pages/mentors/Mentors.vue'
 import Login from './pages/session/Login.vue'
 import Signup from './pages/session/Signup.vue'
@@ -27,6 +29,7 @@ const router = new Router({
     { path: '/matchs', component: Matchs },
     { path: '/chats', component: Chat },
     { path: '/forums', component: Forums },
+    { path: '/forums/:id', component: Forum },
     { path: '/mentors', component: Mentors },
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
