@@ -1,21 +1,33 @@
 <template>
   <center>
-    <div class="container-forums">
-      <b-row class="mb-1">
-        <b-col class="text-left" align-self="start">
-          <b-button variant="secondary" @click="backHome" pill>
-            <b-icon-house-fill />
-            Regresar
-          </b-button>
-        </b-col>
-        <b-col class="text-right" align-self="end" v-if="!modeCreateForum">
-          <b-button variant="info" @click="modeCreateForum = true" pill>
-            Crear foro
-            <b-icon-pencil-fill />
-          </b-button>
-        </b-col>
-      </b-row>
-      <b-card class="create-forum" v-if="modeCreateForum">
+    <b-row>
+      <b-col sm="12" md="4" lg="4" class="mt-3">
+        <b-button variant="secondary" @click="backHome">
+          <b-icon-house-fill />
+          Regresar
+        </b-button>
+      </b-col>
+      <b-col sm="12" md="4" lg="4" class="mt-3">
+        <b-input-group>
+          <b-input-group-prepend is-text>
+            <b-icon-search />
+          </b-input-group-prepend>
+          <b-form-input v-model.lazy="searchField"> </b-form-input>
+        </b-input-group>
+      </b-col>
+      <b-col sm="12" md="4" lg="4" class="mt-3" v-if="!modeCreateForum">
+        <b-button variant="info" @click="modeCreateForum = true">
+          Crear foro
+          <b-icon-pencil-fill />
+        </b-button>
+      </b-col>
+    </b-row>
+    <transition name="flipX">
+      <b-card
+        class="create-forum mt-3"
+        v-if="modeCreateForum"
+        style="animation-duration: 0.8s"
+      >
         <b-input-group class="mt-1">
           <b-form-input
             v-model="newForum.titulo"
@@ -36,6 +48,7 @@
           <b-icon-trash-fill
             class="mt-2 cancel-icon"
             variant="danger"
+            scale="1.6"
             @click="cancelCreateForum"
           />
           <b-form-checkbox
@@ -59,13 +72,21 @@
           >
         </b-row>
       </b-card>
+    </transition>
+    <transition-group name="fade">
       <ItemForum
-        v-for="forum in forums"
+        v-for="forum in filterForums"
         :key="forum.id"
         :data="forum"
-        class="mt-2"
+        class="mt-3"
       />
-    </div>
+    </transition-group>
+    <b-card v-if="filterForums.length == 0" class="mt-3">
+      <p>
+        Ningun foro coincide con la busqueda realizada
+        <b-icon-emoji-frown />
+      </p>
+    </b-card>
   </center>
 </template>
 
@@ -79,6 +100,8 @@ export default {
   },
   data() {
     return {
+      searchField: "",
+      anyoneFound: false,
       modeCreateForum: false,
       newForum: {
         id: 0,
@@ -144,19 +167,19 @@ export default {
     validForm() {
       return this.newForum.titulo != "";
     },
+    filterForums() {
+      const criteria = this.searchField.trim().toLowerCase();
+      if (criteria) {
+        return this.forums.filter(
+          (forum) => forum.titulo.toLowerCase().indexOf(criteria) > -1
+        );
+      }
+      return this.forums;
+    },
   },
 };
 </script>
-
 <style scoped>
-center {
-  background-color: rgba(0, 0, 0, 0.4);
-  min-height: 100vh;
-}
-.container-forums {
-  margin-inline: 15vw;
-  padding-block: 5vh;
-}
 p {
   font-size: 20px;
 }

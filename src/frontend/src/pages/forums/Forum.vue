@@ -3,7 +3,7 @@
     <div class="container-forum">
       <b-row class="mb-2" align-h="between">
         <b-col cols="4" class="text-left">
-          <b-button variant="secondary" @click="backForums" pill>
+          <b-button variant="secondary" @click="backForums">
             Regresar
             <b-icon-signpost-split-fill />
           </b-button>
@@ -44,7 +44,7 @@
               <b-col sm="12" lg="12">
                 <strong> {{ forum.titulo }} </strong>
               </b-col>
-              <b-col sm="12" lg="12">
+              <b-col sm="12" lg="12" class="text-justify">
                 {{ forum.descripcion }}
               </b-col>
             </b-row>
@@ -62,11 +62,17 @@
               >
                 {{ forum.fecha }}
               </b-col>
-              <b-col sm="12" md="4" lg="12">
+              <b-col sm="12" md="4" lg="12" class="mt-4">
                 <b-badge variant="info">
                   <span>{{ forum.cantComentarios }}</span>
                   Comentarios
                 </b-badge>
+                <b-icon-trash-fill
+                  v-if="isLoggedInAdmin"
+                  scale="1.6"
+                  class="cancel-icon ml-3"
+                  variant="danger"
+                />
               </b-col>
             </b-row>
           </b-col>
@@ -74,53 +80,55 @@
       </b-card>
       <b-row class="text-right mt-1" v-if="!modeWriteComment">
         <b-col align-self="end">
-          <b-button variant="primary" @click="modeWriteComment = true" pill>
+          <b-button variant="info" @click="modeWriteComment = true">
             Comentar
             <b-icon-pencil-fill />
           </b-button>
         </b-col>
       </b-row>
-      <b-card class="create-comment mt-2" v-else>
-        <b-input-group class="mt-1">
-          <b-form-textarea
-            id="textarea"
-            v-model="newComment.comentario"
-            placeholder="Ingresa un comentario"
-            rows="1"
-            max-rows="3"
-          ></b-form-textarea>
-        </b-input-group>
-        <b-row class="mt-2 justify-content-around">
-          <b-icon-trash-fill
-            class="mt-2 cancel-icon"
-            variant="danger"
-            @click="cancelWriteComment"
-          />
-          <b-form-checkbox
-            v-b-tooltip.hover
-            title="Anónimo"
-            switch
-            size="lg"
-            class="mt-1"
-            v-model="newComment.anonimo"
-          >
-            <b-icon-sunglasses
-              v-if="newComment.anonimo"
-              scale="2"
-              class="ml-2"
+      <transition name="flipX">
+        <b-card class="create-comment mt-2" v-if="modeWriteComment">
+          <b-input-group class="mt-1">
+            <b-form-textarea
+              id="textarea"
+              v-model="newComment.comentario"
+              placeholder="Ingresa un comentario"
+              rows="1"
+              max-rows="3"
+            ></b-form-textarea>
+          </b-input-group>
+          <b-row class="mt-2 justify-content-around">
+            <b-icon-trash-fill
+              class="mt-2 cancel-icon"
+              scale="1.6"
+              variant="danger"
+              @click="cancelWriteComment"
             />
-            <b-icon-eyeglasses v-else scale="2" class="ml-2" />
-          </b-form-checkbox>
-          <b-button
-            variant="info"
-            @click="publishComment"
-            :disabled="!validForm"
-            pill
-          >
-            Comentar</b-button
-          >
-        </b-row>
-      </b-card>
+            <b-form-checkbox
+              v-b-tooltip.hover
+              title="Anónimo"
+              switch
+              size="lg"
+              class="mt-1"
+              v-model="newComment.anonimo"
+            >
+              <b-icon-sunglasses
+                v-if="newComment.anonimo"
+                scale="2"
+                class="ml-2"
+              />
+              <b-icon-eyeglasses v-else scale="2" class="ml-2" />
+            </b-form-checkbox>
+            <b-button
+              variant="info"
+              @click="publishComment"
+              :disabled="!validForm"
+            >
+              Comentar</b-button
+            >
+          </b-row>
+        </b-card>
+      </transition>
       <CommentForum
         v-for="Comment in comments"
         :key="Comment.id"
@@ -206,12 +214,15 @@ export default {
     validForm() {
       return this.newComment.comentario != "";
     },
+    isLoggedInAdmin() {
+      return this.$store.getters.isLoggedInAdmin;
+    },
   },
   methods: {
     cancelWriteComment() {
       this.modeWriteComment = false;
-      this.comment.comentario = "";
-      this.comment.anonimo = false;
+      this.newComment.comentario = "";
+      this.newComment.anonimo = false;
     },
     publishComment() {
       this.modeWriteComment = false;
@@ -233,14 +244,6 @@ export default {
 </script>
 
 <style scoped>
-center {
-  background-color: rgba(0, 0, 0, 0.4);
-  min-height: 100vh;
-}
-.container-forum {
-  margin-inline: 15vw;
-  padding-block: 5vh;
-}
 .forum {
   border-radius: 10px;
 }

@@ -34,7 +34,7 @@
           <b-col sm="12" lg="12">
             <strong> {{ data.titulo }} </strong>
           </b-col>
-          <b-col sm="12" lg="12">
+          <b-col sm="12" lg="12" class="text-justify">
             {{ getSpoilerDescription }}
           </b-col>
         </b-row>
@@ -82,9 +82,9 @@ export default {
       );
     },
     getSpoilerDescription() {
-      return this.data.descripcion.length < 40
+      return this.data.descripcion.length < 100
         ? this.data.descripcion
-        : this.data.descripcion.slice(0, 40) + "...";
+        : this.data.descripcion.slice(0, 100) + "...";
     },
   },
   methods: {

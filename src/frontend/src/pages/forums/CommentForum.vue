@@ -25,7 +25,7 @@
       </b-col>
       <b-col sm="12" md="8" lg="8" align-self="center">
         <b-row class="comment-content">
-          <b-col sm="12" lg="12">
+          <b-col sm="12" lg="12" class="text-justify">
             {{ data.comentario }}
           </b-col>
         </b-row>
@@ -53,7 +53,12 @@
             lg="12"
             align-self="center"
           >
-            <b-icon-flag-fill class="flag-icon" variant="danger" />
+            <b-icon-flag-fill
+              v-if="isLoggedInAdmin"
+              class="flag-icon"
+              variant="danger"
+            />
+            <b-icon-trash-fill v-else class="flag-icon" variant="danger" />
           </b-col>
         </b-row>
       </b-col>
@@ -77,6 +82,9 @@ export default {
       return (
         this.data.autor.name.split(" ")[0] + " " + this.data.autor.lastName1
       );
+    },
+    isLoggedInAdmin() {
+      return this.$store.getters.isLoggedInAdmin;
     },
   },
 };

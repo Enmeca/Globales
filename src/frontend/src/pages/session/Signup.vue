@@ -368,7 +368,7 @@ export default {
 
         this.registerSuccess = true;
         this.cleanData();
-        // redirifiendo a la pagina de perfil
+        // redirifiendo a la pagina de login
         setTimeout(() => this.$router.push({ path: "/login" }), 3000);
       } else {
         this.registerError = true;
