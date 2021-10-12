@@ -42,7 +42,16 @@ public class LikedUsersController {
     public List<LikedUsers> findLikedUsersByLikedUserID(@PathVariable("id") String id) {
         return service.findLikedUsersByLikedUserID(id);
     }
+    
+    // This method will be used when a user likes another to check if the other one had also liked him before hand in
+    // order to know if a match has been made
+    @GetMapping(path = "/verify/{userId}/{likedUserId}")
+    public LikedUsers getLikedUser(@PathVariable("userId") String userId, 
+            @PathVariable("likedUserId") String likedUserId ) {
+        return service.getLikedUserByParams(userId, likedUserId);
+    }
 
+    @Transactional
     @DeleteMapping(path = "/del/{user}/{likedUser}")
     public void deleteLikedUser(@PathVariable("user") String user, @PathVariable("likedUser") String likedUser){
         service.deleteLikedUserById(user,likedUser);

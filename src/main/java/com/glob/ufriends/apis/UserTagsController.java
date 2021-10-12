@@ -43,6 +43,7 @@ public class UserTagsController {
         return service.findUserTagsByTagID(id);
     }
 
+    @Transactional
     @DeleteMapping(path = "/del/{id}/{tag}")
     public void deleteUserTag(@PathVariable("id") String id, @PathVariable("tag") String tag){
         service.deleteUserTagsByParams(id,tag);

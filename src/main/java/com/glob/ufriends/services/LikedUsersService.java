@@ -21,7 +21,7 @@ public class LikedUsersService {
         return repository.findAll();
     }
 
-    public LikedUsers getUserTag(LikedUsersId id){
+    public LikedUsers getLikedUser(LikedUsersId id){
         return repository.findById(id).orElse(null);
     }
 
@@ -32,7 +32,11 @@ public class LikedUsersService {
     public List<LikedUsers> findLikedUsersByLikedUserID(String likedUserId){
         return repository.findLikedUsersByLikedUserID(likedUserId);
     }
-
+    
+    public LikedUsers getLikedUserByParams(String userId, String likedUserId){
+        return repository.getLikedUser(userId, likedUserId);
+    }
+    
     public void deleteLikedUsers(LikedUsers obj){
         repository.delete(obj);
     }

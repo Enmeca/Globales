@@ -18,7 +18,11 @@ public interface LikedUsersRepo extends JpaRepository<LikedUsers, LikedUsersId>{
     @Query(value = "select * from LIKED_USERS lu where lu.LIKED_USER_UID = ?1",
             nativeQuery = true)
     List<LikedUsers> findLikedUsersByLikedUserID(String likedUserId);
-
+    
+    @Query(value = "select * from LIKED_USERS lu where lu.USER_UID = ?1 and lu.LIKED_USER_UID = ?2",
+            nativeQuery = true)
+    LikedUsers getLikedUser(String userId, String likedUserId);
+    
     @Modifying
     @Query(value = "delete from LIKED_USERS lu where lu.USER_UID = ?1 and lu.LIKED_USER_UID = ?2",
             nativeQuery = true)
