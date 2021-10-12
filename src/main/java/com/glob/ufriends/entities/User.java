@@ -31,10 +31,15 @@ public class User {
     @Column(name = "LAST_NAME_2")
     private String lastName2;
     @Column (name = "DATE_OF_BIRTH")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    //@JsonFormat(pattern="yyyy-MM-dd") // Is this really needed ?
     private Date dateOfBirth;
     @Column(name = "DESCRIPTION")
     private String description;
+    @Column(name = "LAST_CONNECTED")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private java.util.Date lastConnected;
+    @Column(name = "IS_ACTIVE")
+    private int isActive;
     @Column(name = "IS_TUTOR")
     private int isTutor;
     @Column(name = "IS_ADMIN")
