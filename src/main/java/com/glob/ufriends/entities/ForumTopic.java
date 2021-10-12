@@ -26,6 +26,8 @@ public class ForumTopic {
     @Column (name = "CREATION_DATE")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date creationDate;
+    @Column (name = "COMMENTS_QUANTITY")
+    private int commentsQuantity;
     @Column (name = "IS_ANON")
     private int isAnon;
 }

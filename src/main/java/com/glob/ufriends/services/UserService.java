@@ -27,6 +27,19 @@ public class UserService {
     public void deleteUser(User obj){
         repository.delete(obj);
     }
+    
+    public void updateUserLastConnected(String id){
+        repository.updateUserLastConnected(id);
+    }
+    
+    public void updateUserIsActive(String userId){
+        User user = repository.findById(userId).orElse(null);
+        
+        if(user != null){
+            int active = user.getIsActive() == 1 ? 0 : 1;
+            repository.updateUserIsActive(active,userId);
+        }
+    }
 
     public User loginById(String id, String password){
         return repository.getUserByIdPassword(id,password);

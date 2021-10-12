@@ -27,6 +27,11 @@ public class ForumTopicService {
     public ForumTopic getForumTopic(int id){
         return repository.findById(id).orElse(null);
     }
+    
+    public ForumTopic updateForumTopicCommentsQuantity(int comments, int forumId){
+        repository.updateForumTopicCommentsQuantity(comments, forumId);
+        return repository.findById(forumId).orElse(null);
+    }
 
     public void deleteForumTopic(ForumTopic obj){
         repository.delete(obj);
