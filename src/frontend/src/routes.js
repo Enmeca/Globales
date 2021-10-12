@@ -10,7 +10,7 @@ import Mentors from './pages/mentors/Mentors.vue'
 import Login from './pages/session/Login.vue'
 import Signup from './pages/session/Signup.vue'
 import Profile from './pages/profile/Profile.vue'
-
+import admin from './pages/admin/admin.vue'
 // Error componentes
 import NotFound from './pages/error/NotFound.vue'
 
@@ -26,6 +26,7 @@ const router = new Router({
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
     { path: '/profile', component: Profile },
+    {path: '/admin',component: admin},
     { path: '/*', alias: '/notfound', component: NotFound },
   ]
 })
