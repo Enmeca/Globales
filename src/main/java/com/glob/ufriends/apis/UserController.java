@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequestMapping(value = "/api/v1/user")
 @RestController
@@ -69,6 +70,23 @@ public class UserController {
         // Return loggedUser if it was found with the email
         return loggedUser;
     }
+    
+    // Updates user last connected to sysdate of server. 
+    // The user id is passed via a path variable
+    @Transactional
+    @PutMapping(path = "/updateLC/{id}")
+    public void updateUserLastConnected(@PathVariable("id") String id) {
+        service.updateUserLastConnected(id);
+    }
+    
+    // Updates user active status. If the user is active then it will make the user inactive,
+    // if the user is inactive then it will become active.
+    // The user id is passed via a path variable
+    @Transactional
+    @PutMapping(path = "/updateIsActive/{id}")
+    public void updateUserIsActive(@PathVariable("id") String id) {
+        service.updateUserIsActive(id);
+    }
 
     @GetMapping
     public List<User> findAllUsers() {
@@ -85,6 +103,7 @@ public class UserController {
         return service.getAllTutors();
     }
 
+    @Transactional
     @DeleteMapping
     public void deleteUser(@RequestBody User user){
         service.deleteUser(user);

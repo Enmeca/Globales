@@ -43,14 +43,15 @@ public class UserTagsController {
         return service.findUserTagsByTagID(id);
     }
 
+    @Transactional
     @DeleteMapping(path = "/del/{id}/{tag}")
-    public void deleteUser(@PathVariable("id") String id, @PathVariable("tag") String tag){
+    public void deleteUserTag(@PathVariable("id") String id, @PathVariable("tag") String tag){
         service.deleteUserTagsByParams(id,tag);
     }
 
     @Transactional
     @DeleteMapping(path = "/multiple")
-    public void deleteUser(@RequestBody List<UserTags> userTags){
+    public void deleteMultipleUserTags(@RequestBody List<UserTags> userTags){
         for(int i = 0; i< userTags.size(); i++){
             UserTags ut = userTags.get(i);
             service.deleteUserTagsByParams(ut.getUser().getId(),
