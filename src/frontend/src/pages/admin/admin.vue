@@ -181,7 +181,13 @@
           </b-row>
         </div>
         <div v-else>
-            
+          <carousel   :per-page="4" :loop="true" :autoplayTimeout="1000">
+            <customSlice
+            v-for="report in reports"
+            :key="report.id"
+            :data="report"
+            />
+          </carousel>
         </div>
         </b-card-text>
       </b-card-body>
@@ -190,6 +196,9 @@
 </template>
 
 <script>
+import {Carousel} from 'vue-carousel';
+import CustomSlice from './ReportItem.vue'
+
 export default {
     data(){
         return {
@@ -222,7 +231,9 @@ export default {
             { value: "UNA", text: "Universidad Nacional de Costa Rica" },
             { value: "TEC", text: "Instituto Tecnologico de Costa Rica" },
             { value: "UNED", text: "Universidad Estatal a Distancia" },
-            ]};
+            ],
+            reports:[{num:1,id:402420750},{num:2,id:402420751},{num:3,id:402420753},
+            {num:4,id:402420754},{num:5,id:402420755},{num:6,id:402420756}]};
     },
     mounted(){
     fetch("/api/v1/university")
@@ -282,6 +293,9 @@ export default {
             });
             alert(response.status);
         }
+    },
+    components:{
+      Carousel,CustomSlice
     }
 
 };
