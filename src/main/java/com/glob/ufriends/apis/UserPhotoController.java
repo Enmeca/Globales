@@ -41,6 +41,7 @@ public class UserPhotoController {
         return service.getPhotoByUserID(id);
     }
 
+    @Transactional
     @DeleteMapping
     public void deleteUser(@RequestBody UserPhoto userPhoto){
         service.deleteUserPhoto(userPhoto);

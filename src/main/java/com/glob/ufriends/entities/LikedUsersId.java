@@ -2,25 +2,25 @@ package com.glob.ufriends.entities;
 
 import java.io.Serializable;
 
-public class UserTagsId implements  Serializable{
+public class LikedUsersId implements  Serializable{
 
     private String user;
-    private String tag;
+    private String likedUser;
 
-    public UserTagsId(){
+    public LikedUsersId(){
 
     }
 
-    public UserTagsId(String user, String tag) {
+    public LikedUsersId(String user, String likedUser) {
         this.user = user;
-        this.tag = tag;
+        this.likedUser = likedUser;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 41 * hash + user.length();
-        hash = 41 * hash + tag.length();
+        hash = 41 * hash + likedUser.length();
         return hash;
     }
 
@@ -35,11 +35,11 @@ public class UserTagsId implements  Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final UserTagsId other = (UserTagsId) obj;
+        final LikedUsersId other = (LikedUsersId) obj;
         if (this.user != other.user) {
             return false;
         }
-        if (this.tag != other.tag) {
+        if (this.likedUser != other.likedUser) {
             return false;
         }
         return true;

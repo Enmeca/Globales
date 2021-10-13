@@ -7,7 +7,7 @@
       <x>378</x>
       <y>198</y>
       <w>189</w>
-      <h>225</h>
+      <h>234</h>
     </coordinates>
     <panel_attributes>Usuario
 --
@@ -17,11 +17,13 @@
 -Apellido 2: String
 -Fecha de Nacimiento: Date
 -Correo: String
-- Password: String
+-Password: String
 -Carrera: String / FK
 -Universidad: String / FK
 -Descripcion: String
 -Tutor: Boolean
+-UltimaConexion: Date Time
+-Activo: Boolean
 -Administrador: Boolean
 
 </panel_attributes>
@@ -104,7 +106,7 @@ m2=1</panel_attributes>
       <x>675</x>
       <y>315</y>
       <w>198</w>
-      <h>117</h>
+      <h>135</h>
     </coordinates>
     <panel_attributes>Tema de Foro
 --
@@ -113,6 +115,7 @@ m2=1</panel_attributes>
 -Titulo: String
 -Descripción: String
 -Fecha de creación: Date (Time)
+- CantidadComentarios: Int
 -Anon Mode: Boolean</panel_attributes>
     <additional_attributes/>
   </element>
@@ -152,27 +155,27 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>756</x>
-      <y>423</y>
+      <y>441</y>
       <w>45</w>
-      <h>99</h>
+      <h>81</h>
     </coordinates>
     <panel_attributes>
 m1=1..n
 m2=1</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>477</x>
-      <y>414</y>
+      <y>423</y>
       <w>216</w>
-      <h>108</h>
+      <h>99</h>
     </coordinates>
     <panel_attributes>
 m1=1..n
 m2=1</panel_attributes>
-    <additional_attributes>220.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>220.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -251,14 +254,14 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>423</x>
-      <y>414</y>
+      <y>423</y>
       <w>45</w>
-      <h>108</h>
+      <h>99</h>
     </coordinates>
     <panel_attributes>
 m1=1..n
 m2=1</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -320,14 +323,14 @@ m2=0..n</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>234</x>
-      <y>414</y>
+      <y>423</y>
       <w>162</w>
-      <h>63</h>
+      <h>54</h>
     </coordinates>
     <panel_attributes>
 m1=2
 m2=0..n</panel_attributes>
-    <additional_attributes>160.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>160.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -335,7 +338,7 @@ m2=0..n</panel_attributes>
       <x>63</x>
       <y>576</y>
       <w>198</w>
-      <h>108</h>
+      <h>117</h>
     </coordinates>
     <panel_attributes>ChatMessages
 --
@@ -343,6 +346,7 @@ m2=0..n</panel_attributes>
 -Chat: Int / FK a MatchedUsers
 -User: String / FK
 -Message: String
+- Leido: Boolean
 -TimeSent: Date (Time)</panel_attributes>
     <additional_attributes/>
   </element>
