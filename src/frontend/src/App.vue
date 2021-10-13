@@ -31,7 +31,7 @@ body {
   overflow: hidden;
 }
 center {
-  padding-inline: 10vh;
+  padding-inline: 5vh;
   padding-block: 4vw;
 }
 </style>

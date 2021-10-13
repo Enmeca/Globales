@@ -101,10 +101,6 @@ export default {
 </script>
 
 <style scoped>
-center {
-  margin-block: 10vw;
-  margin-inline: 15vw;
-}
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
 }
