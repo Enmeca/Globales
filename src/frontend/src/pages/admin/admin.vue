@@ -252,7 +252,13 @@ export default {
           text: career.name,
         }));
       });
+      fetch("/api/v1/commentReports").then((response) => response.json())
+      .then((data) => {
+          this.reports=data
+          alert(JSON.stringify(data))
+      });
     }
+    
     ,
     methods:{
         changeType(){
