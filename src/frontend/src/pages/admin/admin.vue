@@ -232,8 +232,8 @@ export default {
             { value: "TEC", text: "Instituto Tecnologico de Costa Rica" },
             { value: "UNED", text: "Universidad Estatal a Distancia" },
             ],
-            reports:[{num:1,id:402420750},{num:2,id:402420751},{num:3,id:402420753},
-            {num:4,id:402420754},{num:5,id:402420755},{num:6,id:402420756}]};
+            reports:[]
+            };
     },
     mounted(){
     fetch("/api/v1/university")
@@ -255,7 +255,7 @@ export default {
       fetch("/api/v1/commentReports").then((response) => response.json())
       .then((data) => {
           this.reports=data
-          alert(JSON.stringify(data))
+          //alert(JSON.stringify(data))
       });
     }
     
@@ -292,12 +292,12 @@ export default {
             let tempUser={...this.user}
             tempUser.isTutor=tempUser.isTutor?1:0;
             tempUser.isAdmin=tempUser.isAdmin?1:0;
-            const response = await fetch("api/v1/user", {
+            fetch("api/v1/user", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(tempUser),
             });
-            alert(response.status);
+            
         }
     },
     components:{

@@ -9,9 +9,9 @@
         <b-card-text>
             Comentario: {{this.data.comment.description}}
         </b-card-text>
-        <b-button href="#" variant="primary">Verificar</b-button>
-        <b-button href="#" variant="warning">Eliminar</b-button>
-        <b-button href="#" variant="danger">Sancionar</b-button>
+        <b-button :href="`/forums/id/${this.data.comment.forumId.id}`" variant="primary">Verificar</b-button>
+        <b-button @click="omitReport()" variant="success">Omitir</b-button>
+        <b-button @click="deleteComment()" variant="danger">Eliminar</b-button>
     </b-card>
     </slide>
 </template>
@@ -24,8 +24,21 @@ export default {
       required: true,
     },
   },
-  computed: {
-    
+  methods: {
+    async omitReport(){
+      alert ("xd")
+        const resp = await fetch(`/api/v1/commentReports/delByComment/${this.data.comment.id}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+            });
+     },
+     async deleteComment(){
+       alert ("xd")
+        const resp = await fetch(`/api/v1/commentReports/del/${this.data.comment.id}/${this.data.comment.userid.id}`, {
+                      method: "DELETE",
+                      headers: { "Content-Type": "application/json" },
+                    });
+            }
   },components: {Slide}
 };
 </script>
@@ -34,8 +47,7 @@ export default {
 .main-card {
   background-color: rgba(255, 255, 255, 0.76);
   color: rgba(0, 0, 0, 0.616);
-  max-height: 500px;
-  max-width: 100px;
+  font-size: relative;
   font-size-adjust: inherit;
 }
 </style>
