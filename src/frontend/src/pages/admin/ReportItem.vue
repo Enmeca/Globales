@@ -26,15 +26,13 @@ export default {
   },
   methods: {
     async omitReport(){
-      alert ("xd")
-        const resp = await fetch(`/api/v1/commentReports/delByComment/${this.data.comment.id}`, {
+       fetch(`/api/v1/commentReports/delByComment/${this.data.comment.id}`, {
               method: "DELETE",
               headers: { "Content-Type": "application/json" },
             });
      },
      async deleteComment(){
-       alert ("xd")
-        const resp = await fetch(`/api/v1/commentReports/del/${this.data.comment.id}/${this.data.comment.userid.id}`, {
+        fetch(`/api/v1/commentReports/del/${this.data.comment.id}/${this.data.comment.userid.id}`, {
                       method: "DELETE",
                       headers: { "Content-Type": "application/json" },
                     });
