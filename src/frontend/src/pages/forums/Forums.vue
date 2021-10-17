@@ -1,5 +1,6 @@
 <template>
-  <center>
+<div id="forums-page">
+  <center class="main-card">
     <b-row>
       <b-col sm="12" md="4" lg="4" class="mt-3">
         <b-button variant="secondary" @click="backHome">
@@ -12,7 +13,7 @@
           <b-input-group-prepend is-text>
             <b-icon-search />
           </b-input-group-prepend>
-          <b-form-input v-model.lazy="searchField"> </b-form-input>
+          <b-form-input v-model="searchField"> </b-form-input>
         </b-input-group>
       </b-col>
       <b-col sm="12" md="4" lg="4" class="mt-3" v-if="!modeCreateForum">
@@ -88,8 +89,8 @@
       </p>
     </b-card>
   </center>
+</div>
 </template>
-
 <script>
 // Import components
 import ItemForum from "./ItemForum.vue";
@@ -180,6 +181,14 @@ export default {
 };
 </script>
 <style scoped>
+#forums-page,
+center {
+  height: 40%;
+}
+.main-card {
+  margin-inline: 10vw;
+  margin-block: 2vw;
+}
 p {
   font-size: 20px;
 }

@@ -1,142 +1,144 @@
 <template>
-  <center>
-    <div class="container-forum">
-      <b-row class="mb-2" align-h="between">
-        <b-col cols="4" class="text-left">
-          <b-button variant="secondary" @click="backForums">
-            Regresar
-            <b-icon-signpost-split-fill />
-          </b-button>
-        </b-col>
-      </b-row>
-      <b-card class="forum">
-        <b-row>
-          <b-col sm="12" md="4" lg="2" align-self="center">
-            <b-row>
-              <b-col>
-                <b-avatar
-                  v-if="!forum.anonimo"
-                  variant="info"
-                  :text="authorAbbreviatedName"
-                  size="lg"
-                ></b-avatar>
-                <b-avatar
-                  v-else
-                  variant="dark"
-                  size="lg"
-                  icon="sunglasses"
-                ></b-avatar>
-                <div v-if="!forum.anonimo" class="text-muted">
-                  {{ fullAuthorName }}
-                </div>
-                <div v-else class="text-muted">Anónimo</div>
-              </b-col>
-            </b-row>
-          </b-col>
-          <b-col
-            sm="12"
-            md="8"
-            lg="8"
-            align-self="center"
-            class="forum-content"
-          >
-            <b-row>
-              <b-col sm="12" lg="12">
-                <strong> {{ forum.titulo }} </strong>
-              </b-col>
-              <b-col sm="12" lg="12" class="text-justify">
-                {{ forum.descripcion }}
-              </b-col>
-            </b-row>
-          </b-col>
-          <b-col sm="12" md="12" lg="2" align-self="center">
-            <b-row>
-              <b-col
-                sm="12"
-                offset-sm="0"
-                offset-md="4"
-                md="4"
-                offset-lg="0"
-                lg="12"
-                class="text-muted"
-              >
-                {{ forum.fecha }}
-              </b-col>
-              <b-col sm="12" md="4" lg="12" class="mt-4">
-                <b-badge variant="info">
-                  <span>{{ forum.cantComentarios }}</span>
-                  Comentarios
-                </b-badge>
-                <b-icon-trash-fill
-                  v-if="isLoggedInAdmin"
-                  scale="1.6"
-                  class="cancel-icon ml-3"
-                  variant="danger"
-                />
-              </b-col>
-            </b-row>
+  <div id="forum-page">
+    <center class="main-card">
+      <div class="container-forum">
+        <b-row class="mb-2" align-h="between">
+          <b-col cols="4" class="text-left">
+            <b-button variant="secondary" @click="backForums">
+              Regresar
+              <b-icon-signpost-split-fill />
+            </b-button>
           </b-col>
         </b-row>
-      </b-card>
-      <b-row class="text-right mt-1" v-if="!modeWriteComment">
-        <b-col align-self="end">
-          <b-button variant="info" @click="modeWriteComment = true">
-            Comentar
-            <b-icon-pencil-fill />
-          </b-button>
-        </b-col>
-      </b-row>
-      <transition name="flipX">
-        <b-card class="create-comment mt-2" v-if="modeWriteComment">
-          <b-input-group class="mt-1">
-            <b-form-textarea
-              id="textarea"
-              v-model="newComment.comentario"
-              placeholder="Ingresa un comentario"
-              rows="1"
-              max-rows="3"
-            ></b-form-textarea>
-          </b-input-group>
-          <b-row class="mt-2 justify-content-around">
-            <b-icon-trash-fill
-              class="mt-2 cancel-icon"
-              scale="1.6"
-              variant="danger"
-              @click="cancelWriteComment"
-            />
-            <b-form-checkbox
-              v-b-tooltip.hover
-              title="Anónimo"
-              switch
-              size="lg"
-              class="mt-1"
-              v-model="newComment.anonimo"
+        <b-card class="forum">
+          <b-row>
+            <b-col sm="12" md="4" lg="2" align-self="center">
+              <b-row>
+                <b-col>
+                  <b-avatar
+                    v-if="!forum.anonimo"
+                    variant="info"
+                    :text="authorAbbreviatedName"
+                    size="lg"
+                  ></b-avatar>
+                  <b-avatar
+                    v-else
+                    variant="dark"
+                    size="lg"
+                    icon="sunglasses"
+                  ></b-avatar>
+                  <div v-if="!forum.anonimo" class="text-muted">
+                    {{ fullAuthorName }}
+                  </div>
+                  <div v-else class="text-muted">Anónimo</div>
+                </b-col>
+              </b-row>
+            </b-col>
+            <b-col
+              sm="12"
+              md="8"
+              lg="8"
+              align-self="center"
+              class="forum-content"
             >
-              <b-icon-sunglasses
-                v-if="newComment.anonimo"
-                scale="2"
-                class="ml-2"
-              />
-              <b-icon-eyeglasses v-else scale="2" class="ml-2" />
-            </b-form-checkbox>
-            <b-button
-              variant="info"
-              @click="publishComment"
-              :disabled="!validForm"
-            >
-              Comentar</b-button
-            >
+              <b-row>
+                <b-col sm="12" lg="12">
+                  <strong> {{ forum.titulo }} </strong>
+                </b-col>
+                <b-col sm="12" lg="12" class="text-justify">
+                  {{ forum.descripcion }}
+                </b-col>
+              </b-row>
+            </b-col>
+            <b-col sm="12" md="12" lg="2" align-self="center">
+              <b-row>
+                <b-col
+                  sm="12"
+                  offset-sm="0"
+                  offset-md="4"
+                  md="4"
+                  offset-lg="0"
+                  lg="12"
+                  class="text-muted"
+                >
+                  {{ forum.fecha }}
+                </b-col>
+                <b-col sm="12" md="4" lg="12" class="mt-4">
+                  <b-badge variant="info">
+                    <span>{{ forum.cantComentarios }}</span>
+                    Comentarios
+                  </b-badge>
+                  <b-icon-trash-fill
+                    v-if="isLoggedInAdmin"
+                    scale="1.6"
+                    class="cancel-icon ml-3"
+                    variant="danger"
+                  />
+                </b-col>
+              </b-row>
+            </b-col>
           </b-row>
         </b-card>
-      </transition>
-      <CommentForum
-        v-for="Comment in comments"
-        :key="Comment.id"
-        :data="Comment"
-        class="mt-2 container-comments"
-      />
-    </div>
-  </center>
+        <b-row class="text-right mt-1" v-if="!modeWriteComment">
+          <b-col align-self="end">
+            <b-button variant="info" @click="modeWriteComment = true">
+              Comentar
+              <b-icon-pencil-fill />
+            </b-button>
+          </b-col>
+        </b-row>
+        <transition name="flipX">
+          <b-card class="create-comment mt-2" v-if="modeWriteComment">
+            <b-input-group class="mt-1">
+              <b-form-textarea
+                id="textarea"
+                v-model="newComment.comentario"
+                placeholder="Ingresa un comentario"
+                rows="1"
+                max-rows="3"
+              ></b-form-textarea>
+            </b-input-group>
+            <b-row class="mt-2 justify-content-around">
+              <b-icon-trash-fill
+                class="mt-2 cancel-icon"
+                scale="1.6"
+                variant="danger"
+                @click="cancelWriteComment"
+              />
+              <b-form-checkbox
+                v-b-tooltip.hover
+                title="Anónimo"
+                switch
+                size="lg"
+                class="mt-1"
+                v-model="newComment.anonimo"
+              >
+                <b-icon-sunglasses
+                  v-if="newComment.anonimo"
+                  scale="2"
+                  class="ml-2"
+                />
+                <b-icon-eyeglasses v-else scale="2" class="ml-2" />
+              </b-form-checkbox>
+              <b-button
+                variant="info"
+                @click="publishComment"
+                :disabled="!validForm"
+              >
+                Comentar</b-button
+              >
+            </b-row>
+          </b-card>
+        </transition>
+        <CommentForum
+          v-for="Comment in comments"
+          :key="Comment.id"
+          :data="Comment"
+          class="mt-2 container-comments"
+        />
+      </div>
+    </center>
+  </div>
 </template>
 
 <script>
@@ -244,6 +246,14 @@ export default {
 </script>
 
 <style scoped>
+#forum-page,
+center {
+  height: 40%;
+}
+.main-card {
+  margin-inline: 10vw;
+  margin-block: 1vw;
+}
 .forum {
   border-radius: 10px;
 }
