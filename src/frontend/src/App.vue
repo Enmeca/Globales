@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="rootPage">
     <NavBar />
     <transition enter-active-class="animated fadeInDown">
-      <router-view></router-view>
+      <router-view class="currentPage"></router-view>
     </transition>
   </div>
 </template>
@@ -28,10 +28,9 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
 }
-center {
-  padding-inline: 5vh;
-  padding-block: 4vw;
+.rootPage,
+.currentPage {
+  height: 100%;
 }
 </style>

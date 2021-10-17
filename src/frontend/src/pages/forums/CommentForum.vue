@@ -53,12 +53,12 @@
             lg="12"
             align-self="center"
           >
-            <b-icon-flag-fill
+            <b-icon-trash-fill
               v-if="isLoggedInAdmin"
               class="flag-icon"
               variant="danger"
             />
-            <b-icon-trash-fill v-else class="flag-icon" variant="danger" />
+            <b-icon-flag-fill v-else class="flag-icon" variant="danger" />
           </b-col>
         </b-row>
       </b-col>

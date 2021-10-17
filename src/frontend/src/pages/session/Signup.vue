@@ -1,4 +1,5 @@
 <template>
+<div id="signup-page">
   <center>
     <b-overlay :show="status == 'Loading'" variant="dark">
       <b-card class="main-card text-light">
@@ -263,6 +264,7 @@
       </template>
     </b-overlay>
   </center>
+</div>
 </template>
 
 <script>
@@ -291,6 +293,7 @@ export default {
         description: "",
         isTutor: 0,
         isAdmin: 0,
+        isActive: 1,
         userPhoto: null,
       },
       user_tags: [],
@@ -396,6 +399,7 @@ export default {
         description: "",
         isTutor: 0,
         isAdmin: 0,
+        isActive: 1,
         userPhoto: null,
       };
     },
@@ -404,8 +408,13 @@ export default {
 </script>
 
 <style scoped>
+#signup-page,
+center {
+ height: 50%;
+}
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
 }
 .input {
   max-width: 350px;

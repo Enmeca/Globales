@@ -76,8 +76,8 @@
         <b-nav-item
           v-if="isLoggedIn"
           class="mr-5"
-          href="#/mentors"
-          title="Mentores"
+          href="#/tutors"
+          title="Tutores"
         >
           <b-icon-people-fill />
           <b-icon-list-stars />
@@ -129,6 +129,10 @@ export default {
   },
   methods: {
     logout() {
+      /// Actualizar la ultima hora de conexión
+      fetch("api/v1/user/updateLC/" + this.$store.state.user.id, {
+        method: "PUT",
+      });
       this.$store.commit("removeUser");
       this.$router.push({ path: "/login" }); // redirifiendo a la pagina de login
     },

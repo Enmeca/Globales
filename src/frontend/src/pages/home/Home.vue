@@ -10,19 +10,24 @@
         <b-card-body>
           <b-card-text>
             <p>
-              Una aplicación en la que podrás conocer amigos de tu universidad.
+              Una aplicación en la que podrás conocer amigos de tu universidad
+              <b-icon-chat-dots-fill />
             </p>
             <p>
+              <b-icon-bell-fill />
               Nuestro algoritmo te emparejara con personas con gustos similares
-              a los tuyos.
+              a los tuyos
             </p>
             <p>
               Conoce tutores que podrán ayudarte con las asignaciones de los
-              cursos.
+              cursos
+              <b-icon-people-fill />
+              <b-icon-list-stars />
             </p>
             <p>
+              <b-icon-signpost-fill />
               Podrás participar y crear foros de discusión, inclusive de forma
-              anonima.
+              anonima
             </p>
           </b-card-text>
         </b-card-body>
@@ -33,18 +38,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      date_server: "",
-    };
-  },
-  mounted() {
-    fetch("/api/v1/home/date")
-      .then((response) => response.text())
-      .then((data) => {
-        this.date_server = data;
-      });
-  },
   computed: {
     welcomeUser() {
       if (this.$store.getters.isLoggedIn) {
@@ -64,8 +57,14 @@ export default {
 </script>
 
 <style scoped>
+#home-page,
+center {
+  height: 40%;
+}
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
+  margin-block: 10vw;
 }
 p {
   font-size: 20px;

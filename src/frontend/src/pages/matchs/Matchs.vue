@@ -1,5 +1,5 @@
 <template>
-  <div id="home-page">
+  <div id="matchs-page">
     <center>
       <b-card class="main-card text-light">
         <b-card-title class="h2">
@@ -24,8 +24,14 @@ export default {};
 </script>
 
 <style scoped>
+#matchs-page,
+center {
+ height: 40%;
+}
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
+  margin-block: 10vw;
 }
 p {
   font-size: 20px;

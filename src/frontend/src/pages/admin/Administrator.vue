@@ -1,5 +1,5 @@
 <template>
-  <div id="home-page">
+  <div id="admin-page">
     <center>
       <b-card class="main-card text-light">
         <b-card-title class="display-4">
@@ -18,32 +18,17 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      date_server: "",
-    };
-  },
-  mounted() {
-    fetch("/api/v1/home/date")
-      .then((response) => response.text())
-      .then((data) => {
-        this.date_server = data;
-      });
-  },
-  computed: {
-    userName() {
-      if (this.$store.getters.isLoggedIn) {
-        return "Bienvenido " + this.$store.state.user.name;
-      }
-      return "";
-    },
-  },
-};
+export default {};
 </script>
 
 <style scoped>
+#admin-page,
+center {
+  height: 40%;
+}
 .main-card {
+  margin-inline: 10vw;
+  margin-block: 8vw;
   background-color: rgba(0, 0, 0, 0.5);
 }
 p {
