@@ -5,7 +5,7 @@
         <b-row>
           <b-col>
             <b-avatar
-              v-if="!data.anonimo"
+              v-if="!data.isAnon"
               variant="info"
               :text="authorAbbreviatedName"
               size="lg"
@@ -16,7 +16,7 @@
               size="lg"
               icon="sunglasses"
             ></b-avatar>
-            <div v-if="!data.anonimo" class="text-muted">
+            <div v-if="!data.isAnon" class="text-muted">
               {{ fullAuthorName }}
             </div>
             <div v-else class="text-muted">Anónimo</div>
@@ -26,7 +26,7 @@
       <b-col sm="12" md="8" lg="8" align-self="center">
         <b-row class="comment-content">
           <b-col sm="12" lg="12" class="text-justify">
-            {{ data.comentario }}
+            {{ data.description }}
           </b-col>
         </b-row>
       </b-col>
@@ -42,7 +42,7 @@
             class="text-muted"
             align-self="center"
           >
-            {{ data.fechaCreacion }}
+            {{ getFormatDate }}
           </b-col>
           <b-col
             sm="2"
@@ -76,15 +76,20 @@ export default {
   },
   computed: {
     authorAbbreviatedName() {
-      return this.data.autor.name[0] + this.data.autor.lastName1[0];
+      return this.data.authorId.name[0] + this.data.authorId.lastName1[0];
     },
     fullAuthorName() {
       return (
-        this.data.autor.name.split(" ")[0] + " " + this.data.autor.lastName1
+        this.data.authorId.name.split(" ")[0] +
+        " " +
+        this.data.authorId.lastName1
       );
     },
     isLoggedInAdmin() {
       return this.$store.getters.isLoggedInAdmin;
+    },
+    getFormatDate() {
+      return new Date(this.data.creationDate).toLocaleString();
     },
   },
 };

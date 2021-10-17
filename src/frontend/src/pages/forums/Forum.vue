@@ -16,7 +16,7 @@
               <b-row>
                 <b-col>
                   <b-avatar
-                    v-if="!forum.anonimo"
+                    v-if="!forum.isAnon"
                     variant="info"
                     :text="authorAbbreviatedName"
                     size="lg"
@@ -27,7 +27,7 @@
                     size="lg"
                     icon="sunglasses"
                   ></b-avatar>
-                  <div v-if="!forum.anonimo" class="text-muted">
+                  <div v-if="!forum.isAnon" class="text-muted">
                     {{ fullAuthorName }}
                   </div>
                   <div v-else class="text-muted">Anónimo</div>
@@ -43,10 +43,10 @@
             >
               <b-row>
                 <b-col sm="12" lg="12">
-                  <strong> {{ forum.titulo }} </strong>
+                  <strong> {{ forum.title }} </strong>
                 </b-col>
                 <b-col sm="12" lg="12" class="text-justify">
-                  {{ forum.descripcion }}
+                  {{ forum.description }}
                 </b-col>
               </b-row>
             </b-col>
@@ -61,11 +61,11 @@
                   lg="12"
                   class="text-muted"
                 >
-                  {{ forum.fecha }}
+                  {{ getFormatDate }}
                 </b-col>
                 <b-col sm="12" md="4" lg="12" class="mt-4">
                   <b-badge variant="info">
-                    <span>{{ forum.cantComentarios }}</span>
+                    <span>{{ forum.commentsQuantity }}</span>
                     Comentarios
                   </b-badge>
                   <b-icon-trash-fill
@@ -87,49 +87,73 @@
             </b-button>
           </b-col>
         </b-row>
-        <transition name="flipX">
-          <b-card class="create-comment mt-2" v-if="modeWriteComment">
-            <b-input-group class="mt-1">
-              <b-form-textarea
-                id="textarea"
-                v-model="newComment.comentario"
-                placeholder="Ingresa un comentario"
-                rows="1"
-                max-rows="3"
-              ></b-form-textarea>
-            </b-input-group>
-            <b-row class="mt-2 justify-content-around">
-              <b-icon-trash-fill
-                class="mt-2 cancel-icon"
-                scale="1.6"
-                variant="danger"
-                @click="cancelWriteComment"
-              />
-              <b-form-checkbox
-                v-b-tooltip.hover
-                title="Anónimo"
-                switch
-                size="lg"
-                class="mt-1"
-                v-model="newComment.anonimo"
-              >
-                <b-icon-sunglasses
-                  v-if="newComment.anonimo"
-                  scale="2"
-                  class="ml-2"
+        <b-alert :show="registerSuccess" variant="success" fade dismissible>
+          <h4>
+            Comentario publicado
+            <b-icon-emoji-laughing scale="1" />
+          </h4>
+        </b-alert>
+        <b-alert :show="registerError" variant="danger" fade dismissible>
+          <h4>
+            Ha ocurrido un error, comentario no publicado
+            <b-icon-emoji-frown scale="1" />
+          </h4>
+        </b-alert>
+        <b-overlay :show="status == 'Loading'" variant="dark">
+          <transition name="flipX">
+            <b-card class="create-comment mt-2" v-if="modeWriteComment">
+              <b-input-group class="mt-1">
+                <b-form-textarea
+                  id="textarea"
+                  v-model="newComment.description"
+                  placeholder="Ingresa un comentario"
+                  rows="1"
+                  max-rows="3"
+                ></b-form-textarea>
+              </b-input-group>
+              <b-row class="mt-2 justify-content-around">
+                <b-icon-trash-fill
+                  class="mt-2 cancel-icon"
+                  scale="1.6"
+                  variant="danger"
+                  @click="cancelWriteComment"
                 />
-                <b-icon-eyeglasses v-else scale="2" class="ml-2" />
-              </b-form-checkbox>
-              <b-button
-                variant="info"
-                @click="publishComment"
-                :disabled="!validForm"
-              >
-                Comentar</b-button
-              >
-            </b-row>
-          </b-card>
-        </transition>
+                <b-form-checkbox
+                  v-b-tooltip.hover
+                  title="Anónimo"
+                  switch
+                  size="lg"
+                  class="mt-1"
+                  v-model="newComment.isAnon"
+                >
+                  <b-icon-sunglasses
+                    v-if="newComment.isAnon"
+                    scale="2"
+                    class="ml-2"
+                  />
+                  <b-icon-eyeglasses v-else scale="2" class="ml-2" />
+                </b-form-checkbox>
+                <b-button
+                  variant="info"
+                  @click="publishComment"
+                  :disabled="!validForm"
+                >
+                  Comentar</b-button
+                >
+              </b-row>
+            </b-card>
+          </transition>
+          <template #overlay>
+            <div class="text-center text-white">
+              <b-icon
+                icon="stopwatch"
+                font-scale="3"
+                animation="cylon"
+              ></b-icon>
+              <p id="cancel-label">Por favor espere...</p>
+            </div>
+          </template>
+        </b-overlay>
         <CommentForum
           v-for="Comment in comments"
           :key="Comment.id"
@@ -151,92 +175,93 @@ export default {
   },
   data() {
     return {
+      status: "Ready",
       modeWriteComment: false,
+      registerError: false,
+      registerSuccess: false,
       newComment: {
         id: 0,
-        idForo: this.$route.params.id,
-        autor: this.$store.state.user,
-        comentario: "",
-        fechaCreacion: "29.9.2021 08:40am",
-        anonimo: false,
+        forumId: { id: this.$route.params.id },
+        authorId: this.$store.state.user,
+        description: "",
+        creationDate: null,
+        isAnon: 0,
       },
       forum: {
         id: 1,
-        autor: { name: " ", lastName1: " " },
+        authorId: { name: " ", lastName1: " " },
         titulo: " ",
         descripcion: " ",
         fecha: " ",
-        anonimo: false,
-        cantComentarios: 1,
+        isAnon: 0,
+        cantDescriptions: 1,
       },
       comments: [],
     };
   },
   mounted() {
-    //console.log("You see the forum with id: " + this.$route.params.id);
-    //Fetch data for comment
-    this.forum = {
-      id: 1,
-      autor: { name: "Juan", lastName1: "Salas" },
-      titulo: "¿Pasos iniciales para aprender c++ rapido?",
-      descripcion:
-        "Estoy llevando el curso de fundamentos con el profesor X y no logro comprender la materia, pronto será el examen y no se que hacer",
-      fecha: "28.9.2021 03:46pm",
-      anonimo: false,
-      cantComentarios: 4,
-    };
-    this.comments = [
-      {
-        id: 1,
-        idForo: 1,
-        autor: { name: "Miguel", lastName1: "Salas" },
-        comentario: "¿Asiste a tutorias?",
-        fechaCreacion: "29.9.2021 08:40am",
-        anonimo: false,
-      },
-      {
-        id: 2,
-        idForo: 1,
-        autor: { name: "Daniela", lastName1: "Hernandez" },
-        comentario: "En youtube hay buen contenido",
-        fechaCreacion: "28.9.2021 05:23pm",
-        anonimo: true,
-      },
-    ];
+    fetch("/api/v1/forumTopic/" + this.$route.params.id)
+      .then((response) => response.json())
+      .then((data) => {
+        this.forum = data;
+      });
+    fetch("/api/v1/forumComments/forum/" + this.$route.params.id)
+      .then((response) => response.json())
+      .then((data) => {
+        this.comments = data.reverse();
+      });
   },
   computed: {
     authorAbbreviatedName() {
-      return this.forum.autor.name[0] + this.forum.autor.lastName1[0];
+      return this.forum.authorId.name[0] + this.forum.authorId.lastName1[0];
     },
     fullAuthorName() {
-      return (
-        this.forum.autor.name.split(" ")[0] + " " + this.forum.autor.lastName1
-      );
+      return this.forum.authorId.name + " " + this.forum.authorId.lastName1;
     },
     validForm() {
-      return this.newComment.comentario != "";
+      return this.newComment.description != "";
     },
     isLoggedInAdmin() {
       return this.$store.getters.isLoggedInAdmin;
+    },
+    getFormatDate() {
+      return new Date(this.forum.creationDate).toLocaleString();
     },
   },
   methods: {
     cancelWriteComment() {
       this.modeWriteComment = false;
-      this.newComment.comentario = "";
-      this.newComment.anonimo = false;
+      this.newComment.description = "";
+      this.newComment.isAnon = false;
     },
-    publishComment() {
+    async publishComment() {
+      this.status = "Loading";
+      this.newComment.isAnon = this.newComment.isAnon ? 1 : 0;
+      const response = await fetch("/api/v1/forumComments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.newComment),
+      });
+      if (response.status == 200) {
+        this.registerSuccess = true;
+        fetch("/api/v1/forumComments/forum/" + this.$route.params.id)
+          .then((response) => response.json())
+          .then((data) => {
+            this.comments = data.reverse();
+          });
+        this.newComment = {
+          id: 0,
+          forumId: { id: this.$route.params.id },
+          authorId: this.$store.state.user,
+          description: "",
+          creationDate: null,
+          isAnon: 0,
+        };
+      } else {
+        this.registerError = true;
+      }
       this.modeWriteComment = false;
-      this.comments.unshift(this.newComment);
-      this.newComment = {
-        id: 0,
-        idForo: this.$route.params.id,
-        autor: this.$store.state.user,
-        comentario: "",
-        fechaCreacion: "29.9.2021 08:40am",
-        anonimo: false,
-      };
+      this.status = "Ready";
     },
     backForums() {
       this.$router.push({ path: "/forums" });
