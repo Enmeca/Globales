@@ -5,7 +5,7 @@
         <b-row>
           <b-col>
             <b-avatar
-              v-if="!data.anonimo"
+              v-if="!data.isAnon"
               variant="info"
               :text="authorAbbreviatedName"
               size="lg"
@@ -16,7 +16,7 @@
               size="lg"
               icon="sunglasses"
             ></b-avatar>
-            <div v-if="!data.anonimo" class="text-muted">
+            <div v-if="!data.isAnon" class="text-muted">
               {{ fullAuthorName }}
             </div>
             <div v-else class="text-muted">Anónimo</div>
@@ -32,7 +32,7 @@
       >
         <b-row>
           <b-col sm="12" lg="12">
-            <strong> {{ data.titulo }} </strong>
+            <strong> {{ data.title }} </strong>
           </b-col>
           <b-col sm="12" lg="12" class="text-justify">
             {{ getSpoilerDescription }}
@@ -50,11 +50,11 @@
             lg="12"
             class="text-muted"
           >
-            {{ data.fecha }}
+            {{ getFormatDate }}
           </b-col>
           <b-col sm="12" md="4" lg="12">
-            <b-badge variant="info">
-              <span>{{ data.cantComentarios }}</span>
+            <b-badge variant="info" pill>
+              <span> {{ data.commentsQuantity }}</span>
               Comentarios
             </b-badge>
           </b-col>
@@ -74,17 +74,22 @@ export default {
   },
   computed: {
     authorAbbreviatedName() {
-      return this.data.autor.name[0] + this.data.autor.lastName1[0];
+      return this.data.authorId.name[0] + this.data.authorId.lastName1[0];
     },
     fullAuthorName() {
       return (
-        this.data.autor.name.split(" ")[0] + " " + this.data.autor.lastName1
+        this.data.authorId.name.split(" ")[0] +
+        " " +
+        this.data.authorId.lastName1
       );
     },
     getSpoilerDescription() {
-      return this.data.descripcion.length < 100
-        ? this.data.descripcion
-        : this.data.descripcion.slice(0, 100) + "...";
+      return this.data.description.length < 100
+        ? this.data.description
+        : this.data.description.slice(0, 100) + "...";
+    },
+    getFormatDate() {
+      return new Date(this.data.creationDate).toLocaleString();
     },
   },
   methods: {
