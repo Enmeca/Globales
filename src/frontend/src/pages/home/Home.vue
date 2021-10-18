@@ -5,23 +5,27 @@
         <b-card-title class="display-4">
           UFriends
           <b-icon-people-fill />
+          <p>{{ welcomeUser }}</p>
         </b-card-title>
         <b-card-body>
           <b-card-text>
-            <!--<p>Fecha del servidor: {{ date_server }}</p>-->
-            <p>{{ userName }}</p>
             <p>
               Una aplicación en la que podrás conocer amigos de tu universidad
+              <b-icon-chat-dots-fill />
             </p>
             <p>
+              <b-icon-bell-fill />
               Nuestro algoritmo te emparejara con personas con gustos similares
               a los tuyos
             </p>
             <p>
-              Nuestros mentores y tutores podrán ayudarte con las asignaciones
-              de los cursos
+              Conoce tutores que podrán ayudarte con las asignaciones de los
+              cursos
+              <b-icon-people-fill />
+              <b-icon-list-stars />
             </p>
             <p>
+              <b-icon-signpost-fill />
               Podrás participar y crear foros de discusión, inclusive de forma
               anonima
             </p>
@@ -34,22 +38,17 @@
 
 <script>
 export default {
-  data() {
-    return {
-      date_server: "",
-    };
-  },
-  mounted() {
-    fetch("/api/v1/home/date")
-      .then((response) => response.text())
-      .then((data) => {
-        this.date_server = data;
-      });
-  },
   computed: {
-    userName() {
+    welcomeUser() {
       if (this.$store.getters.isLoggedIn) {
-        return "Bienvenido " + this.$store.state.user.name;
+        return (
+          "Bienvenido " +
+          this.$store.state.user.name +
+          " " +
+          this.$store.state.user.lastName1 +
+          " " +
+          this.$store.state.user.lastName2
+        );
       }
       return "";
     },
@@ -58,12 +57,14 @@ export default {
 </script>
 
 <style scoped>
+#home-page,
 center {
-  margin: 5vw;
-  margin-inline: 15vw;
+  height: 40%;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
+  margin-block: 10vw;
 }
 p {
   font-size: 20px;

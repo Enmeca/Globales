@@ -1,17 +1,17 @@
 <template>
-  <div id="home-page">
+  <div id="tutors-page">
     <center>
       <b-card class="main-card text-light">
         <b-card-title class="h2">
-          Mentores
+          Tutores
           <b-icon-people-fill />
           <b-icon-list-stars />
         </b-card-title>
         <b-card-body>
           <b-card-text>
             <p>
-              Aqui podras ver los tutores o mentores asi como calificaciones o
-              opiniones
+              Aqui podras ver los tutores asi como las calificaciones o
+              opiniones de otros estudiantes
             </p>
           </b-card-text>
         </b-card-body>
@@ -25,12 +25,14 @@ export default {};
 </script>
 
 <style scoped>
+#tutors-page,
 center {
-  margin: 5vw;
-  margin-inline: 15vw;
+  height: 40%;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
+  margin-block: 10vw;
 }
 p {
   font-size: 20px;

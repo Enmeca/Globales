@@ -1,6 +1,7 @@
 <template>
-  <div id="home-page">
-    <center>
+<div id="signup-page">
+  <center>
+    <b-overlay :show="status == 'Loading'" variant="dark">
       <b-card class="main-card text-light">
         <b-card-body>
           <b-card-title class="display-3">
@@ -234,6 +235,7 @@
                 @click="signup"
                 size="lg"
                 :disabled="!validForm"
+                pill
                 >Registrarse</b-button
               >
             </b-col>
@@ -254,14 +256,22 @@
           </b-alert>
         </b-card-body>
       </b-card>
-    </center>
-  </div>
+      <template #overlay>
+        <div class="text-center text-white">
+          <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+          <p id="cancel-label">Por favor espere...</p>
+        </div>
+      </template>
+    </b-overlay>
+  </center>
+</div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      status: "Ready",
       registerError: false,
       registerSuccess: false,
       searchTag: "",
@@ -283,6 +293,7 @@ export default {
         description: "",
         isTutor: 0,
         isAdmin: 0,
+        isActive: 1,
         userPhoto: null,
       },
       user_tags: [],
@@ -344,11 +355,13 @@ export default {
         user: { id: this.user.id },
         tag: { name: tag },
       }));
+      this.status = "Loading";
       const response = await fetch("api/v1/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
       });
+      this.status = "Ready";
       if (response.status == 200) {
         fetch("api/v1/userTags/multiple", {
           method: "POST",
@@ -358,7 +371,7 @@ export default {
 
         this.registerSuccess = true;
         this.cleanData();
-        // redirifiendo a la pagina de perfil
+        // redirifiendo a la pagina de login
         setTimeout(() => this.$router.push({ path: "/login" }), 3000);
       } else {
         this.registerError = true;
@@ -386,6 +399,7 @@ export default {
         description: "",
         isTutor: 0,
         isAdmin: 0,
+        isActive: 1,
         userPhoto: null,
       };
     },
@@ -394,12 +408,13 @@ export default {
 </script>
 
 <style scoped>
+#signup-page,
 center {
-  margin-top: 2vw;
-  margin-inline: 10vw;
+ height: 50%;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
 }
 .input {
   max-width: 350px;

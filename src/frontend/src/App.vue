@@ -1,17 +1,16 @@
 <template>
-  <div>
+  <div class="rootPage">
     <NavBar />
-    <!-- Current page -->
-    <router-view />
+    <transition enter-active-class="animated fadeInDown">
+      <router-view class="currentPage"></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
-// Import components
 import NavBar from "./pages/NavBar.vue";
 
 export default {
-  // Specify which components you are using
   components: {
     NavBar,
   },
@@ -19,6 +18,7 @@ export default {
 </script>
 
 <style>
+html,
 body {
   background-image: url("./assets/background.jpeg");
   background-size: cover;
@@ -27,6 +27,10 @@ body {
   background-position: left center;
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+.rootPage,
+.currentPage {
   height: 100%;
 }
 </style>
