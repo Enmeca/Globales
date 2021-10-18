@@ -14,6 +14,11 @@ import Router from 'vue-router'
 Vue.use(Router)
 import router from './routes.js'
 
+// Vue carousel
+import VueCarousel from 'vue-carousel';
+Vue.use(VueCarousel);
+
+
 // BootstrapVue
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'

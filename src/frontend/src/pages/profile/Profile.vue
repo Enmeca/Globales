@@ -401,7 +401,7 @@ export default {
             }));
 
           if (deletetags.length > 0) {
-            fetch("api/v1/userTags/multiple", {
+            fetch("api/v1/userTags/zmultiple", {
               method: "DELETE",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(deletetags),

@@ -12,11 +12,8 @@ import Tutors from './pages/tutors/Tutors.vue'
 import Login from './pages/session/Login.vue'
 import Signup from './pages/session/Signup.vue'
 import Profile from './pages/profile/Profile.vue'
-
-// Componentes de Administrador
 import Administrator from './pages/admin/Administrator.vue'
-
-// Componentes de Error
+// Error componentes
 import NotFound from './pages/error/NotFound.vue'
 import NotAuth from './pages/error/NotAuth.vue'
 
