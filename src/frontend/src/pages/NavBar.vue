@@ -90,16 +90,8 @@
           href="#/administrator"
           title="Administrador"
         >
-          <b-icon-key-fill />
-          <template v-if="expanded">Administrador</template>
-        </b-nav-item>
-        <b-nav-item
-          v-if="isLoggedIn"
-          class="mr-3"
-          href="#/admin"
-          title="Administrador"
-        >
           <b-icon-gear />
+          <template v-if="expanded">Administrador</template>
         </b-nav-item>
       </b-navbar-nav>
 
@@ -150,8 +142,9 @@ export default {
       return (
         this.$store.state.user.name[0] + this.$store.state.user.lastName1[0]
       );
-    },isAdmin(){
-      return this.$store.user.isAdmin
+    },
+    isAdmin() {
+      return this.$store.user.isAdmin;
     },
     isLoggedIn() {
       return this.$store.getters.isLoggedIn;
