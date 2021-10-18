@@ -1,22 +1,28 @@
 <template>
-    <slide>
-    <b-card class="main-card"
-        :title="`Reporte #${this.data.comment.id} de ${this.data.user.id}`"
-        style="max-width: 20rem;">
-        <b-card-text>
-            Motivo: {{this.data.motive}}
-        </b-card-text>
-        <b-card-text>
-            Comentario: {{this.data.comment.description}}
-        </b-card-text>
-        <b-button :href="`/forums/id/${this.data.comment.forumId.id}`" variant="primary">Verificar</b-button>
-        <b-button @click="omitReport()" variant="success">Omitir</b-button>
-        <b-button @click="deleteComment()" variant="danger">Eliminar</b-button>
+  <slide>
+    <b-card
+      class="main-card"
+      :title="`Reporte #${this.data.comment.id} de ${this.data.user.id}`"
+      style="max-width: 20rem"
+    >
+      <b-card-text> Motivo: {{ this.data.motive }} </b-card-text>
+      <b-card-text>
+        Comentario: {{ this.data.comment.description }}
+      </b-card-text>
+      <b-button
+        :href="`#/forums/${this.data.comment.forumId.id}`"
+        variant="primary"
+        >Verificar</b-button
+      >
+      <br />
+      <b-button @click="omitReport()" variant="success">Omitir</b-button>
+      <br />
+      <b-button @click="deleteComment()" variant="danger">Eliminar</b-button>
     </b-card>
-    </slide>
+  </slide>
 </template>
 <script>
-import {Slide} from 'vue-carousel';
+import { Slide } from "vue-carousel";
 export default {
   props: {
     data: {
@@ -25,19 +31,23 @@ export default {
     },
   },
   methods: {
-    async omitReport(){
-       fetch(`/api/v1/commentReports/delByComment/${this.data.comment.id}`, {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-            });
-     },
-     async deleteComment(){
-        fetch(`/api/v1/commentReports/del/${this.data.comment.id}/${this.data.comment.userid.id}`, {
-                      method: "DELETE",
-                      headers: { "Content-Type": "application/json" },
-                    });
-            }
-  },components: {Slide}
+    async omitReport() {
+      fetch(`/api/v1/commentReports/delByComment/${this.data.comment.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+    async deleteComment() {
+      fetch(
+        `/api/v1/commentReports/del/${this.data.comment.id}/${this.data.comment.userid.id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    },
+  },
+  components: { Slide },
 };
 </script>
 

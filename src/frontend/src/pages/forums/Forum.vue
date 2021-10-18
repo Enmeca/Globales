@@ -73,6 +73,7 @@
                     scale="1.6"
                     class="cancel-icon ml-3"
                     variant="danger"
+                    @click="deleteForum"
                   />
                 </b-col>
               </b-row>
@@ -96,6 +97,25 @@
         <b-alert :show="registerError" variant="danger" fade dismissible>
           <h4>
             Ha ocurrido un error, comentario no publicado
+            <b-icon-emoji-frown scale="1" />
+          </h4>
+        </b-alert>
+        <b-alert
+          :show="registerReportSuccess"
+          variant="success"
+          fade
+          dismissible
+        >
+          <h4>
+            Reporte registrado
+            <b-icon-emoji-wink scale="1" />
+          </h4>
+          Gracias por tu reporte uno de nuestros administradores lo revisara en
+          brevedad
+        </b-alert>
+        <b-alert :show="registerReportError" variant="danger" fade dismissible>
+          <h4>
+            Ha ocurrido un error, reporte no enviado
             <b-icon-emoji-frown scale="1" />
           </h4>
         </b-alert>
@@ -154,10 +174,37 @@
             </div>
           </template>
         </b-overlay>
+        <div>
+          <b-modal
+            :visible="modeReportComment"
+            title="Reporte de comentario"
+            @hidden="resetReport"
+            @ok="submitReport"
+            cancel-title="Cancelar"
+            ok-title="Enviar reporte"
+          >
+            <form @submit.stop.prevent="submitReport">
+              {{ showReportComment }}
+              <b-form-group
+                label="¿Motivo del reporte?"
+                label-for="name-input"
+                invalid-feedback="Motivo es requerido"
+              >
+                <b-form-input
+                  id="name-input"
+                  v-model="newCommentReport.motive"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </form>
+          </b-modal>
+        </div>
         <CommentForum
           v-for="Comment in comments"
           :key="Comment.id"
           :data="Comment"
+          :deleteComment="deleteComment"
+          :reportComment="reportComment"
           class="mt-2 container-comments"
         />
       </div>
@@ -177,8 +224,11 @@ export default {
     return {
       status: "Ready",
       modeWriteComment: false,
+      modeReportComment: false,
       registerError: false,
       registerSuccess: false,
+      registerReportError: false,
+      registerReportSuccess: false,
       newComment: {
         id: 0,
         forumId: { id: this.$route.params.id },
@@ -197,6 +247,11 @@ export default {
         cantDescriptions: 1,
       },
       comments: [],
+      newCommentReport: {
+        comment: null,
+        user: this.$store.state.user,
+        motive: "",
+      },
     };
   },
   mounted() {
@@ -226,6 +281,20 @@ export default {
     },
     getFormatDate() {
       return new Date(this.forum.creationDate).toLocaleString();
+    },
+    showReportComment() {
+      if (this.newCommentReport.comment) {
+        if (this.newCommentReport.comment.isAnon) {
+          return "Anónimo: " + this.newCommentReport.comment.description;
+        }
+        let autor = !this.newCommentReport.comment.isAnon
+          ? this.newCommentReport.comment.authorId.name +
+            " " +
+            this.newCommentReport.comment.authorId.lastName1
+          : (autor = "Anónimo");
+        return autor + ": " + this.newCommentReport.comment.description;
+      }
+      return "";
     },
   },
   methods: {
@@ -265,6 +334,61 @@ export default {
     },
     backForums() {
       this.$router.push({ path: "/forums" });
+    },
+    async deleteForum() {
+      const response = await fetch("/api/v1/forumTopic", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.forum),
+      });
+      if (response.status == 200) {
+        this.$router.push({ path: "/forums" });
+      }
+    },
+    async deleteComment(data) {
+      const response = await fetch("/api/v1/forumComments", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (response.status == 200) {
+        fetch("/api/v1/forumTopic/" + this.$route.params.id)
+          .then((response) => response.json())
+          .then((data) => {
+            this.forum = data;
+          });
+        fetch("/api/v1/forumComments/forum/" + this.$route.params.id)
+          .then((response) => response.json())
+          .then((data) => {
+            this.comments = data.reverse();
+          });
+      }
+    },
+    reportComment(data) {
+      this.newCommentReport.comment = data;
+      this.modeReportComment = true;
+    },
+    resetReport() {
+      this.modeReportComment = false;
+      this.newCommentReport = {
+        comment: null,
+        user: this.$store.state.user,
+        motive: "",
+      };
+    },
+    async submitReport() {
+      if (this.newCommentReport.comment) {
+        const response = await fetch("/api/v1/commentReports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.newCommentReport),
+        });
+        if (response.status == 200) {
+          this.registerReportSuccess = true;
+        } else {
+          this.registerReportError = true;
+        }
+      }
     },
   },
 };

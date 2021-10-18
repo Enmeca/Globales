@@ -57,8 +57,14 @@
               v-if="isLoggedInAdmin"
               class="flag-icon"
               variant="danger"
+              @click="deleteComment(data)"
             />
-            <b-icon-flag-fill v-else class="flag-icon" variant="danger" />
+            <b-icon-flag-fill
+              v-else
+              class="flag-icon"
+              variant="danger"
+              @click="reportComment(data)"
+            />
           </b-col>
         </b-row>
       </b-col>
@@ -71,6 +77,14 @@ export default {
   props: {
     data: {
       type: Object,
+      required: true,
+    },
+    deleteComment: {
+      type: Function,
+      required: true,
+    },
+    reportComment: {
+      type: Function,
       required: true,
     },
   },

@@ -1,13 +1,9 @@
 <template>
-  <center>
+  <center class="admin-page">
     <b-card class="main-card text-light">
-      <b-card-title class="h2">
-        Pagina de administrador
-        <b-icon-gear />
-      </b-card-title>
       <b-card-body>
         <b-card-text>
-          <p>Administra usuarios y foros</p>
+          <p>Administrar usuarios y foros</p>
           <b-col sm="12" lg="6" class="mb-2" align-self="center">
             <b-button-group>
               <b-button @click="changeType">Usuarios</b-button>
@@ -147,9 +143,7 @@
                       name="checkAdmin"
                     />
                   </b-input-group-prepend>
-                  <b-input-group-prepend is-text
-                    ><b>Tutor:</b>
-                  </b-input-group-prepend>
+                  <b-input-group-prepend is-text>Tutor: </b-input-group-prepend>
                   <b-input-group-prepend is-text>
                     <b-form-checkbox
                       id="checktutor"
@@ -295,12 +289,13 @@ export default {
 </script>
 
 <style scoped>
+#admin-page,
 center {
-  margin: 5vw;
-  margin-inline: 15vw;
+  height: 50%;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
+  margin-inline: 10vw;
 }
 p {
   font-size: 20px;
