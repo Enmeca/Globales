@@ -157,6 +157,18 @@
                 >
               </b-col>
             </b-row>
+            <b-alert :show="registerSuccess" variant="success" fade dismissible>
+              <h4>
+                Usuario {{user.id}} Actualizado
+                <b-icon-emoji-laughing scale="1" />
+              </h4>
+            </b-alert>
+             <b-alert :show="registerError" variant="danger" fade dismissible>
+                <h4>
+                  Ha ocurrido un error, Usuario no Actualizado
+                  <b-icon-emoji-frown scale="1" />
+                  </h4>
+              </b-alert>
           </div>
           <div v-else>
             <carousel :per-page="4" :loop="true" :autoplayTimeout="1000">
@@ -189,6 +201,8 @@ import CustomSlice from "./ReportItem.vue";
 export default {
   data() {
     return {
+      registerError:false,
+      registerSuccess: false,
       manageType: true,
       ForumList: [],
       user: {
@@ -279,11 +293,15 @@ export default {
       tempUser.isTutor = tempUser.isTutor ? 1 : 0;
       tempUser.isAdmin = tempUser.isAdmin ? 1 : 0;
       tempUser.isActive = tempUser.isActive ? 1 : 0;
-      fetch("api/v1/user", {
+      const response = await fetch("api/v1/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tempUser),
       });
+      if(response.status===200)
+          this.registerSuccess=true;
+      else
+          this.registerError=true;
     },
   },
   components: {
