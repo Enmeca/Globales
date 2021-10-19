@@ -137,19 +137,17 @@
               <b-col sm="12" lg="6" class="mb-2" align-self="center">
                 <b-input-group prepend="Admin">
                   <b-input-group-prepend is-text>
-                    <b-form-checkbox
-                      id="checkAdmin"
-                      v-model="user.isAdmin"
-                      name="checkAdmin"
-                    />
+                    <b-form-checkbox v-model="user.isAdmin" />
                   </b-input-group-prepend>
                   <b-input-group-prepend is-text>Tutor: </b-input-group-prepend>
                   <b-input-group-prepend is-text>
-                    <b-form-checkbox
-                      id="checktutor"
-                      v-model="user.isTutor"
-                      name="checktutor"
-                    />
+                    <b-form-checkbox v-model="user.isTutor" />
+                  </b-input-group-prepend>
+                  <b-input-group-prepend is-text
+                    >Activo:
+                  </b-input-group-prepend>
+                  <b-input-group-prepend is-text>
+                    <b-form-checkbox v-model="user.isActive" />
                   </b-input-group-prepend>
                 </b-input-group>
               </b-col>
@@ -196,22 +194,12 @@ export default {
         dateOfBirth: "",
         description: "",
         isTutor: false,
+        isActive: false,
         isAdmin: false,
         userPhoto: null,
       },
-      careers: [
-        { value: "ING-SYS", text: "Ingenieria de Sistemas" },
-        { value: "ADM", text: "Administracion de Empresas" },
-        { value: "MECTR", text: "Mecatronica" },
-        { value: "BIO", text: "Biologia" },
-        { value: "TOP", text: "Topografia" },
-      ],
-      universities: [
-        { value: "UCR", text: "Universidad de Costa Rica" },
-        { value: "UNA", text: "Universidad Nacional de Costa Rica" },
-        { value: "TEC", text: "Instituto Tecnologico de Costa Rica" },
-        { value: "UNED", text: "Universidad Estatal a Distancia" },
-      ],
+      careers: [],
+      universities: [],
       reports: [],
     };
   },
@@ -251,6 +239,7 @@ export default {
           this.user = data;
           this.user.isTutor = this.user.isTutor === 1 ? true : false;
           this.user.isAdmin = this.user.isAdmin === 1 ? true : false;
+          this.user.isActive = this.user.isActive === 1 ? true : false;
         });
     },
     newUser() {
@@ -267,6 +256,7 @@ export default {
         description: "",
         isTutor: false,
         isAdmin: false,
+        isActive: true,
         userPhoto: null,
       };
     },
@@ -274,6 +264,7 @@ export default {
       let tempUser = { ...this.user };
       tempUser.isTutor = tempUser.isTutor ? 1 : 0;
       tempUser.isAdmin = tempUser.isAdmin ? 1 : 0;
+      tempUser.isActive = tempUser.isActive ? 1 : 0;
       fetch("api/v1/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
