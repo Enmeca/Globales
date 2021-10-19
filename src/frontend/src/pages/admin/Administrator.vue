@@ -166,7 +166,16 @@
                 v-for="report in reports"
                 :key="report.id"
                 :data="report"
+                :updateReports="UpdateReports"
               />
+              <slice v-if="reports.length===0">
+                <b-card 
+                class="second-card"
+                :title="`Sin Reportes`"
+                style="max-width: 20rem">
+                <b-card-text>  No hay casos para administrar </b-card-text>
+                </b-card>
+              </slice>
             </carousel>
           </div>
         </b-card-text>
@@ -236,7 +245,6 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.reports = data;
-        //alert(JSON.stringify(data))
       });
   },
 
@@ -252,6 +260,12 @@ export default {
           this.user.isTutor = this.user.isTutor === 1 ? true : false;
           this.user.isAdmin = this.user.isAdmin === 1 ? true : false;
         });
+    },UpdateReports(){
+      fetch("/api/v1/commentReports")
+      .then((response) => response.json())
+      .then((data) => {
+        this.reports = data;
+      });
     },
     newUser() {
       this.user = {
@@ -297,7 +311,13 @@ center {
   background-color: rgba(0, 0, 0, 0.5);
   margin-inline: 10vw;
 }
-p {
+.second-card {
+  background-color: rgba(255, 255, 255, 0.876);
+  color: rgba(0, 0, 0, 0.616);
+  font-size: relative;
+  font-size-adjust: inherit;
+}
+p{
   font-size: 20px;
 }
 </style>

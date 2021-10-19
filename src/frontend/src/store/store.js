@@ -10,7 +10,7 @@ export default new Vuex.Store({
     },
     getters: {
         isLoggedIn: state => state.user != null,
-        isLoggedInAdmin: state => state.user != null && true, //state.user.isAdmin,
+        isLoggedInAdmin: state => state.user != null && state.user.isAdmin,
     },
     mutations: {
         saveUser(state, user) {
