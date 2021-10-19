@@ -45,6 +45,23 @@
               <h4 class="alert-heading">Credenciales erroneos!</h4>
               <p>Inténtalo nuevamente.</p>
             </b-alert>
+            <b-alert
+              :show="userNotActive"
+              variant="danger"
+              fade
+              dismissible
+              @dismissed="cleanData"
+            >
+              <h4 class="alert-heading">
+                Cuenta inactiva
+                <b-icon-shield-fill-exclamation />
+              </h4>
+              <p>
+                Su cuenta se encuentra inactiva, por que ha infringido alguna de
+                nuestras reglas. <br />Consulte con un administrador para
+                reactivarla.
+              </p>
+            </b-alert>
           </b-card-body>
         </b-card>
         <template #overlay>
@@ -68,6 +85,7 @@ export default {
         password: "",
       },
       invalidCredentials: false,
+      userNotActive: false,
     };
   },
   computed: {
@@ -87,14 +105,20 @@ export default {
       this.status = "Ready";
       this.responseStatus = response.status;
       if (response.status == 200) {
-        this.$store.commit("saveUser", await response.json());
-        this.$router.push({ path: "/home" }); // redirifiendo a la pagina principal
+        let user = await response.json();
+        if (user.isActive) {
+          this.$store.commit("saveUser", user);
+          this.$router.push({ path: "/home" }); // redirifiendo a la pagina principal
+        } else {
+          this.userNotActive = true;
+        }
       } else {
         this.invalidCredentials = true;
       }
     },
     cleanData() {
       this.invalidCredentials = false;
+      this.userNotActive = false;
       this.user.id = "";
       this.user.password = "";
     },
