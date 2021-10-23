@@ -157,12 +157,11 @@
                     <b-icon-image></b-icon-image>
                   </b-input-group-prepend>
                   <b-form-file
+                    id="images"
                     accept="image/*"
-                    v-model="images"
-                    :state="Boolean(images)"
                     placeholder="Elige una foto de perfil"
                     browse-text=" "
-                    @change="updateImage"
+                    @change="loadImage"
                   ></b-form-file>
                 </b-input-group>
               </b-col>
@@ -303,13 +302,12 @@ export default {
       tags: [],
       careers: [],
       universities: [],
-      images: [],
       urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: this.$store.state.user,
       user_tags: [],
       user_photo: {
-        user_uid: "",
-        profile_pic: "",
+        userUid: this.$store.state.user.id,
+        profilePic: "",
       },
     };
   },
@@ -387,29 +385,39 @@ export default {
           }));
 
         if (addtetags.length > 0) {
-          fetch("api/v1/userTags/multiple", {
+          await fetch("api/v1/userTags/multiple", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(myTags),
           });
-
-          let deletetags = this.currentTags
-            .filter((x) => !this.user_tags.find((y) => y === x))
-            .map((tag) => ({
-              user: { id: this.user.id },
-              tag: { name: tag },
-            }));
-
-          if (deletetags.length > 0) {
-            fetch("api/v1/userTags/zmultiple", {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(deletetags),
-            });
-          }
-
-          setTimeout(() => this.$router.go(0), 3000);
         }
+        let deletetags = this.currentTags
+          .filter((x) => !this.user_tags.find((y) => y === x))
+          .map((tag) => ({
+            user: { id: this.user.id },
+            tag: { name: tag },
+          }));
+
+        if (deletetags.length > 0) {
+          await fetch("api/v1/userTags/zmultiple", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(deletetags),
+          });
+        }
+        alert(JSON.stringify(this.user_photo));
+        await fetch("api/v1/userPhoto/updatePhoto", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.user_photo),
+        });
+
+        await fetch("api/v1/user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.user),
+        });
+        setTimeout(() => this.$router.go(0), 3000);
       } else {
         this.registerError = true;
       }
@@ -418,8 +426,18 @@ export default {
       addTag(option);
       this.searchTag = "";
     },
-    updateImage(e) {
-      this.urlProfile = URL.createObjectURL(e.target.files[0]);
+    loadImage() {
+      let image = document.getElementById("images").files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(image);
+      var userPhoto = this.user_photo;
+      reader.onload = function () {
+        // reader.onload lost scope "this"
+        userPhoto.profilePic = reader.result.split(",")[1];
+      };
+      reader.onerror = function (error) {
+        console.log("Error to up photo: ", error);
+      };
     },
   },
 };
