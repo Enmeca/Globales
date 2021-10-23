@@ -18,9 +18,9 @@
           <b-card-body>
             <b-card-title class="display-3">
               <b-img
-                v-if="this.urlProfile"
+                v-if="this.user_photo.profilePic"
                 id="preview-photo"
-                :src="this.urlProfile"
+                :src="this.user_photo.profilePic"
                 thumbnail
                 fluid
                 rounded
@@ -302,12 +302,11 @@ export default {
       tags: [],
       careers: [],
       universities: [],
-      urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: this.$store.state.user,
       user_tags: [],
       user_photo: {
-        userUid: this.$store.state.user.id,
-        profilePic: "",
+        userUid: this.$store.state.user,
+        profilePic: "https://source.unsplash.com/150x150/?icon",
       },
     };
   },
@@ -405,7 +404,7 @@ export default {
             body: JSON.stringify(deletetags),
           });
         }
-        alert(JSON.stringify(this.user_photo));
+        console.log(JSON.stringify(this.user_photo.profilePic));
         await fetch("api/v1/userPhoto/updatePhoto", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -433,7 +432,7 @@ export default {
       var userPhoto = this.user_photo;
       reader.onload = function () {
         // reader.onload lost scope "this"
-        userPhoto.profilePic = reader.result.split(",")[1];
+        userPhoto.profilePic = reader.result;
       };
       reader.onerror = function (error) {
         console.log("Error to up photo: ", error);
