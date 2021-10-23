@@ -1,7 +1,7 @@
 <template>
   <div id="chats-page">
     <center>
-      <b-card class="main-card">
+      <b-card class="bg-transparent">
         <b-row class="chats">
           <b-col sm="12" md="4" lg="4" class="p-1" v-show="showChats">
             <b-input-group>
@@ -10,38 +10,19 @@
               </b-input-group-prepend>
               <b-form-input v-model="searchField"> </b-form-input>
             </b-input-group>
-            <b-card v-for="chat in chats" :key="chat.id" class="p-0 mt-1">
-              <b-row>
-                <b-col cols="4">
-                  <b-avatar
-                    v-if="true"
-                    variant="info"
-                    text="PS"
-                    size="lg"
-                  ></b-avatar>
-                  <b-avatar
-                    v-else
-                    variant="dark"
-                    icon="sunglasses"
-                    size="lg"
-                  ></b-avatar>
-                </b-col>
-                <b-col cols="8">
-                  <b-row>
-                    <b-col> persona </b-col>
-                    <b-col> Fecha </b-col>
-                  </b-row>
-                  <b-row>
-                    <b-col> Mensaje </b-col>
-                    <b-col> cant </b-col>
-                  </b-row>
-                </b-col>
-              </b-row>
-            </b-card>
+            <ItemChat
+              v-for="chat in chats"
+              :key="chat.id"
+              class="p-0 mt-1"
+              :userChat="temp.userChat"
+              :lastMessage="temp.lastMessage"
+              :cantNotReaded="temp.cantNotReaded"
+              :width="window.width"
+            />
           </b-col>
           <b-col sm="12" md="8" lg="8" class="p-1" v-show="showCurrentChat">
             <b-card style="height: 100%">
-              <b-card-body v-if="actualChat != null">
+              <b-card-body v-if="actualChat == null">
                 Chat actual
                 {{ window.width }}
                 X
@@ -57,7 +38,12 @@
 </template>
 
 <script>
+import ItemChat from "./ItemChat.vue";
+
 export default {
+  components: {
+    ItemChat,
+  },
   data() {
     return {
       window: {
@@ -70,8 +56,24 @@ export default {
         { user: "aja", id: 2 },
         { user: "aja", id: 3 },
         { user: "aja", id: 4 },
+        { user: "aja", id: 5 },
+        { user: "aja", id: 6 },
+        { user: "aja", id: 7 },
       ],
       actualChat: null, //{ user: "aja", id: 1 },
+      temp: {
+        userChat: {
+          name: "Luis David",
+          lastName1: "Villalobos",
+          lastName2: "Gonzalez",
+        },
+        lastMessage: {
+          message: "example of lastMessage large",
+          date: "10/22/2021 07:12 pm",
+          readed: true,
+        },
+        cantNotReaded: 999,
+      },
     };
   },
   created() {
@@ -89,10 +91,10 @@ export default {
   },
   computed: {
     showCurrentChat() {
-      return this.window.width >= 770 || this.actualChat != null;
+      return this.window.width >= 768 || this.actualChat != null;
     },
     showChats() {
-      return this.window.width >= 770 || this.actualChat == null;
+      return this.window.width >= 768 || this.actualChat == null;
     },
   },
 };
@@ -101,11 +103,6 @@ export default {
 <style scoped>
 #chats-page,
 center {
-  height: 70%;
-  margin-inline: 1vw;
-  margin-block: 2vw;
-}
-.main-card {
-  background-color: rgba(0, 0, 0, 0.6);
+  margin: 0.5vw;
 }
 </style>
