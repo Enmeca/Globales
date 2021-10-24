@@ -18,9 +18,9 @@
           <b-card-body>
             <b-card-title class="display-3">
               <b-img
-                v-if="this.user_photo.profilePic"
+                v-if="this.user_photo.base64Photo"
                 id="preview-photo"
-                :src="this.user_photo.profilePic"
+                :src="this.user_photo.base64Photo"
                 thumbnail
                 fluid
                 rounded
@@ -305,9 +305,12 @@ export default {
       user: this.$store.state.user,
       user_tags: [],
       user_photo: {
-        userUid: this.$store.state.user,
-        profilePic: "https://source.unsplash.com/150x150/?icon",
+        userId: this.$store.state.user.id,
+        base64Photo:
+          "http://localhost:9191/api/v1/userPhoto/photo/" +
+          this.$store.state.user.id,
       },
+      updateImage: false,
     };
   },
   mounted() {
@@ -331,6 +334,12 @@ export default {
           value: career.id,
           text: career.name,
         }));
+      });
+    fetch("api/v1/userTags/user/" + this.user.id)
+      .then((response) => response.json())
+      .then((data) => {
+        this.user_tags = data.map((tag) => tag.tag.name);
+        this.currentTags = [...this.user_tags];
       });
     fetch("api/v1/userTags/user/" + this.user.id)
       .then((response) => response.json())
@@ -398,18 +407,22 @@ export default {
           }));
 
         if (deletetags.length > 0) {
-          await fetch("api/v1/userTags/zmultiple", {
+          await fetch("api/v1/userTags/multiple", {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(deletetags),
           });
         }
-        console.log(JSON.stringify(this.user_photo.profilePic));
-        await fetch("api/v1/userPhoto/updatePhoto", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(this.user_photo),
-        });
+        if (this.updateImage) {
+          this.user_photo.base64Photo =
+            this.user_photo.base64Photo.split(",")[1]; // Do not send it with 'data:image/*;base64,'
+          await fetch("api/v1/userPhoto/updatePhoto", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(this.user_photo),
+          });
+          this.updateImage = false;
+        }
 
         await fetch("api/v1/user", {
           method: "POST",
@@ -426,13 +439,14 @@ export default {
       this.searchTag = "";
     },
     loadImage() {
+      this.updateImage = true;
       let image = document.getElementById("images").files[0];
       let reader = new FileReader();
       reader.readAsDataURL(image);
       var userPhoto = this.user_photo;
       reader.onload = function () {
         // reader.onload lost scope "this"
-        userPhoto.profilePic = reader.result;
+        userPhoto.base64Photo = reader.result;
       };
       reader.onerror = function (error) {
         console.log("Error to up photo: ", error);
@@ -455,6 +469,6 @@ center {
   max-width: 350px;
 }
 #preview-photo {
-  max-height: 100px;
+  max-height: 200px;
 }
 </style>

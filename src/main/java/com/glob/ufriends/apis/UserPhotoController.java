@@ -27,7 +27,7 @@ public class UserPhotoController {
 */
     /* SEND POST WITH THIS STRUCTURE FOR:
     * {
-    *   "id": String,
+    *   "userId": String,
     *   "base64Photo": String // Do not send it with 'data:image/png;base64,'
     * }
     *
