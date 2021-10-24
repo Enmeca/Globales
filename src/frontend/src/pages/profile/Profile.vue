@@ -262,11 +262,11 @@
                 </b-input-group>
               </b-col>
 
-              <b-col cols="12">
+              <!--- <b-col cols="12">
                 <b-col cols="6" class="bg-light text-dark">
                   (temp) Ultima hora de conexion: {{ user.lastConnected }}
                 </b-col>
-              </b-col>
+              </b-col> --->
               <b-col sm="12" lg="12">
                 <b-button
                   variant="info"
@@ -380,7 +380,6 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.user),
       });
-      this.status = "Ready";
       if (response.status == 200) {
         this.$store.commit("saveUser", await response.json());
         this.user = this.$store.state.user;
@@ -429,10 +428,16 @@ export default {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(this.user),
         });
-        setTimeout(() => this.$router.go(0), 3000);
+        fetch("api/v1/userTags/user/" + this.user.id)
+          .then((response) => response.json())
+          .then((data) => {
+            this.user_tags = data.map((tag) => tag.tag.name);
+            this.currentTags = [...this.user_tags];
+          });
       } else {
         this.registerError = true;
       }
+      this.status = "Ready";
     },
     onOptionClick({ option, addTag }) {
       addTag(option);
