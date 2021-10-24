@@ -4,8 +4,14 @@
     <b-card-body class="text-left p-0 m-0">
       <h4 class="text-center">Reporte #{{ data.comment.id }}</h4>
       <p><strong>Comentario:</strong> {{ this.data.comment.description }}</p>
-      <p><strong>Autor: </strong>{{ getFullAutorNameUser }}</p>
-      <p><strong>Enviado por: </strong>{{ getFullSendNameUser }}</p>
+      <p>
+        <strong>Autor: </strong>{{ getFullAutorNameUser }} -
+        {{ this.data.comment.authorId.id }}
+      </p>
+      <p>
+        <strong>Enviado por: </strong>{{ getFullSendNameUser }} -
+        {{ this.data.user.id }}
+      </p>
       <p><strong>Motivo: </strong>{{ this.data.motive }}</p>
       <b-row align-h="center">
         <b-button
@@ -17,11 +23,10 @@
         </b-button>
 
         <b-button @click="omitReport" variant="danger" class="m-1">
-          <b-icon-trash-fill />
+          <b-icon-trash-fill /> reporte
         </b-button>
-
         <b-button @click="deleteComment" variant="secondary" class="m-1"
-          ><b-icon-trash-fill /> equivalentes</b-button
+          ><b-icon-trash-fill /> reporte y comentario</b-button
         >
       </b-row>
     </b-card-body>
@@ -54,13 +59,20 @@ export default {
     },
     async deleteComment() {
       const response = await fetch(
-        `/api/v1/commentReports/del/${this.data.comment.id}/${this.data.user.id}`,
+        `/api/v1/commentReports/delByComment/${this.data.comment.id}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
         }
       );
-      if (response.status === 200) this.updateReports();
+      const response2 = await fetch("/api/v1/forumComments", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.data.comment),
+      });
+
+      if (response.status === 200 && response2.status === 200)
+        this.updateReports();
     },
   },
   computed: {

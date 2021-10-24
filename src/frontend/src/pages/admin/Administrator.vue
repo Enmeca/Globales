@@ -21,8 +21,12 @@
                 placeholder="Cedula"
                 v-model="user.id"
               />
-              <b-button variant="info" @click="findUser">Buscar</b-button>
-              <b-button variant="success" @click="newUser">Nuevo</b-button>
+              <b-button variant="info" @click="findUser" class="mr-2 ml-2"
+                ><b-icon-search
+              /></b-button>
+              <b-button variant="success" @click="newUser"
+                ><b-icon-person-plus-fill />
+              </b-button>
             </b-input-group>
           </b-col>
 
@@ -137,17 +141,20 @@
               </b-input-group>
             </b-col>
             <b-col sm="12" lg="6" class="mb-2" align-self="center">
-              <b-input-group prepend="Admin">
+              <b-input-group>
+                <b-input-group-prepend is-text>Admin: </b-input-group-prepend>
                 <b-input-group-prepend is-text>
-                  <b-form-checkbox v-model="user.isAdmin" />
+                  <b-form-checkbox v-model="user.isAdmin" switch />
                 </b-input-group-prepend>
+
                 <b-input-group-prepend is-text>Tutor: </b-input-group-prepend>
                 <b-input-group-prepend is-text>
-                  <b-form-checkbox v-model="user.isTutor" />
+                  <b-form-checkbox v-model="user.isTutor" switch />
                 </b-input-group-prepend>
+
                 <b-input-group-prepend is-text>Activo: </b-input-group-prepend>
                 <b-input-group-prepend is-text>
-                  <b-form-checkbox v-model="user.isActive" />
+                  <b-form-checkbox v-model="user.isActive" switch />
                 </b-input-group-prepend>
               </b-input-group>
             </b-col>
