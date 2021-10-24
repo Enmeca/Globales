@@ -1,67 +1,98 @@
 <template>
-  <slide>
-    <b-card 
-      class="main-card"
-      :title="`Reporte #${this.data.comment.id} de ${this.data.user.id}`"
-      style="max-width: 20rem"
-    >
-      <b-card-text> Motivo: {{ this.data.motive }} </b-card-text>
-      <b-card-text>
-        Comentario: {{ this.data.comment.description }}
-      </b-card-text>
-      <b-button
-        :href="`#/forums/${this.data.comment.forumId.id}`"
-        variant="primary"
-        >Verificar</b-button>
-      
-      <b-button @click="omitReport()" variant="success">Cerar  Caso</b-button> 
-      <br/>
-      <b-button @click="deleteComment()" variant="danger">Cerrar Casos equivalentes</b-button>
-    </b-card>
-  </slide>
+  <!--<slide> -->
+  <b-card class="main-card">
+    <b-card-body class="text-left p-0 m-0">
+      <h4 class="text-center">Reporte #{{ data.comment.id }}</h4>
+      <p><strong>Comentario:</strong> {{ this.data.comment.description }}</p>
+      <p><strong>Autor: </strong>{{ getFullAutorNameUser }}</p>
+      <p><strong>Enviado por: </strong>{{ getFullSendNameUser }}</p>
+      <p><strong>Motivo: </strong>{{ this.data.motive }}</p>
+      <b-row align-h="center">
+        <b-button
+          :href="`#/forums/${this.data.comment.forumId.id}`"
+          variant="primary"
+          class="m-1"
+        >
+          <b-icon-eye-fill />
+        </b-button>
+
+        <b-button @click="omitReport" variant="danger" class="m-1">
+          <b-icon-trash-fill />
+        </b-button>
+
+        <b-button @click="deleteComment" variant="secondary" class="m-1"
+          ><b-icon-trash-fill /> equivalentes</b-button
+        >
+      </b-row>
+    </b-card-body>
+  </b-card>
+  <!--</slide> -->
 </template>
 <script>
-import { Slide } from "vue-carousel";
+//import { Slide } from "vue-carousel";
 export default {
   props: {
     data: {
       type: Object,
       required: true,
-    },updateReports:{
+    },
+    updateReports: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     async omitReport() {
-      const response= await fetch(`/api/v1/commentReports/delByComment/${this.data.comment.id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
-      if(response.status===200)
-        this.updateReports()
+      const response = await fetch(
+        `/api/v1/commentReports/delByComment/${this.data.comment.id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.status === 200) this.updateReports();
     },
     async deleteComment() {
-      const response= await fetch(
+      const response = await fetch(
         `/api/v1/commentReports/del/${this.data.comment.id}/${this.data.user.id}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
         }
       );
-      if(response.status===200)
-        this.updateReports()
+      if (response.status === 200) this.updateReports();
     },
   },
-  components: { Slide },
+  computed: {
+    getFullSendNameUser() {
+      return (
+        this.data.user.name +
+        " " +
+        this.data.user.lastName1 +
+        " " +
+        this.data.user.lastName2
+      );
+    },
+    getFullAutorNameUser() {
+      return (
+        this.data.comment.authorId.name +
+        " " +
+        this.data.comment.authorId.lastName1 +
+        " " +
+        this.data.comment.authorId.lastName2
+      );
+    },
+  },
+  //components: { Slide },
 };
 </script>
 
 <style scoped>
 .main-card {
-  background-color: rgba(255, 255, 255, 0.876);
-  color: rgba(0, 0, 0, 0.616);
-  font-size: relative;
-  font-size-adjust: inherit;
+  background-color: rgba(255, 255, 255, 0.863) !important;
+  color: rgb(83, 76, 76);
+}
+p {
+  font-size: 18px;
 }
 </style>
