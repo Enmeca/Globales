@@ -193,7 +193,7 @@ PROMPT ========================================
 alter table USERS add constraint CAREER_FK foreign key (CAREER_ID) references CAREERS;
 alter table USERS add constraint UNIVERSITY_FK foreign key (UNIVERSITY_ID) references UNIVERSITIES;
 
-alter table USER_PHOTOS add constraint USERS_PHOTOS_FK foreign key (USER_UID) references USERS;
+--alter table USER_PHOTOS add constraint USERS_PHOTOS_FK foreign key (USER_UID) references USERS;
 
 alter table TUTOR_REVIEWS add constraint REVIEWS_USER_FK foreign key (USER_UID) references USERS;
 alter table TUTOR_REVIEWS add constraint REVIEWS_TUTOR_FK foreign key (TUTOR_ID) references USERS;

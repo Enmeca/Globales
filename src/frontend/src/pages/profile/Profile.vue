@@ -18,9 +18,9 @@
           <b-card-body>
             <b-card-title class="display-3">
               <b-img
-                v-if="this.urlProfile"
+                v-if="this.user_photo.base64Photo"
                 id="preview-photo"
-                :src="this.urlProfile"
+                :src="this.user_photo.base64Photo"
                 thumbnail
                 fluid
                 rounded
@@ -157,12 +157,11 @@
                     <b-icon-image></b-icon-image>
                   </b-input-group-prepend>
                   <b-form-file
+                    id="images"
                     accept="image/*"
-                    v-model="images"
-                    :state="Boolean(images)"
                     placeholder="Elige una foto de perfil"
                     browse-text=" "
-                    @change="updateImage"
+                    @change="loadImage"
                   ></b-form-file>
                 </b-input-group>
               </b-col>
@@ -303,14 +302,15 @@ export default {
       tags: [],
       careers: [],
       universities: [],
-      images: [],
-      urlProfile: null, //"https://source.unsplash.com/150x150/?icon",
       user: this.$store.state.user,
       user_tags: [],
       user_photo: {
-        user_uid: "",
-        profile_pic: "",
+        userId: this.$store.state.user.id,
+        base64Photo:
+          "http://localhost:9191/api/v1/userPhoto/photo/" +
+          this.$store.state.user.id,
       },
+      updateImage: false,
     };
   },
   mounted() {
@@ -334,6 +334,12 @@ export default {
           value: career.id,
           text: career.name,
         }));
+      });
+    fetch("api/v1/userTags/user/" + this.user.id)
+      .then((response) => response.json())
+      .then((data) => {
+        this.user_tags = data.map((tag) => tag.tag.name);
+        this.currentTags = [...this.user_tags];
       });
     fetch("api/v1/userTags/user/" + this.user.id)
       .then((response) => response.json())
@@ -387,29 +393,43 @@ export default {
           }));
 
         if (addtetags.length > 0) {
-          fetch("api/v1/userTags/multiple", {
+          await fetch("api/v1/userTags/multiple", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(myTags),
           });
-
-          let deletetags = this.currentTags
-            .filter((x) => !this.user_tags.find((y) => y === x))
-            .map((tag) => ({
-              user: { id: this.user.id },
-              tag: { name: tag },
-            }));
-
-          if (deletetags.length > 0) {
-            fetch("api/v1/userTags/zmultiple", {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(deletetags),
-            });
-          }
-
-          setTimeout(() => this.$router.go(0), 3000);
         }
+        let deletetags = this.currentTags
+          .filter((x) => !this.user_tags.find((y) => y === x))
+          .map((tag) => ({
+            user: { id: this.user.id },
+            tag: { name: tag },
+          }));
+
+        if (deletetags.length > 0) {
+          await fetch("api/v1/userTags/multiple", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(deletetags),
+          });
+        }
+        if (this.updateImage) {
+          this.user_photo.base64Photo =
+            this.user_photo.base64Photo.split(",")[1]; // Do not send it with 'data:image/*;base64,'
+          await fetch("api/v1/userPhoto/updatePhoto", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(this.user_photo),
+          });
+          this.updateImage = false;
+        }
+
+        await fetch("api/v1/user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.user),
+        });
+        setTimeout(() => this.$router.go(0), 3000);
       } else {
         this.registerError = true;
       }
@@ -418,8 +438,19 @@ export default {
       addTag(option);
       this.searchTag = "";
     },
-    updateImage(e) {
-      this.urlProfile = URL.createObjectURL(e.target.files[0]);
+    loadImage() {
+      this.updateImage = true;
+      let image = document.getElementById("images").files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(image);
+      var userPhoto = this.user_photo;
+      reader.onload = function () {
+        // reader.onload lost scope "this"
+        userPhoto.base64Photo = reader.result;
+      };
+      reader.onerror = function (error) {
+        console.log("Error to up photo: ", error);
+      };
     },
   },
 };
@@ -438,6 +469,6 @@ center {
   max-width: 350px;
 }
 #preview-photo {
-  max-height: 100px;
+  max-height: 200px;
 }
 </style>
