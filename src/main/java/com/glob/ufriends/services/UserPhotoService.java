@@ -28,7 +28,7 @@ public class UserPhotoService {
         repository.updateUserProfilePic(newPhoto,userId);
     }
 
-    public UserPhoto getPhotoByUserID(String id){
+    public byte[] getPhotoByUserID(String id){
         return repository.getPhotoByUserID(id);
     }
 

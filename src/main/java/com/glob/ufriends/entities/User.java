@@ -44,7 +44,4 @@ public class User {
     private int isTutor;
     @Column(name = "IS_ADMIN")
     private int isAdmin;
-    @OneToOne(mappedBy = "userUid", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private UserPhoto userPhoto;
 }
