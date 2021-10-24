@@ -11,7 +11,7 @@ public interface UserPhotoRepo extends JpaRepository<UserPhoto, String> {
     // Method that only returns the photo itself. Not tested yet
     @Query(value = "select PROFILE_PIC from USER_PHOTOS where USER_UID = ?1",
             nativeQuery = true)
-    UserPhoto getPhotoByUserID(String id);
+    byte[] getPhotoByUserID(String id);
 
     // Method to update only the profile picture
     @Modifying

@@ -16,11 +16,6 @@ public class UserPhoto {
     @Column(name = "USER_UID")
     private String id;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "USER_UID", nullable = false)
-    private User userUid;
-
     @Column(name = "PROFILE_PIC")
     @Lob
     private byte[] profilePic;
