@@ -74,6 +74,17 @@
                 </b-input-group>
               </b-col>
 
+              <b-col sm="12" lg="6" class="mb-2" align-self="center">
+                <b-input-group class="mb-2 input">
+                  <b-form-datepicker
+                    v-model="user.dateOfBirth"
+                    locale="es"
+                    :max="new Date()"
+                    placeholder="Fecha Nacimiento"
+                  ></b-form-datepicker>
+                </b-input-group>
+              </b-col>
+
               <b-col sm="12" lg="6">
                 <b-input-group class="mb-2 input">
                   <b-input-group-prepend is-text>
@@ -84,6 +95,23 @@
                     placeholder="Contraseña"
                     v-model="user.password"
                   ></b-form-input>
+                </b-input-group>
+              </b-col>
+
+              <b-col sm="12" lg="6">
+                <b-input-group class="mb-2 input">
+                  <b-input-group-prepend is-text>
+                    <b-icon-lock-fill></b-icon-lock-fill>
+                  </b-input-group-prepend>
+                  <b-form-input
+                    type="password"
+                    placeholder=" Confirmar Contraseña"
+                    v-model="confirmPassword"
+                    :state="checkConfirmPassword"
+                  ></b-form-input>
+                  <b-form-invalid-feedback class="text-light">
+                    Las contraseñas deben coincidir
+                  </b-form-invalid-feedback>
                 </b-input-group>
               </b-col>
 
@@ -345,6 +373,8 @@ export default {
     validForm() {
       return this.user.description != "";
     },
+      if (this.confirmPassword == "") return null;
+      return this.user.password == this.confirmPassword;
   },
   methods: {
     async signup() {
