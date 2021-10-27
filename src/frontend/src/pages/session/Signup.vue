@@ -144,17 +144,6 @@
                 </b-input-group>
               </b-col>
 
-              <b-col sm="12" lg="6" class="mb-2" align-self="center">
-                <b-input-group class="mb-2 input">
-                  <b-form-datepicker
-                    v-model="user.dateOfBirth"
-                    locale="es"
-                    :max="new Date()"
-                    placeholder="Fecha Nacimiento"
-                  ></b-form-datepicker>
-                </b-input-group>
-              </b-col>
-
               <b-col sm="12" lg="6">
                 <b-input-group class="mb-2 input">
                   <b-input-group-prepend is-text> </b-input-group-prepend>
@@ -302,6 +291,7 @@ export default {
       registerError: false,
       registerSuccess: false,
       searchTag: "",
+      confirmPassword: "",
       tags: [],
       careers: [],
       universities: [],
@@ -371,10 +361,12 @@ export default {
       return "";
     },
     validForm() {
-      return this.user.description != "";
+      return this.user.description;
     },
+    checkConfirmPassword() {
       if (this.confirmPassword == "") return null;
       return this.user.password == this.confirmPassword;
+    },
   },
   methods: {
     async signup() {
