@@ -280,7 +280,9 @@ export default {
       return this.$store.getters.isLoggedInAdmin;
     },
     getFormatDate() {
-      return new Date(this.forum.creationDate).toLocaleString();
+      let dateFix = new Date(this.forum.creationDate);
+      dateFix.setHours(dateFix.getHours() - 6);
+      return dateFix.toLocaleString();
     },
     showReportComment() {
       if (this.newCommentReport.comment) {
