@@ -99,13 +99,14 @@
         <b-nav-item-dropdown right v-if="isLoggedIn">
           <template #button-content>
             <b-avatar
-              variant="light"
+              variant="secondary"
               :text="userAbbreviatedName"
               :src="profile_pic"
             ></b-avatar>
           </template>
           <b-dropdown-item href="#/profile">
-            <b-icon-person-fill variant="info" /> Perfil</b-dropdown-item
+            <b-icon-person-fill variant="info" /> Ver/Editar
+            Perfil</b-dropdown-item
           >
           <b-dropdown-item @click="logout">
             <b-icon-box-arrow-up-right variant="danger" /> Cerrar

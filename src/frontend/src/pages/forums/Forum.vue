@@ -17,7 +17,11 @@
                 <b-col>
                   <b-avatar
                     v-if="!forum.isAnon"
-                    variant="info"
+                    variant="secondary"
+                    :src="
+                      'http://localhost:9191/api/v1/userPhoto/photo/' +
+                      this.forum.authorId.id
+                    "
                     :text="authorAbbreviatedName"
                     size="lg"
                   ></b-avatar>

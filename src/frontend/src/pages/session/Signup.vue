@@ -21,7 +21,7 @@
             <b-card-title class="display-3">
               <b-avatar
                 v-if="this.user_photo.base64Photo"
-                variant="light"
+                variant="secondary"
                 size="12rem"
                 :text="userAbbreviatedName"
                 :src="this.user_photo.base64Photo"

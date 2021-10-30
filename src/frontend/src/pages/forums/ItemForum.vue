@@ -6,8 +6,12 @@
           <b-col>
             <b-avatar
               v-if="!data.isAnon"
-              variant="info"
+              variant="secondary"
               :text="authorAbbreviatedName"
+              :src="
+                'http://localhost:9191/api/v1/userPhoto/photo/' +
+                this.data.authorId.id
+              "
               size="lg"
             ></b-avatar>
             <b-avatar
@@ -54,7 +58,10 @@
           </b-col>
           <b-col sm="12" md="4" lg="12">
             <b-badge variant="info" pill>
-              <span> {{ data.commentsQuantity }}</span>
+              <span v-if="data.commentsQuantity > 0">
+                {{ data.commentsQuantity }}</span
+              >
+              <span v-else> Sin </span>
               Comentarios
             </b-badge>
           </b-col>
