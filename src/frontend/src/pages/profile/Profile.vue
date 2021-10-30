@@ -17,16 +17,12 @@
         <b-card class="main-card text-light">
           <b-card-body>
             <b-card-title class="display-3">
-              <b-img
-                v-if="this.user_photo.base64Photo"
-                id="preview-photo"
+              <b-avatar
+                variant="light"
+                size="12rem"
+                :text="userAbbreviatedName"
                 :src="this.user_photo.base64Photo"
-                thumbnail
-                fluid
-                rounded
-                alt="Profile image"
-              ></b-img>
-              <b-icon-person-fill v-else />
+              ></b-avatar>
             </b-card-title>
             <b-row>
               <b-col sm="12" lg="6">
@@ -159,7 +155,7 @@
                   <b-form-file
                     id="images"
                     accept="image/*"
-                    placeholder="Elige una foto de perfil"
+                    placeholder="Elige una nueva foto de perfil"
                     browse-text=" "
                     @change="loadImage"
                   ></b-form-file>
@@ -306,7 +302,7 @@ export default {
       user: this.$store.state.user,
       user_tags: [],
       user_photo: {
-        userId: this.$store.state.user.id,
+        userId: "",
         base64Photo:
           "http://localhost:9191/api/v1/userPhoto/photo/" +
           this.$store.state.user.id,
@@ -342,12 +338,6 @@ export default {
           text: career.name,
         }));
       });
-    /*fetch("api/v1/userTags/user/" + this.user.id)
-      .then((response) => response.json())
-      .then((data) => {
-        this.user_tags = data.map((tag) => tag.tag.name);
-        this.currentTags = [...this.user_tags];
-      });*/
   },
   computed: {
     availableOptions() {
@@ -367,6 +357,11 @@ export default {
         return "No hay etiquetas que coincidan con los criterios de búsqueda.";
       }
       return "";
+    },
+    userAbbreviatedName() {
+      return (
+        this.$store.state.user.name[0] + this.$store.state.user.lastName1[0]
+      );
     },
   },
   methods: {
@@ -417,30 +412,39 @@ export default {
           });
         }
         if (this.updateImage) {
-          this.user_photo.base64Photo =
-            this.user_photo.base64Photo.split(",")[1]; // Do not send it with 'data:image/*;base64,'
+          let user_photo = {
+            userId: this.$store.state.user.id,
+            // Do not send it with 'data:image/*;base64,'
+            base64Photo: this.user_photo.base64Photo.split(",")[1],
+          };
           await fetch("api/v1/userPhoto/updatePhoto", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(this.user_photo),
+            body: JSON.stringify(user_photo),
           });
           this.updateImage = false;
         }
-
-        await fetch("api/v1/user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(this.user),
-        });
-        fetch("api/v1/userTags/user/" + this.user.id)
+        await fetch("api/v1/userTags/user/" + this.user.id)
           .then((response) => response.json())
           .then((data) => {
             this.user_tags = data.map((tag) => tag.tag.name);
             this.currentTags = [...this.user_tags];
           });
+        const responseUpdateUser = await fetch("api/v1/user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.user),
+        });
+        let user = await responseUpdateUser.json();
+        this.$store.commit("saveUser", user);
       } else {
         this.registerError = true;
       }
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
       this.status = "Ready";
     },
     onOptionClick({ option, addTag }) {
