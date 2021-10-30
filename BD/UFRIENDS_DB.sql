@@ -324,6 +324,23 @@ insert into TAGS values ('Tecnologia');
 insert into TAGS values ('Naturaleza');
 insert into TAGS values ('Futbol');
 insert into TAGS values ('Basketbol');
+insert into TAGS values ('Jardineria');
+insert into TAGS values ('Cocina');
+insert into TAGS values ('Series animadas');
+insert into TAGS values ('Comics');
+insert into TAGS values ('Boxeo');
+insert into TAGS values ('Lectura');
+insert into TAGS values ('Musica');
+insert into TAGS values ('Historia');
+insert into TAGS values ('Idiomas');
+insert into TAGS values ('Ciclismo');
+insert into TAGS values ('Natacion');
+insert into TAGS values ('Canto');
+insert into TAGS values ('Baile');
+insert into TAGS values ('Dibujo');
+insert into TAGS values ('Viajar');
+insert into TAGS values ('Ping-pong');
+insert into TAGS values ('Animales');
 -- Hay que meter un montón de tags despues
 				
 insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Javier','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
@@ -331,6 +348,14 @@ insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Ja
 				
 insert into USERS values ('615283905','ADM','TEC','javo64@gmail','123','Alberto','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Deprecado', null, 1, 0, 0);
+				
+insert into USER_TAGS values ('117780905','Videojuegos');
+insert into USER_TAGS values ('117780905','Idiomas');
+insert into USER_TAGS values ('117780905','Cine');		
+
+insert into USER_TAGS values ('117780905','Natacion');
+insert into USER_TAGS values ('117780905','Series animadas');
+insert into USER_TAGS values ('117780905','Ping-pong');		
 
 
 -- El siguiente insert es para probar el trigger de actualizar el campo de # de comentarios de un foro

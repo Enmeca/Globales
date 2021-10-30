@@ -55,12 +55,12 @@
           title="Matchs"
         >
           <b-icon-bell-fill />
-          <span> {{ cantMatchs }} </span>
+          <span v-if="cantMatchs > 0">{{ cantMatchs }} </span>
           <template v-if="expanded">Matchs</template>
         </b-nav-item>
         <b-nav-item v-if="isLoggedIn" class="mr-5" href="#/chats" title="Chats">
           <b-icon-chat-dots-fill />
-          <span> {{ cantChats }} </span>
+          <span v-if="cantChats > 0"> {{ cantChats }} </span>
           <template v-if="expanded">Chats</template>
         </b-nav-item>
         <b-nav-item
@@ -70,7 +70,7 @@
           title="Foros"
         >
           <b-icon-signpost-fill />
-          <span> {{ cantForums }} </span>
+          <span v-if="cantForums > 0"> {{ cantForums }} </span>
           <template v-if="expanded">Foros</template>
         </b-nav-item>
         <b-nav-item
@@ -98,7 +98,11 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown right v-if="isLoggedIn">
           <template #button-content>
-            <b-avatar variant="info" :text="userAbbreviatedName"></b-avatar>
+            <b-avatar
+              variant="light"
+              :text="userAbbreviatedName"
+              :src="profile_pic"
+            ></b-avatar>
           </template>
           <b-dropdown-item href="#/profile">
             <b-icon-person-fill variant="info" /> Perfil</b-dropdown-item
@@ -117,14 +121,12 @@
 export default {
   data() {
     // fetch data from session or backend
+
     return {
       expanded: false,
-      user_photo: {
-        profile_pic: "https://source.unsplash.com/150x150/?icon",
-      },
-      cantChats: 3,
-      cantMatchs: 2,
-      cantForums: 9,
+      cantChats: 0,
+      cantMatchs: 0,
+      cantForums: 0,
     };
   },
   methods: {
@@ -151,6 +153,12 @@ export default {
     },
     isLoggedInAdmin() {
       return this.$store.getters.isLoggedInAdmin;
+    },
+    profile_pic() {
+      let idUser = this.$store.getters.isLoggedIn
+        ? this.$store.state.user.id
+        : "";
+      return "http://localhost:9191/api/v1/userPhoto/photo/" + idUser;
     },
   },
 };
