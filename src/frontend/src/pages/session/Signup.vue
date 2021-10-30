@@ -4,16 +4,28 @@
       <b-overlay :show="status == 'Loading'" variant="dark">
         <b-card class="main-card text-light">
           <b-card-body>
+            <b-alert :show="registerSuccess" variant="success" fade dismissible>
+              <h4>
+                Registro realizado con exito
+                <b-icon-check-circle-fill scale="1" />
+              </h4>
+              Redirigiendo a iniciar sesión
+              <b-icon-arrow-clockwise animation="spin" scale="1.4" />
+            </b-alert>
+            <b-alert :show="registerError" variant="danger" fade dismissible>
+              <h4>
+                Ha ocurrido un error al realizar el registro
+                <b-icon-exclamation-octagon-fill scale="1.2" />
+              </h4>
+            </b-alert>
             <b-card-title class="display-3">
-              <b-img
+              <b-avatar
                 v-if="this.user_photo.base64Photo"
-                id="preview-photo"
+                variant="light"
+                size="12rem"
+                :text="userAbbreviatedName"
                 :src="this.user_photo.base64Photo"
-                thumbnail
-                fluid
-                rounded
-                alt="Profile image"
-              ></b-img>
+              ></b-avatar>
               <b-icon-person-fill v-else />
             </b-card-title>
             <b-row>
@@ -74,6 +86,17 @@
                 </b-input-group>
               </b-col>
 
+              <b-col sm="12" lg="6" class="mb-2" align-self="center">
+                <b-input-group class="mb-2 input">
+                  <b-form-datepicker
+                    v-model="user.dateOfBirth"
+                    locale="es"
+                    :max="new Date()"
+                    placeholder="Fecha Nacimiento"
+                  ></b-form-datepicker>
+                </b-input-group>
+              </b-col>
+
               <b-col sm="12" lg="6">
                 <b-input-group class="mb-2 input">
                   <b-input-group-prepend is-text>
@@ -84,6 +107,23 @@
                     placeholder="Contraseña"
                     v-model="user.password"
                   ></b-form-input>
+                </b-input-group>
+              </b-col>
+
+              <b-col sm="12" lg="6">
+                <b-input-group class="mb-2 input">
+                  <b-input-group-prepend is-text>
+                    <b-icon-lock-fill></b-icon-lock-fill>
+                  </b-input-group-prepend>
+                  <b-form-input
+                    type="password"
+                    placeholder=" Confirmar Contraseña"
+                    v-model="confirmPassword"
+                    :state="checkConfirmPassword"
+                  ></b-form-input>
+                  <b-form-invalid-feedback class="text-light">
+                    Las contraseñas deben coincidir
+                  </b-form-invalid-feedback>
                 </b-input-group>
               </b-col>
 
@@ -113,17 +153,6 @@
                       <option disabled value="">Elige tu carrera</option>
                     </template>
                   </b-form-select>
-                </b-input-group>
-              </b-col>
-
-              <b-col sm="12" lg="6" class="mb-2" align-self="center">
-                <b-input-group class="mb-2 input">
-                  <b-form-datepicker
-                    v-model="user.dateOfBirth"
-                    locale="es"
-                    :max="new Date()"
-                    placeholder="Fecha Nacimiento"
-                  ></b-form-datepicker>
                 </b-input-group>
               </b-col>
 
@@ -239,20 +268,6 @@
                 >
               </b-col>
             </b-row>
-            <b-alert :show="registerSuccess" variant="success" fade dismissible>
-              <h4>
-                Registro realizado con exito
-                <b-icon-check-circle-fill scale="1" />
-              </h4>
-              Redirigiendo a iniciar sesión
-              <b-icon-arrow-clockwise animation="spin" scale="1.4" />
-            </b-alert>
-            <b-alert :show="registerError" variant="danger" fade dismissible>
-              <h4>
-                Ha ocurrido un error al realizar el registro
-                <b-icon-exclamation-octagon-fill scale="1.2" />
-              </h4>
-            </b-alert>
           </b-card-body>
         </b-card>
         <template #overlay>
@@ -274,6 +289,7 @@ export default {
       registerError: false,
       registerSuccess: false,
       searchTag: "",
+      confirmPassword: "",
       tags: [],
       careers: [],
       universities: [],
@@ -343,7 +359,11 @@ export default {
       return "";
     },
     validForm() {
-      return this.user.description != "";
+      return this.user.description;
+    },
+    checkConfirmPassword() {
+      if (this.confirmPassword == "") return null;
+      return this.user.password == this.confirmPassword;
     },
   },
   methods: {
@@ -365,15 +385,23 @@ export default {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(myTags),
         });
-
-        this.user_photo.base64Photo = this.user_photo.base64Photo.split(",")[1]; // Do not send it with 'data:image/*;base64,'
-        this.user_photo.userId = this.user.id;
-        await fetch("api/v1/userPhoto", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(this.user_photo),
+        if (this.user_photo.base64Photo != "") {
+          let user_photo = {
+            userId: this.user.id,
+            // Do not send it with 'data:image/*;base64,'
+            base64Photo: this.user_photo.base64Photo.split(",")[1],
+          };
+          await fetch("api/v1/userPhoto", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user_photo),
+          });
+        }
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
         });
-
         this.registerSuccess = true;
         this.cleanData();
         // redirifiendo a la pagina de login
@@ -417,6 +445,15 @@ export default {
         isActive: 1,
         userPhoto: null,
       };
+      this.user_photo = {
+        userId: "",
+        base64Photo: "",
+      };
+    },
+    userAbbreviatedName() {
+      return (
+        this.$store.state.user.name[0] + this.$store.state.user.lastName1[0]
+      );
     },
   },
 };

@@ -103,7 +103,9 @@ export default {
       return this.$store.getters.isLoggedInAdmin;
     },
     getFormatDate() {
-      return new Date(this.data.creationDate).toLocaleString();
+      let dateFix = new Date(this.data.creationDate);
+      dateFix.setHours(dateFix.getHours() - 6);
+      return dateFix.toLocaleString();
     },
   },
 };

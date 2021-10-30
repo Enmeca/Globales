@@ -89,7 +89,9 @@ export default {
         : this.data.description.slice(0, 100) + "...";
     },
     getFormatDate() {
-      return new Date(this.data.creationDate).toLocaleString();
+      let dateFix = new Date(this.data.creationDate);
+      dateFix.setHours(dateFix.getHours() - 6);
+      return dateFix.toLocaleString();
     },
   },
   methods: {
