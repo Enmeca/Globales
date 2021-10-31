@@ -1,14 +1,15 @@
 <template>
   <div class="bg-light p-2 card-rounded">
     <b-row class="text-muted">
-      <b-col cols="4" align-self="center">
+      <b-col cols="5" align-self="center">
         <b-avatar
-          variant="info"
+          variant="secondary"
           :text="userAbbreviatedName"
-          size="lg"
+          :src="'http://localhost:9191/api/v1/userPhoto/photo/' + userChat.id"
+          size="6em"
         ></b-avatar>
       </b-col>
-      <b-col cols="8">
+      <b-col cols="7">
         <b-row align-h="between">
           <b-col cols="12" class="text-right">
             {{ getDateLastMessage }}
@@ -20,7 +21,7 @@
             {{ getLastMessage }}
           </b-col>
           <b-col cols="12" class="text-right">
-            <b-badge variant="info" class="cant-not-read">
+            <b-badge variant="secondary" class="cant-not-read">
               {{ getCantNotReaded }}
             </b-badge>
           </b-col>
