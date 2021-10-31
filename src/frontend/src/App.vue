@@ -33,4 +33,16 @@ body {
 .currentPage {
   height: 100%;
 }
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+::-webkit-scrollbar-track {
+  background: rgb(100, 100, 100);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(180, 180, 180);
+  border-radius: 10px;
+}
 </style>
