@@ -3,7 +3,7 @@
     <center class="main-card">
       <div class="container-forum">
         <b-row class="mb-2" align-h="between">
-          <b-col cols="4" class="text-left">
+          <b-col sm="5" md="4" lg="4" class="text-left">
             <b-button variant="secondary" @click="backForums">
               Regresar
               <b-icon-signpost-split-fill />
@@ -84,8 +84,11 @@
             </b-col>
           </b-row>
         </b-card>
-        <b-row class="text-right mt-1" v-if="!modeWriteComment">
-          <b-col align-self="end">
+        <b-row
+          class="text-right mt-1 justify-content-end"
+          v-if="!modeWriteComment"
+        >
+          <b-col sm="5" md="4" lg="4">
             <b-button variant="info" @click="modeWriteComment = true">
               Comentar
               <b-icon-pencil-fill />

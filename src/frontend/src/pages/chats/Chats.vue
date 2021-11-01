@@ -3,14 +3,14 @@
     <center>
       <b-card class="card-of-chats bg-opacity-black p-2">
         <b-row class="chats" style="height: 100%">
-          <b-col sm="12" md="4" lg="4" class="col-chats p-1" v-show="showChats">
+          <b-col sm="12" md="4" lg="3" class="col-chats p-1" v-show="showChats">
             <b-input-group>
               <b-input-group-prepend is-text>
                 <b-icon-search />
               </b-input-group-prepend>
               <b-form-input v-model="searchField"> </b-form-input>
             </b-input-group>
-            <transition-group name="fade" tag="ul" class="pl-0">
+            <transition-group name="bounceLeft" tag="ul" class="pl-0">
               <ItemChat
                 v-for="chat in filterChats"
                 :key="chat.id"
@@ -31,7 +31,7 @@
           <b-col
             sm="12"
             md="8"
-            lg="8"
+            lg="9"
             class="col-current-chats p-1"
             v-show="showCurrentChat"
           >

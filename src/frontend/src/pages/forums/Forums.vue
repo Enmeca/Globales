@@ -98,12 +98,13 @@
           </div>
         </template>
       </b-overlay>
-      <transition-group name="fade" tag="ul">
+      <transition-group name="bounceLeft" tag="ul" class="pl-0">
         <ItemForum
           v-for="forum in filterForums"
           :key="forum.id"
           :data="forum"
           class="mt-3"
+          style="animation-duration: 0.8s"
         />
       </transition-group>
       <b-card v-if="filterForums.length == 0" class="mt-3">
@@ -194,7 +195,7 @@ export default {
   },
   computed: {
     validForm() {
-      return this.newForum.title != "";
+      return this.newForum.title != "" && this.newForum.description != "";
     },
     filterForums() {
       const criteria = this.searchField.trim().toLowerCase();
