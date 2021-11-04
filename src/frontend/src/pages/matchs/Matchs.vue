@@ -7,32 +7,78 @@
           <b-icon-bell-fill />
         </b-card-title>
         <b-card-body>
+          <div class="example-3d">
+          <swiper ref="mySwiper" :options="swiperOption">
+          <swiper-slide>Slide 1</swiper-slide>
+          <swiper-slide>Slide 2</swiper-slide>
+          <swiper-slide>Slide 3</swiper-slide>
+          <swiper-slide>Slide 4</swiper-slide>
+          <swiper-slide>Slide 5</swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+          </div>
           <b-card-text>
             <p>
                 <b-card class="second-card">
                   <b-card-body class="text-left p-0 m-0">
                     <h4 class="text-center">{{`${actualProfile.name} ${actualProfile.lastName1} ${actualProfile.lastName2}` }}</h4>
-                    <b-img
-                      v-if="matchList[0].image!=undefined"
-                      id="preview-photo"
-                      :src="this.user_photo.base64Photo"
-                      thumbnail
-                      fluid
-                      rounded
-                      alt="Profile image"
-                    ></b-img>
-                    <b-icon-person-fill v-else />
+                      <b-avatar
+                        variant="light"
+                        size="18rem"
+                        :text="this.actualProfile.userPhoto.shortName"
+                        :src="this.actualProfile.userPhoto.base64Photo"
+                      ></b-avatar>
                      <p> 
                     <strong>Descripcion:</strong>{{actualProfile.description}}
                      </p>
-                      <b-button @click="omitMatch()" variant="danger" class="m-1">
+                     <p>
+                       <strong>Tags:</strong>
+                       <b-col sm="12" lg="6" align-self="center">
+                <b-input-group class="mb-2 input">
+                  <b-form-tags
+                    id="tags-with-dropdown"
+                    v-model="tags"
+                    no-outer-focus
+                    class="mb-2"
+                  >
+                    <template v-slot="{ tags }">
+                      <ul
+                        v-if="actualProfile.tags.length > 0"
+                        class="list-inline d-inline-block mb-2"
+                      >
+                        <li
+                          v-for="tag in tags"
+                          :key="tag"
+                          class="list-inline-item"
+                        >
+                          <b-form-tag :title="tag" disabled variant="info">{{
+                            tag
+                          }}</b-form-tag>
+                        </li>
+                      </ul>
+                    </template>
+                  </b-form-tags>
+                </b-input-group>
+              </b-col>
+                     </p>
+                      <b-button variant="danger" class="m-1">
                         <b-icon-heart-fill/></b-button>
-                      <b-button variant="info" class="m-1">
+                      <b-button  @click="omitMatch()" variant="info" class="m-1">
                         <b-icon-arrow-right/></b-button>
                   </b-card-body>
                 </b-card>
             </p>
-            <p>Tambien podras ver quien ha hecho match contigo</p>
+            <h2>Mis Matchs</h2>
+              <b-col
+              sm="12"
+              md="6"
+              lg="4"
+              v-for="match in matchList"
+              :key="match.id"
+              class="mt-2"
+              >
+              <matchItem :data="match"/>
+              </b-col>
           </b-card-text>
         </b-card-body>
       </b-card>
@@ -41,21 +87,41 @@
 </template>
 
 <script>
-  //import { Swiper, SwiperSlide } from 'swiper/vue';
-  //import 'swiper/css';
-
+import MatchItem from './MatchItem.vue';
+import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
+import 'swiper/swiper-bundle.css'
 export default {
+  components:{MatchItem,Swiper,SwiperSlide},
+  directives: {
+    swiper: directive
+  },
  data() {
     return {
+      swiperOption: {
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows : true
+          },
+          pagination: {
+            el: '.swiper-pagination'
+          }
+        },
       actualProfile:{
         id: "0000",
         careerId: "0",
         universityId: "0",
         email: "N/A",
         password: "0",
-        name: "No",
-        lastName1: "hay",
-        lastName2: "Matchs",
+        name: "",
+        lastName1: "",
+        lastName2: "",
         dateOfBirth: "",
         description: "No hay matchs disponibles",
         isTutor: 0,
@@ -64,6 +130,8 @@ export default {
         userPhoto: null
       },
       matchList: [],
+      tags:[],
+      matches:[],
       careers: [],
       universities: [],
     };
@@ -87,13 +155,20 @@ export default {
       });
       fetch("/api/v1/user").
       then(response => response.json()).
-      then(data => {this.matchList=data;this.omitMatch()});
+      then(data => {data.forEach(x=>
+        x.userPhoto={
+        shortName: x.shortName=x.name[0]+x.lastName1[0] ,
+        base64Photo:
+          "http://localhost:8080/api/v1/userPhoto/photo/" +this.actualProfile.id});
+          this.matchList=data; this.omitMatch()});
       
   },
   methods:{
-    omitMatch(){
+    async omitMatch(){
         this.actualProfile=this.matchList.pop()
-        
+        const resp = await fetch("api/v1/userTags/user/" + this.actualProfile.id).then(resp=>resp.json());
+        this.tags= resp.map(x=>x.tag.name)
+        alert(JSON.stringify(this.tags))
     },
     match(){
 
@@ -110,7 +185,8 @@ center {
 .second-card {
   background-color: rgba(255, 255, 255, 0.863) !important;
   color: rgb(83, 76, 76);
-  max-width: 50%;
+  max-width: 20rem;
+  min-width: 20rem;
 }
 .main-card {
   background-color: rgba(0, 0, 0, 0.5);
@@ -119,5 +195,22 @@ center {
 }
 p {
   font-size: 20px;
+}
+
+
+.example-3d {
+  position: relative;
+  overflow: hidden;
+  height: 360px;
+  padding: 15px;
+}
+.swiper {
+  width: 300px !important;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
 }
 </style>

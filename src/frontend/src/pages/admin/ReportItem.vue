@@ -1,5 +1,4 @@
 <template>
-  <!--<slide> -->
   <b-card class="main-card">
     <b-card-body class="text-left p-0 m-0">
       <h4 class="text-center">Reporte #{{ data.comment.id }}</h4>
@@ -31,10 +30,8 @@
       </b-row>
     </b-card-body>
   </b-card>
-  <!--</slide> -->
 </template>
 <script>
-//import { Slide } from "vue-carousel";
 export default {
   props: {
     data: {
@@ -95,7 +92,6 @@ export default {
       );
     },
   },
-  //components: { Slide },
 };
 </script>
 
