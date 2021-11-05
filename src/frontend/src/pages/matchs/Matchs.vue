@@ -19,66 +19,77 @@
           </div>
           <b-card-text>
             <p>
-                <b-card class="second-card">
-                  <b-card-body class="text-left p-0 m-0">
-                    <h4 class="text-center">{{`${actualProfile.name} ${actualProfile.lastName1} ${actualProfile.lastName2}` }}</h4>
-                      <b-avatar
-                        variant="light"
-                        size="18rem"
-                        :text="this.actualProfile.userPhoto.shortName"
-                        :src="this.actualProfile.userPhoto.base64Photo"
-                      ></b-avatar>
-                     <p> 
-                    <strong>Descripcion:</strong>{{actualProfile.description}}
-                     </p>
-                     <p>
-                       <strong>Tags:</strong>
-                       <b-col sm="12" lg="6" align-self="center">
-                <b-input-group class="mb-2 input">
-                  <b-form-tags
-                    id="tags-with-dropdown"
-                    v-model="tags"
-                    no-outer-focus
-                    class="mb-2"
-                  >
-                    <template v-slot="{ tags }">
-                      <ul
-                        v-if="actualProfile.tags.length > 0"
-                        class="list-inline d-inline-block mb-2"
-                      >
-                        <li
-                          v-for="tag in tags"
-                          :key="tag"
-                          class="list-inline-item"
+              <b-card class="second-card">
+                <b-card-body class="text-left p-0 m-0">
+                  <h4 class="text-center">
+                    {{ actualProfile.name }}
+                    {{ actualProfile.lastName1 }}
+                    {{ actualProfile.lastName2 }}
+                  </h4>
+                  <b-avatar
+                    variant="light"
+                    size="18rem"
+                    :text="actualProfile.name[0] + actualProfile.lastName1[0]"
+                    :src="
+                      'http://localhost:8080/api/v1/userPhoto/photo/' +
+                      actualProfile.id
+                    "
+                  ></b-avatar>
+                  <p>
+                    <strong>Descripcion:</strong>{{ actualProfile.description }}
+                  </p>
+                  <p>
+                    <strong>Tags:</strong>
+                    <b-col cols="12" align-self="center">
+                      <b-input-group class="mb-2 input">
+                        <b-form-tags
+                          id="tags-with-dropdown"
+                          v-model="tags"
+                          no-outer-focus
                         >
-                          <b-form-tag :title="tag" disabled variant="info">{{
-                            tag
-                          }}</b-form-tag>
-                        </li>
-                      </ul>
-                    </template>
-                  </b-form-tags>
-                </b-input-group>
-              </b-col>
-                     </p>
-                      <b-button variant="danger" class="m-1">
-                        <b-icon-heart-fill/></b-button>
-                      <b-button  @click="omitMatch()" variant="info" class="m-1">
-                        <b-icon-arrow-right/></b-button>
-                  </b-card-body>
-                </b-card>
+                          <template v-slot="{ tags }">
+                            <ul
+                              v-if="tags.length > 0"
+                              class="list-inline d-inline-block m-0"
+                            >
+                              <li
+                                v-for="tag in tags"
+                                :key="tag"
+                                class="list-inline-item"
+                              >
+                                <b-form-tag
+                                  :title="tag"
+                                  disabled
+                                  variant="info"
+                                  >{{ tag }}</b-form-tag
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </b-form-tags>
+                      </b-input-group>
+                    </b-col>
+                  </p>
+                  <b-button variant="danger" class="m-1">
+                    <b-icon-heart-fill
+                  /></b-button>
+                  <b-button @click="omitMatch()" variant="info" class="m-1">
+                    <b-icon-arrow-right
+                  /></b-button>
+                </b-card-body>
+              </b-card>
             </p>
             <h2>Mis Matchs</h2>
-              <b-col
+            <b-col
               sm="12"
               md="6"
               lg="4"
               v-for="match in matchList"
               :key="match.id"
               class="mt-2"
-              >
-              <matchItem :data="match"/>
-              </b-col>
+            >
+              <matchItem :data="match" />
+            </b-col>
           </b-card-text>
         </b-card-body>
       </b-card>
@@ -87,33 +98,33 @@
 </template>
 
 <script>
-import MatchItem from './MatchItem.vue';
-import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
-import 'swiper/swiper-bundle.css'
+import MatchItem from "./MatchItem.vue";
+import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
+import "swiper/swiper-bundle.css";
 export default {
-  components:{MatchItem,Swiper,SwiperSlide},
+  components: { MatchItem, Swiper, SwiperSlide },
   directives: {
-    swiper: directive
+    swiper: directive,
   },
- data() {
+  data() {
     return {
       swiperOption: {
-          effect: 'coverflow',
-          grabCursor: true,
-          centeredSlides: true,
-          slidesPerView: 'auto',
-          coverflowEffect: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows : true
-          },
-          pagination: {
-            el: '.swiper-pagination'
-          }
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        coverflowEffect: {
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true,
         },
-      actualProfile:{
+        pagination: {
+          el: ".swiper-pagination",
+        },
+      },
+      actualProfile: {
         id: "0000",
         careerId: "0",
         universityId: "0",
@@ -127,16 +138,16 @@ export default {
         isTutor: 0,
         isAdmin: 0,
         isActive: 1,
-        userPhoto: null
+        userPhoto: null,
       },
       matchList: [],
-      tags:[],
-      matches:[],
+      tags: [],
+      matches: [],
       careers: [],
       universities: [],
     };
   },
-  mounted(){
+  mounted() {
     fetch("/api/v1/university")
       .then((response) => response.json())
       .then((data) => {
@@ -153,34 +164,36 @@ export default {
           text: career.name,
         }));
       });
-      fetch("/api/v1/user").
-      then(response => response.json()).
-      then(data => {data.forEach(x=>
-        x.userPhoto={
-        shortName: x.shortName=x.name[0]+x.lastName1[0] ,
-        base64Photo:
-          "http://localhost:8080/api/v1/userPhoto/photo/" +this.actualProfile.id});
-          this.matchList=data; this.omitMatch()});
-      
+    fetch("/api/v1/user")
+      .then((response) => response.json())
+      .then((data) => {
+        this.matchList = data;
+        this.actualProfile = this.matchList.pop();
+        fetch("api/v1/userTags/user/" + this.actualProfile.id)
+          .then((response) => response.json())
+          .then((data) => {
+            this.tags = data.map((tag) => tag.tag.name);
+          });
+      });
   },
-  methods:{
-    async omitMatch(){
-        this.actualProfile=this.matchList.pop()
-        const resp = await fetch("api/v1/userTags/user/" + this.actualProfile.id).then(resp=>resp.json());
-        this.tags= resp.map(x=>x.tag.name)
-        alert(JSON.stringify(this.tags))
+  methods: {
+    async omitMatch() {
+      this.actualProfile = this.matchList.pop();
+      fetch("api/v1/userTags/user/" + this.actualProfile.id)
+        .then((response) => response.json())
+        .then((data) => {
+          this.tags = data.map((tag) => tag.tag.name);
+        });
     },
-    match(){
-
-    }
-  }
+    /*match(){ } */
+  },
 };
 </script>
 
 <style scoped>
 #matchs-page,
 center {
- height: 40%;
+  height: 40%;
 }
 .second-card {
   background-color: rgba(255, 255, 255, 0.863) !important;
@@ -196,7 +209,6 @@ center {
 p {
   font-size: 20px;
 }
-
 
 .example-3d {
   position: relative;
