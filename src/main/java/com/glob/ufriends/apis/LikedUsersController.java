@@ -1,7 +1,10 @@
 package com.glob.ufriends.apis;
 
 import com.glob.ufriends.entities.LikedUsers;
+import com.glob.ufriends.entities.MatchedUsers;
+import com.glob.ufriends.entities.User;
 import com.glob.ufriends.services.LikedUsersService;
+import com.glob.ufriends.services.MatchedUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +18,41 @@ public class LikedUsersController {
     @Autowired
     private LikedUsersService service;
 
+    @Autowired
+    private MatchedUsersService matchService;
+
+    /*
+     * JSON Object for Liked Users (POST):
+     *
+     * {
+     *   user: {id: String}, // User object that has the id of the user
+     *   likedUser: {id: String}, // User object that has the id of the liked user
+     * }
+     *
+     * */
+
+    @Transactional
     @PostMapping
+    // This method also creates the match if both users have liked each other
     public LikedUsers addLikedUsers(@RequestBody LikedUsers likedUsers) {
+        String userId = likedUsers.getUser().getId();
+        String likedUserId = likedUsers.getLikedUser().getId();
+        LikedUsers likedByOtherUser = service.getLikedUserByParams(likedUserId, userId);
+
+        if(likedByOtherUser != null){
+            MatchedUsers newMatchedUsers = new MatchedUsers();
+            User user = new User();
+            User likedUser = new User();
+            user.setId(likedUserId);
+            likedUser.setId(userId);
+            // The user that liked second will be the matchedUser in the match. The one that liked first
+            // will be the "user"
+            newMatchedUsers.setUser(user);
+            newMatchedUsers.setMatchedUser(likedUser);
+            matchService.saveMatchedUsers(newMatchedUsers);
+        } // Else return null maybe or a 400 status code maybe if
+        // message that says that the user has already liked the other user is needed
+
         return service.saveLikedUsers(likedUsers);
     }
 

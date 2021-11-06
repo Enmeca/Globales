@@ -307,7 +307,11 @@ insert into CAREERS values ('ING-SIS', 'Ingenieria de Sistemas');
 insert into CAREERS values ('ADM', 'Administracion de Empresas');
 insert into CAREERS values ('MECTR', 'Mecatronica');
 insert into CAREERS values ('BIO', 'Biologia');
-insert into CAREERS values ('TOP', 'Topografia');
+insert into CAREERS values ('VET', 'Veterinaria');
+insert into CAREERS values ('CMOVH', 'C. Movimiento Humano');
+insert into CAREERS values ('DER', 'Derecho');
+insert into CAREERS values ('ECON', 'Economia');
+insert into CAREERS values ('ING-IND', 'Ingenieria Industrial');
 
 insert into UNIVERSITIES values ('UCR', 'Universidad de Costa Rica');
 insert into UNIVERSITIES values ('UNA', 'Universidad Nacional de Costa Rica');
@@ -348,6 +352,18 @@ insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Ja
 				
 insert into USERS values ('615283905','ADM','TEC','javo64@gmail','123','Alberto','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Deprecado', null, 1, 0, 0);
+
+insert into USERS values ('212283905','ADM','TEC','tutor1@gmail','123','Gerardo','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
+				'Deprecado', null, 1, 1, 0);
+				
+insert into USERS values ('613253965','ADM','TEC','tutor2@gmail','123','Pablo','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
+				'Deprecado', null, 1, 1, 0);
+				
+-- PARA PROBAR UN METODO DEL API DE TUTOR REVIEWS
+--insert into TUTOR_REVIEWS values ('615283905','212283905',5,'Sin comentarios');
+--insert into TUTOR_REVIEWS values ('117780905','212283905',4,'Sin comentarios');
+--insert into TUTOR_REVIEWS values ('615283905','613253965',5,'Sin comentarios');
+--insert into TUTOR_REVIEWS values ('117780905','613253965',2,'Sin comentarios');
 				
 insert into USER_TAGS values ('117780905','Videojuegos');
 insert into USER_TAGS values ('117780905','Idiomas');

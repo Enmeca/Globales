@@ -63,9 +63,10 @@ public class ForumCommentsController {
         return service.findForumCommentsByForumID(id);
     }
 
-    @GetMapping(path = "/orderByDateDesc")
-    public List<ForumComments> findAllForumCommentsOrderByDate() {
-        return service.getForumCommentsOrderedByCDate();
+    // The parameter is the forumUID
+    @GetMapping(path = "/orderByDateDesc/{id}")
+    public List<ForumComments> findForumCommentsOrderByDateDesc(@PathVariable("id") int id) {
+        return service.getForumCommentsOrderedByCDate(id);
     }
 
     // Be sure to send an object with the id
