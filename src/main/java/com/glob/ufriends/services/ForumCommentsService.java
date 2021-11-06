@@ -24,8 +24,8 @@ public class ForumCommentsService {
         return repository.findForumCommentsByForumID(forumId);
     }
     
-    public List<ForumComments> getForumCommentsOrderedByCDate(){
-        return repository.getForumCommentsOrderedByCDate();
+    public List<ForumComments> getForumCommentsOrderedByCDate(int forumId){
+        return repository.getForumCommentsOrderedByCDate(forumId);
     }
 
     public ForumComments getForumComments(int id){

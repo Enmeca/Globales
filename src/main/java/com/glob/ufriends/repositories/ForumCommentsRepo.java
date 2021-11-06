@@ -11,8 +11,8 @@ public interface ForumCommentsRepo extends JpaRepository<ForumComments, Integer>
             nativeQuery = true)
     List<ForumComments> findForumCommentsByForumID(int forumId);
     
-    @Query(value = "select * from FORUM_COMMENTS fc order by fc.CREATION_DATE desc",
+    @Query(value = "select * from FORUM_COMMENTS fc where fc.FORUM_ID = ?1 order by fc.CREATION_DATE desc",
             nativeQuery = true)
-    List<ForumComments> getForumCommentsOrderedByCDate();
+    List<ForumComments> getForumCommentsOrderedByCDate(int forumId);
     
 }
