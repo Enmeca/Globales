@@ -1,51 +1,112 @@
 <template>
   <div id="chats-page">
     <center>
-      <b-card class="card-of-chats bg-opacity-black p-2">
-        <b-row class="chats" style="height: 100%">
-          <b-col sm="12" md="4" lg="3" class="col-chats p-1" v-show="showChats">
+      <b-card class="bg-opacity-black">
+        <b-row class="chats">
+          <b-col sm="12" md="4" lg="4" class="p-1" v-show="showChats">
             <b-input-group>
               <b-input-group-prepend is-text>
                 <b-icon-search />
               </b-input-group-prepend>
               <b-form-input v-model="searchField"> </b-form-input>
             </b-input-group>
-            <transition-group name="bounceLeft" tag="ul" class="pl-0">
+            <transition-group name="fadeLeft">
               <ItemChat
                 v-for="chat in filterChats"
                 :key="chat.id"
-                class="p-0 mt-1"
-                :userChat="chat.userChat"
-                :lastMessage="chat.lastMessage"
-                :cantNotReaded="chat.cantNotReaded"
+                :handleClick="changeChat"
+                :chatData="chat"
                 :width="window.width"
+                class="p-0 m-1"
               />
             </transition-group>
-            <b-card v-if="filterChats.length == 0" class="mt-3">
-              <p>
-                Ningún chat coincide con el criterio de busqueda
-                <b-icon-emoji-frown />
-              </p>
-            </b-card>
           </b-col>
           <b-col
             sm="12"
             md="8"
-            lg="9"
+            lg="8"
             class="col-current-chats p-1"
             v-show="showCurrentChat"
           >
-            <b-card style="height: 100%">
-              <b-card-body v-if="actualChat">
-                Welcome to page chat
-              </b-card-body>
-              <b-card-body v-else>
-                Chat actual
-                {{ window.width }}
-                X
-                {{ window.height }}
-              </b-card-body>
-            </b-card>
+            <transition
+              enter-active-class="animated fadeInRight"
+              leave-active-class="animated fadeOutRight"
+            >
+              <b-container
+                v-if="actualChat != -1"
+                style="height: 100%; animation-duration: 0.5s"
+              >
+                <b-container
+                  class="bg-info-chat bg-secondary text-white p-1"
+                  fluid
+                >
+                  <b-row>
+                    <b-col cols="4" align-self="center" class="text-left">
+                      <b-avatar
+                        class="ml-3"
+                        variant="dark"
+                        :text="userAbbreviatedName"
+                        :src="
+                          'http://localhost:9191/api/v1/userPhoto/photo/' +
+                          chats[actualChat].user.user_uid
+                        "
+                        size="4em"
+                      ></b-avatar>
+                    </b-col>
+                    <b-col cols="5" align-self="center" class="text-left">
+                      <strong>
+                        <i class="ml-2">
+                          {{ chats[actualChat].user.name }}
+                          {{ chats[actualChat].user.lastName1 }}
+                          {{ chats[actualChat].user.lastName2 }}
+                        </i>
+                      </strong>
+                    </b-col>
+                    <b-col cols="3" align-self="center" class="text-center">
+                      <b-icon-arrow-left
+                        v-if="!showChats"
+                        class="back-icon"
+                        @click="actualChat = -1"
+                        scale="1.5"
+                      >
+                      </b-icon-arrow-left>
+                    </b-col>
+                  </b-row>
+                </b-container>
+
+                <b-card class="bg-chat" style="height: 75%">
+                  <b-container fluid>
+                    <ChatMessages
+                      v-for="message in chats[actualChat].messages"
+                      :key="message.id"
+                      :data="message"
+                      :mine="
+                        message.user_uid !== chats[actualChat].user.user_uid
+                      "
+                    />
+                  </b-container>
+                </b-card>
+
+                <b-container
+                  class="bg-info-send bg-secondary text-white pt-1"
+                  fluid
+                >
+                  <b-row>
+                    <b-col cols="6" class="text-left">
+                      zona de escribir mensaje
+                    </b-col>
+                    <b-col cols="6" class="text-right">
+                      <b-button> boton Enviar </b-button>
+                    </b-col>
+                  </b-row>
+                </b-container>
+              </b-container>
+            </transition>
+            <transition enter-active-class="animated fadeInRight">
+              <b-container v-if="actualChat == -1" style="height: 100%" fluid>
+                <b-card style="height: 100%"> A </b-card>
+              </b-container>
+            </transition>
           </b-col>
         </b-row>
       </b-card>
@@ -55,9 +116,11 @@
 
 <script>
 import ItemChat from "./ItemChat.vue";
+import ChatMessages from "./ChatMessages.vue";
 
 export default {
   components: {
+    ChatMessages,
     ItemChat,
   },
   data() {
@@ -69,97 +132,73 @@ export default {
       searchField: "",
       chats: [
         {
-          id: "1",
-          userChat: {
-            id: "117540697",
-            name: "John",
-            lastName1: "Dereh",
-            lastName2: "dereh",
+          user: {
+            user_uid: 117540697,
+            name: "Juan",
+            lastName1: "Miguel",
+            lastName2: "Hidalgo",
           },
-          lastMessage: {
-            message: "example of lastMessage large",
-            date: "10/22/2021 07:12 pm",
-            readed: true,
-          },
-          cantNotReaded: 999,
+          id: 1,
+          cantNotReaded: 0,
+          messages: [
+            {
+              id: 5,
+              message: "Hola.",
+              user_uid: 117540697,
+              date: " 2019-09-09",
+              readed: true,
+            },
+            {
+              id: 6,
+              message: "Hola ¿Como estas?",
+              user_uid: 1,
+              date: " 2019-09-09",
+              readed: true,
+            },
+          ],
         },
         {
-          id: "2",
-          userChat: {
-            id: "615283905",
-            name: "Y",
-            lastName1: "Dereh",
-            lastName2: "dereh",
+          user: {
+            user_uid: 2,
+            name: "Jessica",
+            lastName1: "Rodriguez",
+            lastName2: "Salas",
           },
-          lastMessage: {
-            message: "example of lastMessage large",
-            date: "10/29/2021 09:10 am",
-            readed: true,
-          },
+          id: 2,
           cantNotReaded: 2,
-        },
-        {
-          id: "3",
-          userChat: {
-            id: "615283905",
-            name: "G",
-            lastName1: "Dereh",
-            lastName2: "dereh",
-          },
-          lastMessage: {
-            message: "example of lastMessage large",
-            date: "10/29/2021 09:10 am",
-            readed: true,
-          },
-          cantNotReaded: 2,
-        },
-        {
-          id: "4",
-          userChat: {
-            id: "615283905",
-            name: "V",
-            lastName1: "Dereh",
-            lastName2: "dereh",
-          },
-          lastMessage: {
-            message: "example of lastMessage large",
-            date: "10/29/2021 09:10 am",
-            readed: true,
-          },
-          cantNotReaded: 2,
-        },
-        {
-          id: "5",
-          userChat: {
-            id: "615283905",
-            name: "X",
-            lastName1: "Dereh",
-            lastName2: "dereh",
-          },
-          lastMessage: {
-            message: "example of lastMessage large",
-            date: "10/29/2021 09:10 am",
-            readed: true,
-          },
-          cantNotReaded: 2,
-        },
-        {
-          id: "6",
-          userChat: {
-            id: "615283905",
-            name: "Z",
-            lastName1: "Dereh",
-            lastName2: "dereh",
-          },
-          lastMessage: {
-            message: "example of lastMessage large",
-            date: "10/29/2021 09:10 am",
-            readed: true,
-          },
-          cantNotReaded: 2,
+          messages: [
+            {
+              id: 1,
+              message: "Tas bien?",
+              user_uid: 2,
+              date: " 2019-09-09",
+              readed: false,
+            },
+            {
+              id: 2,
+              message: "LOL",
+              user_uid: 1,
+              date: " 2019-09-09",
+              readed: false,
+            },
+            {
+              id: 3,
+              message: "Tas bien?",
+              user_uid: 2,
+              date: " 2019-09-09",
+              readed: false,
+            },
+            {
+              id: 4,
+              message: "LOL",
+              user_uid: 1,
+              date: " 2019-09-09",
+              readed: false,
+            },
+          ],
         },
       ],
-      actualChat: null, //{ user: "aja", id: 1 },
+      actualChat: -1,
     };
   },
   created() {
@@ -174,25 +213,37 @@ export default {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
     },
+    changeChat(id) {
+      this.actualChat = -1;
+      setTimeout(() => {
+        this.actualChat = this.chats.findIndex((chat) => chat.id == id);
+      }, 100);
+    },
   },
   computed: {
-    showCurrentChat() {
-      return this.window.width >= 768 || this.actualChat != null;
-    },
-    showChats() {
-      return this.window.width >= 768 || this.actualChat == null;
-    },
     filterChats() {
       const criteria = this.searchField.trim().toLowerCase();
       if (criteria) {
         return this.chats.filter(
           (chat) =>
-            chat.userChat.name.toLowerCase().indexOf(criteria) > -1 ||
-            chat.userChat.lastName1.toLowerCase().indexOf(criteria) > -1 ||
-            chat.userChat.lastName2.toLowerCase().indexOf(criteria) > -1
+            chat.user.name.toLowerCase().indexOf(criteria) > -1 ||
+            chat.user.lastName1.toLowerCase().indexOf(criteria) > -1 ||
+            chat.user.lastName2.toLowerCase().indexOf(criteria) > -1
         );
       }
       return this.chats;
+    },
+    showCurrentChat() {
+      return this.window.width >= 770 || this.actualChat != -1;
+    },
+    showChats() {
+      return this.window.width >= 770 || this.actualChat == -1;
+    },
+    userAbbreviatedName() {
+      return (
+        this.chats[this.actualChat].user.name[0] +
+        this.chats[this.actualChat].user.lastName1[0]
+      );
     },
   },
 };
@@ -201,12 +252,9 @@ export default {
 <style scoped>
 #chats-page,
 center {
-  margin: 0.5vw;
-}
-
-.card-chats {
-  height: 80vh;
-  overflow: hidden;
+  height: 70%;
+  margin-inline: 1vw;
+  margin-block: 1vw;
 }
 
 .col-chats {
@@ -217,11 +265,32 @@ center {
 
 .col-current-chats {
   height: 80vh;
+}
+.card-of-chats {
+  border-radius: 50px;
+}
+.bg-opacity-black {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.bg-info-chat {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.bg-info-send {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.bg-chat {
+  background: url("../../assets/background-chats.jpg");
+  border-radius: 0px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.bg-opacity-black {
-  background-color: rgba(0, 0, 0, 0.6);
+.back-icon:hover {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1.5);
 }
 </style>
