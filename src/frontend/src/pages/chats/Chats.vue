@@ -3,14 +3,14 @@
     <center>
       <b-card class="bg-opacity-black">
         <b-row class="chats">
-          <b-col sm="12" md="4" lg="4" class="p-1" v-show="showChats">
+          <b-col sm="12" md="4" lg="4" class="p-0" v-show="showChats">
             <b-input-group>
               <b-input-group-prepend is-text>
                 <b-icon-search />
               </b-input-group-prepend>
               <b-form-input v-model="searchField"> </b-form-input>
             </b-input-group>
-            <transition-group name="fadeLeft">
+            <transition-group name="bounceLeft">
               <ItemChat
                 v-for="chat in filterChats"
                 :key="chat.id"
@@ -25,7 +25,7 @@
             sm="12"
             md="8"
             lg="8"
-            class="col-current-chats p-1"
+            class="col-current-chats p-0"
             v-show="showCurrentChat"
           >
             <transition
@@ -35,41 +35,36 @@
               <b-container
                 v-if="actualChat != -1"
                 style="height: 100%; animation-duration: 0.5s"
+                fluid
               >
-                <b-container
-                  class="bg-info-chat bg-secondary text-white p-1"
-                  fluid
-                >
-                  <b-row>
-                    <b-col cols="4" align-self="center" class="text-left">
+                <b-container class="bg-info-chat bg-secondary text-white" fluid>
+                  <b-row class="text-left">
+                    <b-col cols="12" align-self="center">
+                      <b-icon-arrow-left
+                        v-if="!showChats"
+                        class="back-icon mt-2 ml-2 mr-2"
+                        @click="actualChat = -1"
+                        scale="2"
+                      >
+                      </b-icon-arrow-left>
+
                       <b-avatar
-                        class="ml-3"
                         variant="dark"
                         :text="userAbbreviatedName"
                         :src="
                           'http://localhost:9191/api/v1/userPhoto/photo/' +
-                          chats[actualChat].user.user_uid
+                          chats[actualChat].user.id
                         "
-                        size="4em"
+                        :size="showChats ? '4em' : '3em'"
+                        class="m-2"
                       ></b-avatar>
-                    </b-col>
-                    <b-col cols="5" align-self="center" class="text-left">
                       <strong>
-                        <i class="ml-2">
+                        <i>
                           {{ chats[actualChat].user.name }}
                           {{ chats[actualChat].user.lastName1 }}
                           {{ chats[actualChat].user.lastName2 }}
                         </i>
                       </strong>
-                    </b-col>
-                    <b-col cols="3" align-self="center" class="text-center">
-                      <b-icon-arrow-left
-                        v-if="!showChats"
-                        class="back-icon"
-                        @click="actualChat = -1"
-                        scale="1.5"
-                      >
-                      </b-icon-arrow-left>
                     </b-col>
                   </b-row>
                 </b-container>
@@ -80,25 +75,20 @@
                       v-for="message in chats[actualChat].messages"
                       :key="message.id"
                       :data="message"
-                      :mine="
-                        message.user_uid !== chats[actualChat].user.user_uid
-                      "
+                      :mine="message.user_uid !== chats[actualChat].user.id"
                     />
                   </b-container>
                 </b-card>
 
-                <b-container
-                  class="bg-info-send bg-secondary text-white pt-1"
-                  fluid
-                >
-                  <b-row>
-                    <b-col cols="6" class="text-left">
-                      zona de escribir mensaje
-                    </b-col>
-                    <b-col cols="6" class="text-right">
-                      <b-button> boton Enviar </b-button>
-                    </b-col>
-                  </b-row>
+                <b-container class="bg-info-send bg-secondary text-white" fluid>
+                  <b-input-group class="p-1">
+                    <b-form-input type="text"></b-form-input>
+                    <b-input-group-append>
+                      <b-button variant="primary">
+                        <b-icon-cursor-fill />
+                      </b-button>
+                    </b-input-group-append>
+                  </b-input-group>
                 </b-container>
               </b-container>
             </transition>
@@ -133,7 +123,7 @@ export default {
       chats: [
         {
           user: {
-            user_uid: 117540697,
+            id: 117540697,
             name: "Juan",
             lastName1: "Miguel",
             lastName2: "Hidalgo",
@@ -159,7 +149,7 @@ export default {
         },
         {
           user: {
-            user_uid: 2,
+            id: 2,
             name: "Jessica",
             lastName1: "Rodriguez",
             lastName2: "Salas",
@@ -271,6 +261,7 @@ center {
 }
 .bg-opacity-black {
   background-color: rgba(0, 0, 0, 0.6);
+  min-height: 86vh !important;
 }
 .bg-info-chat {
   border-top-left-radius: 10px;

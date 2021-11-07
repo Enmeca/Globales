@@ -94,6 +94,7 @@ export default {
 <style scoped>
 .cant-not-read {
   border-radius: 100px !important;
+  font-size: 15px;
 }
 .card-rounded {
   border-radius: 10px !important;

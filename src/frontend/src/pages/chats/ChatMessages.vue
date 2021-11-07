@@ -3,15 +3,16 @@
     <b-col
       sm="7"
       md="5"
-      lg="5"
-      :class="'message ' + (mine ? 'ml-auto bg-info' : 'mr-auto bg-secondary')"
+      lg="4"
+      :class="
+        'message ' + (mine ? 'ml-auto bg-primary' : 'mr-auto bg-secondary')
+      "
     >
       <b-row align-h="end">
         <b-col cols="12" :class="mine ? 'text-right' : 'text-left'">
           {{ data.message }}
-          asdasdasdasdasdasdasdasdasdasdasasd das d"
         </b-col>
-        <b-col cols="5">
+        <b-col cols="5" class="text-right">
           {{ getDateMessage }}
           <b-icon-check2 variant="light" v-if="data.readed" />
           <b-icon-check2-all variant="light" v-else />
