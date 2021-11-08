@@ -5,7 +5,7 @@ REM on the frontend, use windows terminal and microsoft edge
 REM Run Backend using maven plugin commands
 REM Run frontend using Node Package Manager commands
 
-start wt -M new-tab -p "Command Prompt" -d "%cd%" cmd /k "npm run serve" ; split-pane -p "Command Prompt" -d "%cd%" cmd /k "cd ../.. & "mvn package exec:java"
+start wt -M new-tab -p "Command Prompt" -d "%cd%" cmd /k "npm run serve" ; split-pane -p "Command Prompt" -d "%cd%" cmd /k "cd ../.. & "mvn clean compile package exec:java"
 
 REM Open edge explorer in localhost:8080
 
