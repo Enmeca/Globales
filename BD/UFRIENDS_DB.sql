@@ -373,6 +373,13 @@ insert into USER_TAGS values ('117780905','Natacion');
 insert into USER_TAGS values ('117780905','Series animadas');
 insert into USER_TAGS values ('117780905','Ping-pong');		
 
+insert into USER_TAGS values ('212283905','Natacion');
+insert into USER_TAGS values ('212283905','Series animadas');
+insert into USER_TAGS values ('212283905','Ping-pong');	
+
+insert into USER_TAGS values ('613253965','Videojuegos');
+insert into USER_TAGS values ('613253965','Idiomas');
+insert into USER_TAGS values ('613253965','Cine');	
 
 -- El siguiente insert es para probar el trigger de actualizar el campo de # de comentarios de un foro
 insert into FORUM_TOPICS values (SEQ_ID_FORUM_TOPICS.nextval,'117780905','TEST 1','TEST FORUM TOPIC TO TRY THINGS',null,0,0);
