@@ -365,6 +365,11 @@ export default {
       if (this.confirmPassword == "") return null;
       return this.user.password == this.confirmPassword;
     },
+    userAbbreviatedName() {
+      let result = this.user.name[0] ?? "";
+      result += this.user.lastName1[0] ?? "";
+      return result;
+    },
   },
   methods: {
     async signup() {
@@ -449,11 +454,6 @@ export default {
         userId: "",
         base64Photo: "",
       };
-    },
-    userAbbreviatedName() {
-      return (
-        this.$store.state.user.name[0] + this.$store.state.user.lastName1[0]
-      );
     },
   },
 };

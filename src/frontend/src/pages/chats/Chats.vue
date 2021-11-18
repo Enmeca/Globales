@@ -147,46 +147,6 @@ export default {
             },
           ],
         },
-        {
-          user: {
-            id: 2,
-            name: "Jessica",
-            lastName1: "Rodriguez",
-            lastName2: "Salas",
-          },
-          id: 2,
-          cantNotReaded: 2,
-          messages: [
-            {
-              id: 1,
-              message: "Tas bien?",
-              user_uid: 2,
-              date: " 2019-09-09",
-              readed: false,
-            },
-            {
-              id: 2,
-              message: "LOL",
-              user_uid: 1,
-              date: " 2019-09-09",
-              readed: false,
-            },
-            {
-              id: 3,
-              message: "Tas bien?",
-              user_uid: 2,
-              date: " 2019-09-09",
-              readed: false,
-            },
-            {
-              id: 4,
-              message: "LOL",
-              user_uid: 1,
-              date: " 2019-09-09",
-              readed: false,
-            },
-          ],
-        },
       ],
       actualChat: -1,
     };
