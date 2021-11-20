@@ -359,6 +359,12 @@ insert into USERS values ('212283905','ADM','TEC','tutor1@gmail','123','Gerardo'
 insert into USERS values ('613253965','ADM','TEC','tutor2@gmail','123','Pablo','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Deprecado', null, 1, 1, 0);
 				
+insert into USERS values ('2222222','ADM','TEC','tutor19@gmail','123','Gabriel','Fernandez','Sanchez', TO_DATE('2002/04/25', 'yyyy/mm/dd'),
+				'Sin mucho que decir', null, 1, 1, 0);
+
+insert into USERS values ('3333333','ADM','UNA','dan23@gmail','123','Daniel','Lobo','Lara', TO_DATE('2001/11/15', 'yyyy/mm/dd'),
+				'Un poco mas que decir', null, 1, 1, 0);
+				
 -- PARA PROBAR UN METODO DEL API DE TUTOR REVIEWS
 --insert into TUTOR_REVIEWS values ('615283905','212283905',5,'Sin comentarios');
 --insert into TUTOR_REVIEWS values ('117780905','212283905',4,'Sin comentarios');
@@ -373,6 +379,13 @@ insert into USER_TAGS values ('117780905','Natacion');
 insert into USER_TAGS values ('117780905','Series animadas');
 insert into USER_TAGS values ('117780905','Ping-pong');		
 
+
+insert into USER_TAGS values ('212283905','Series animadas');
+insert into USER_TAGS values ('212283905','Ping-pong');	
+
+insert into USER_TAGS values ('613253965','Videojuegos');
+insert into USER_TAGS values ('613253965','Idiomas');
+insert into USER_TAGS values ('613253965','Cine');	
 
 -- El siguiente insert es para probar el trigger de actualizar el campo de # de comentarios de un foro
 insert into FORUM_TOPICS values (SEQ_ID_FORUM_TOPICS.nextval,'117780905','TEST 1','TEST FORUM TOPIC TO TRY THINGS',null,0,0);
