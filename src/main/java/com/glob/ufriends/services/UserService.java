@@ -52,4 +52,12 @@ public class UserService {
     public List<User> getAllTutors(){
         return repository.getAllTutors();
     }
+    
+    public List<User> getAllTutorsThatHaveNotBeenReviewedYet(){
+        return repository.getAllTutorsThatHaveNotBeenReviewedYet();
+    }
+    
+    public List<User> getAllUsersThatHaveNotBeenLikedByUser(String userId){
+        return repository.getAllUsersThatHaveNotBeenLikedByUser(userId);
+    }
 }

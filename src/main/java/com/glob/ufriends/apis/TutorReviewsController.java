@@ -2,7 +2,10 @@ package com.glob.ufriends.apis;
 
 import com.glob.ufriends.entities.TutorReviews;
 import com.glob.ufriends.entities.TutorReviewsHelper;
+import com.glob.ufriends.entities.User;
 import com.glob.ufriends.services.TutorReviewsService;
+import com.glob.ufriends.services.UserService;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,9 @@ public class TutorReviewsController {
 
     @Autowired
     private TutorReviewsService service;
+    
+    @Autowired
+    private UserService userService;
 
     /*
      * JSON Object for Tutor Reviews (POST):
@@ -51,13 +57,31 @@ public class TutorReviewsController {
         return service.findTutorReviewsByTutorID(id);
     }
 
-    // WORK IN PROGRESS - THE QUERY WORKS FINE ON CLI BUT THERE ARE PROBLEMS CONVERTING IT TO AN OBJECT
-    /*
-    // To get a list of the tutors with their average rating
+    // Returns a list of TutorReviewsHelper ordered by the average rating of the tutor in descending order
+    /* The Objects have this structure:
+    *  {
+    *     tutor: Object, // An user Object with the information of the tutor
+    *     averageRating: float // The average rating of the tutor. It is 0.0 if the tutor has not been reviewed yet
+    *  }
+    */
     @GetMapping(path = "/all/averageRating")
     public List<TutorReviewsHelper> getTutorsAverageReviewRating() {
-        return service.getTutorsAverageReviewRating();
-    }*/
+        List<TutorReviewsHelper> tutorsWithAVGReviewRating = new ArrayList<>();
+        List<TutorReviews> tutorsReviewed = service.getTutorsAverageReviewRating();
+        List<User> tutorsNotReviewed = userService.getAllTutorsThatHaveNotBeenReviewedYet();
+        
+        for(int i = 0; i < tutorsReviewed.size(); i++) {
+            TutorReviews tr = tutorsReviewed.get(i);
+            tutorsWithAVGReviewRating.add(new TutorReviewsHelper(tr.getTutor(), tr.getScore()));
+        }
+        
+        for(int j = 0; j < tutorsNotReviewed.size(); j++) {
+            User user = tutorsNotReviewed.get(j);
+            tutorsWithAVGReviewRating.add(new TutorReviewsHelper(user, 0.0f));
+        }
+           
+        return tutorsWithAVGReviewRating;
+    }
 
     @Transactional
     @DeleteMapping

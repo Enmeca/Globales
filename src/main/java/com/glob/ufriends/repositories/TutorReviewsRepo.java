@@ -20,8 +20,11 @@ public interface TutorReviewsRepo extends JpaRepository<TutorReviews, TutorRevie
             nativeQuery = true)
     List<TutorReviews> findTutorReviewsByTutorID(String tutorId);
     
-    @Query(value = "select tr.TUTOR_ID, (sum(tr.SCORE)/count(tr.SCORE)) as Ratings from TUTOR_REVIEWS tr group by tr.TUTOR_ID order by Ratings desc",
+    // The USER_UID needs to be static or defined here in order to not have an invalid column name exception
+    @Query(value = "select '117780905' as USER_UID, tr.TUTOR_ID,"
+            + " (sum(tr.SCORE)/count(tr.SCORE)) as Score, 'COMMENTS' as COMMENTS"
+            + " from TUTOR_REVIEWS tr group by tr.TUTOR_ID order by Score desc",
             nativeQuery = true)
-    List<TutorReviewsHelper> getTutorsAverageReviewRating();
+    List<TutorReviews> getTutorsAverageReviewRating();
 
 }

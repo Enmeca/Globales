@@ -29,7 +29,7 @@ public class TutorReviewsService {
         return repository.findTutorReviewsByTutorID(tutorId);
     }
     
-    public List<TutorReviewsHelper> getTutorsAverageReviewRating(){
+    public List<TutorReviews> getTutorsAverageReviewRating(){
         return repository.getTutorsAverageReviewRating();
     }
     
