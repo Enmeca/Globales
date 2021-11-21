@@ -25,7 +25,7 @@ public class MatchedUsersService {
     }
     
     public List<MatchedUsers> findMatchedUsersByMatchedUserID(String matchedUserId){
-        return repository.findMatchedUsersByUserID(matchedUserId);
+        return repository.findMatchedUsersByMatchedUserID(matchedUserId);
     }
 
     public MatchedUsers getMatchedUsers(int id){

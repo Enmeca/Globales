@@ -109,7 +109,7 @@ export default {
         if (user.isActive) {
           this.$store.commit("saveUser", user);
           this.$store.dispatch("fetchChats", user.id); // load chats
-          this.$store.dispatch("connectWebSocketChat"); // connect web socket for chat
+          this.$store.dispatch("connectWebSocketChat", user.id); // connect web socket for chat
           this.$router.push({ path: "/home" }); // redirifiendo a la pagina principal
         } else {
           this.userNotActive = true;

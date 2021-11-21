@@ -75,16 +75,18 @@
                       v-for="message in chats[actualChat].messages"
                       :key="message.id"
                       :data="message"
-                      :mine="message.user_uid !== chats[actualChat].user.id"
+                      :mine="message.userUid.id === user.id"
                     />
                   </b-container>
                 </b-card>
-
                 <b-container class="bg-info-send bg-secondary text-white" fluid>
                   <b-input-group class="p-1">
-                    <b-form-input type="text"></b-form-input>
+                    <b-form-input
+                      v-model="contentMessage"
+                      type="text"
+                    ></b-form-input>
                     <b-input-group-append>
-                      <b-button variant="primary">
+                      <b-button variant="primary" @click="sendMessage">
                         <b-icon-cursor-fill />
                       </b-button>
                     </b-input-group-append>
@@ -120,35 +122,9 @@ export default {
         height: 0,
       },
       searchField: "",
-      chats: [
-        {
-          user: {
-            id: 117540697,
-            name: "Juan",
-            lastName1: "Miguel",
-            lastName2: "Hidalgo",
-          },
-          id: 1,
-          cantNotReaded: 0,
-          messages: [
-            {
-              id: 5,
-              message: "Hola.",
-              user_uid: 117540697,
-              date: " 2019-09-09",
-              readed: true,
-            },
-            {
-              id: 6,
-              message: "Hola ¿Como estas?",
-              user_uid: 1,
-              date: " 2019-09-09",
-              readed: true,
-            },
-          ],
-        },
-      ],
+      chats: this.$store.state.chats,
       actualChat: -1,
+      contentMessage: "",
     };
   },
   created() {
@@ -168,6 +144,19 @@ export default {
       setTimeout(() => {
         this.actualChat = this.chats.findIndex((chat) => chat.id == id);
       }, 100);
+    },
+    sendMessage() {
+      if (this.actualChat !== -1) {
+        this.$store.dispatch("sendMessage", {
+          id: 0,
+          chatUid: { id: this.chats[this.actualChat].id },
+          userUid: { id: this.user.id },
+          message: this.contentMessage,
+          dateSent: null,
+          wasRead: 0,
+        });
+        this.contentMessage = "";
+      }
     },
   },
   computed: {
@@ -194,6 +183,9 @@ export default {
         this.chats[this.actualChat].user.name[0] +
         this.chats[this.actualChat].user.lastName1[0]
       );
+    },
+    user() {
+      return this.$store.state.user;
     },
   },
 };

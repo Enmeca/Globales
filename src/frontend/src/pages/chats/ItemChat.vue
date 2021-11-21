@@ -5,10 +5,7 @@
         <b-avatar
           variant="secondary"
           :text="userAbbreviatedName"
-          :src="
-            'http://localhost:9191/api/v1/userPhoto/photo/' +
-            this.chatData.user.id
-          "
+          :src="'http://localhost:9191/api/v1/userPhoto/photo/' + getIdUserChat"
           size="6em"
         ></b-avatar>
       </b-col>
@@ -59,23 +56,47 @@ export default {
   },
   computed: {
     userAbbreviatedName() {
-      return this.chatData.user.name[0] + this.chatData.user.lastName1[0];
+      if (this.$store.state.user.id !== this.chatData.user.id) {
+        return this.chatData.user.name[0] + this.chatData.user.lastName1[0];
+      } else {
+        return (
+          this.chatData.matchedUser.name[0] +
+          this.chatData.matchedUser.lastName1[0]
+        );
+      }
+    },
+    getIdUserChat() {
+      if (this.$store.state.user.id !== this.chatData.user.id) {
+        return this.chatData.user.id;
+      } else {
+        return this.chatData.matchedUser.id;
+      }
     },
     getDateLastMessage() {
       //let today = new Date();
-      let date = new Date(this.chatData.messages[0].date);
+      let date = new Date(this.chatData.messages[0].dateSent);
       //if(today.getFullYear() == date.getFullYear()){
-
+      // filter for create speciall format, similary to whatsapp -> today, yesterday, 3 hours ago, last month
       //}
       return date.toLocaleString().split(",")[0];
     },
     getNameUser() {
-      let fullName =
-        this.chatData.user.name.split(" ")[0] +
-        " " +
-        this.chatData.user.lastName1 +
-        " " +
-        this.chatData.user.lastName2[0];
+      let fullName = "";
+      if (this.$store.state.user.id !== this.chatData.user.id) {
+        fullName =
+          this.chatData.user.name.split(" ")[0] +
+          " " +
+          this.chatData.user.lastName1 +
+          " " +
+          this.chatData.user.lastName2[0];
+      } else {
+        fullName =
+          this.chatData.matchedUser.name.split(" ")[0] +
+          " " +
+          this.chatData.matchedUser.lastName1 +
+          " " +
+          this.chatData.matchedUser.lastName2[0];
+      }
       if (this.width > 800) {
         return fullName;
       }

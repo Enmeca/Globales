@@ -25,13 +25,6 @@
 <script>
 export default {
   props: {
-    /*  -UID: Int / PK
--Chat: Int / FK a MatchedUsers
--User: String / FK
--Message: String
-- Leido: Boolean
--TimeSent: Date (Time)*/
-
     data: {
       type: Object,
       required: true,
@@ -44,7 +37,7 @@ export default {
   computed: {
     getDateMessage() {
       //let today = new Date();
-      let date = new Date(this.data.date);
+      let date = new Date(this.data.dateSent);
       //if(today.getFullYear() == date.getFullYear()){
 
       //}

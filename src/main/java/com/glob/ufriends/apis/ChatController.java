@@ -1,5 +1,6 @@
 package com.glob.ufriends.apis;
 
+import com.glob.ufriends.entities.ChatMessage;
 import com.glob.ufriends.entities.ChatMessages;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,15 +15,18 @@ public class ChatController {
     /* Register to web chat (user inline) */
     @MessageMapping("/chat.register")
     @SendTo("/topic/public")
-    public ChatMessages register(@Payload ChatMessages chatMessages, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("username", chatMessages.getChatUid());
-        return chatMessages;
+    public ChatMessage register(@Payload String user, SimpMessageHeaderAccessor headerAccessor) {
+        headerAccessor.getSessionAttributes().put("username", "117540697");
+        ChatMessage a = new ChatMessage();
+        a.setContent("Prro");
+        a.setSender("117540697");
+        return a;
     }
 
     /* Send message web chat */
     @MessageMapping("/chat.send")
     @SendTo("/topic/public")
-    public ChatMessages sendMessage(@Payload ChatMessages chatMessage) {
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
         return chatMessage;
     }
 }

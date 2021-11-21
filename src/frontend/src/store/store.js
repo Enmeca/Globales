@@ -11,10 +11,12 @@ export default new Vuex.Store({
         user: null,
         chats: [],
         stompClient: null,
+        socket: null,
     },
     getters: {
         isLoggedIn: state => state.user != null,
         isLoggedInAdmin: state => state.user != null && state.user.isAdmin,
+        isOnline: state => state.user != null && state.stompClient != null,
     },
     mutations: {
         saveUser(state, user) {
@@ -40,19 +42,28 @@ export default new Vuex.Store({
             }
             state.commit("saveChats", chats);
         },
-        connectWebSocketChat(state) {
-            let socket = new SockJS('http://localhost:9191/api/v1/websocket');
-            state.stompClient = Stomp.over(socket);
+        connectWebSocketChat(state, user_id) {
+            state.socket = new SockJS('/websocket');
+            state.stompClient = Stomp.over(state.socket);
             state.stompClient.connect({},
                 () => {
-                    console.log("Connection succeeded");
+                    console.log("Connection succeeded" + user_id);
                     state.stompClient.subscribe('/topic/public', () => { console.log("New message recived"); });
+                    state.stompClient.send("/app/chat.register", {}, JSON.stringify({ id: user_id }))
                 },
                 () => {
                     console.log("Connection error");
                 },
-            )
-        }
+            );
+        },
+        sendMessage(state, message) {
+            console.log("You try to send a message");
+            console.log(message);
+            console.log("Inside if");
+            console.log(JSON.stringify(message));
+            state.stompClient.send("/app/chat.send", {}, JSON.stringify(message));
+            console.log("sended");
+        },
     },
     plugins: [createPersistedState({
         storage: window.sessionStorage,
