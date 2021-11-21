@@ -36,7 +36,7 @@ public class MatchedUsersController {
     public List<MatchedUsers> findMatchedUsersByUserID(@PathVariable("id") String id) {
         List<MatchedUsers> userList = service.findMatchedUsersByUserID(id); // List where the user is the user "A" in the match
         List<MatchedUsers> matchedUserList = 
-                service.findMatchedUsersByUserID(id); // List where the user is the user "B" in the match
+                service.findMatchedUsersByMatchedUserID(id); // List where the user is the user "B" in the match
         
         List<MatchedUsers> allMatchs = new ArrayList<>(); 
         allMatchs.addAll(userList);
