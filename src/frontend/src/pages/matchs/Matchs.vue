@@ -13,20 +13,21 @@
                 <b-card class="second-card">
                   <b-card-body class="text-left p-0 m-0">
                     <h4 class="text-center">
-                      {{ match.name }}
-                      {{ match.lastName1 }}
-                      {{ match.lastName2 }}
+                      {{ match.user.name }}
+                      {{ match.user.lastName1 }}
+                      {{ match.user.lastName2 }}
                     </h4>
                     <b-avatar
                       variant="light"
                       size="18rem"
-                      :text="match.name[0] + match.lastName1[0]"
+                      :text="match.user.name[0] + match.user.lastName1[0]"
                       :src="
                         'http://localhost:8080/api/v1/userPhoto/photo/' +
-                        match.id
+                        match.user.id
                       "
                     ></b-avatar>
-                    <p><strong>Descripcion:</strong>{{ match.description }}</p>
+                    <p><strong>Descripcion:</strong>{{ match.user.description }}</p>
+                    <p><strong>Compatibilidad:</strong>{{ compatibilityUser(match.user,match.tags) }}%</p>
                     <p>
                       <strong>Tags:</strong>
                       <b-col cols="12" align-self="center">
@@ -56,10 +57,10 @@
                         </b-input-group>
                       </b-col>
                     </p>
-                    <b-button variant="danger" class="m-1">
+                    <b-button @click="sendMatch(match.user.id)" variant="danger" class="m-1">
                       <b-icon-heart-fill
                     /></b-button>
-                    <b-button @click="omitMatch()" variant="info" class="m-1">
+                    <b-button @click="omitMatch(match.user.id)" variant="info" class="m-1">
                       <b-icon-arrow-right
                     /></b-button>
                   </b-card-body>
@@ -139,28 +140,44 @@ export default {
           text: career.name,
         }));
       });
-    fetch("/api/v1/user")
+    fetch("/api/v1/userTags/usersForMatch/getUsersByCompatibility/"+this.$store.state.user.id)
       .then((response) => response.json())
       .then((data) => {
-        this.matchList = data;
-        this.matchList.forEach((match) => {
-          fetch("api/v1/userTags/user/" + match.id)
-            .then((response) => response.json())
-            .then((data) => {
-              match.tags = data.map((tag) => tag.tag.name);
-            });
-        });
-      });
-  },
+        var list=data
+        list.sort(() => (Math.random() > .5) ? 1 : -1)
+        this.matchList = list;});
+      fetch("/api/v1/userTags/onlyTags/asStrings/byUserId/"+this.$store.state.user.id)
+      .then((response) => response.json())
+      .then((data) => {
+        this.tags = data
+      });    
+  }
+  ,
   methods: {
-    /*async omitMatch() {
-      this.actualProfile = this.matchList.pop();
-      fetch("api/v1/userTags/user/" + this.actualProfile.id)
-        .then((response) => response.json())
-        .then((data) => {
-          this.tags = data.map((tag) => tag.tag.name);
-        });
-    },*/
+    omitMatch(id) {
+      this.matchList = this.matchList.filter(x=> x.user.id!=id)
+    },
+    async sendMatch(friend){
+      const response = await fetch("/api/v1/likedUsers",{
+          method:"POST",
+          headers: { "Content-Type": "application/json" },
+          body:JSON.stringify({user:{id:this.$store.state.user.id},likedUser:{id:friend}})});
+      if(response.status===200){
+        this.matchList = this.matchList.filter(x=> x.user.id!=friend)
+      }else{
+        alert("algo fallo");
+      }
+    },
+    compatibilityUser(user,Utags){
+        let compatibility=0
+        if(user.universityId===this.$store.state.user.universityId)
+          compatibility+=1
+        for(let element of Utags){
+            if(this.tags.find(x=> x===element)!==undefined)
+              compatibility+=1
+        }
+        return (compatibility/this.tags.length+1)*100
+    }
   },
 };
 </script>
