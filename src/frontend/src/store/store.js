@@ -11,7 +11,7 @@ export default new Vuex.Store({
         user: null,
         chats: [],
         stompClient: null,
-        socket: null,
+        newMessages: 0
     },
     getters: {
         isLoggedIn: state => state.user != null,
@@ -25,44 +25,56 @@ export default new Vuex.Store({
         saveChats(state, chats) {
             state.chats = chats
         },
+        saveStomClient(state, stompClient) {
+            state.stompClient = stompClient
+        },
+        saveNewMessages(state, newMessages) {
+            state.newMessages = newMessages
+        },
         removeUser(state) {
             state.user = null
         },
         removeChats(state) {
             state.chats = []
         },
+        removeStomClient(state) {
+            state.stompClient = null
+        },
     },
     actions: {
-        async fetchChats(state, user_id) {
-            const response = await fetch("/api/v1/matchedUsers/user/" + user_id);
+        async fetchChats({ commit, state }) {
+            const response = await fetch("/api/v1/matchedUsers/user/" + state.user.id);
             let chats = await response.json();
             for (let chat of chats) {
                 const response = await fetch("/api/v1/chatMessages/chat/" + chat.id);
                 chat.messages = await response.json();
             }
-            state.commit("saveChats", chats);
+            commit("saveChats", chats);
         },
-        connectWebSocketChat(state, user_id) {
-            state.socket = new SockJS('/websocket');
-            state.stompClient = Stomp.over(state.socket);
-            state.stompClient.connect({},
+        connectWebSocketChat({ commit, dispatch, state }) {
+            let socket = new SockJS('http://localhost:9090/websocket');
+            let stompClient = Stomp.over(socket);
+            stompClient.debug = () => { }; // disable debug messages
+            stompClient.connect({},
                 () => {
-                    console.log("Connection succeeded" + user_id);
-                    state.stompClient.subscribe('/topic/public', () => { console.log("New message recived"); });
-                    state.stompClient.send("/app/chat.register", {}, JSON.stringify({ id: user_id }))
+                    stompClient.subscribe('/topic/public', (message) => { dispatch("receiveMessage", JSON.parse(message.body)); });
+                    stompClient.send("/app/chat.register", JSON.stringify({ userUid: { id: state.user.id } }));
+                    commit("saveStomClient", stompClient);
                 },
                 () => {
                     console.log("Connection error");
                 },
             );
         },
-        sendMessage(state, message) {
-            console.log("You try to send a message");
-            console.log(message);
-            console.log("Inside if");
-            console.log(JSON.stringify(message));
-            state.stompClient.send("/app/chat.send", {}, JSON.stringify(message));
-            console.log("sended");
+        sendMessage({ state }, message) {
+            state.stompClient.send("/app/chat.send", JSON.stringify(message));
+        },
+        receiveMessage({ commit, state }, message) {
+            if (message.chatUid === null) return; // error message
+            let chat = state.chats.find(chat => chat.id === message.chatUid.id);
+            if (chat === undefined) return; // not for me
+            chat.messages.push(message);
+            commit("saveNewMessages", state.newMessages + 1); // Notification
         },
     },
     plugins: [createPersistedState({
