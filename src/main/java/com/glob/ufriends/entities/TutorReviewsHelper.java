@@ -12,6 +12,6 @@ import javax.persistence.*;
 public class TutorReviewsHelper {
 
     private User tutor;
-    private float ratings;
+    private float averageRating;
 
 }

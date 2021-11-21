@@ -53,6 +53,10 @@ public class UserService {
         return repository.getAllTutors();
     }
     
+    public List<User> getAllTutorsThatHaveNotBeenReviewedYet(){
+        return repository.getAllTutorsThatHaveNotBeenReviewedYet();
+    }
+    
     public List<User> getAllUsersThatHaveNotBeenLikedByUser(String userId){
         return repository.getAllUsersThatHaveNotBeenLikedByUser(userId);
     }
