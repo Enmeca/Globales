@@ -13,7 +13,9 @@ public class ChatMessagesService {
     private ChatMessagesRepo repository;
 
     public ChatMessages saveChatMessages(ChatMessages obj){
-        return repository.save(obj);
+        ChatMessages cm = repository.save(obj);
+        cm.setDateSent(repository.getCurrentDateTime());
+        return cm;
     }
 
     public ChatMessages getChatMessage(int id){
