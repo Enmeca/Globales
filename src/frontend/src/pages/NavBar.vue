@@ -125,7 +125,7 @@ export default {
 
     return {
       expanded: false,
-      cantChats: 0,
+      cantChats: this.$store.state.newMessages,
       cantMatchs: 0,
       cantForums: 0,
     };

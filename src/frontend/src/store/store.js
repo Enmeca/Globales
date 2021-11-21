@@ -52,7 +52,7 @@ export default new Vuex.Store({
             commit("saveChats", chats);
         },
         connectWebSocketChat({ commit, dispatch, state }) {
-            let socket = new SockJS('http://localhost:9090/websocket');
+            let socket = new SockJS('/websocket');
             let stompClient = Stomp.over(socket);
             stompClient.debug = () => { }; // disable debug messages
             stompClient.connect({},
@@ -74,7 +74,8 @@ export default new Vuex.Store({
             let chat = state.chats.find(chat => chat.id === message.chatUid.id);
             if (chat === undefined) return; // not for me
             chat.messages.push(message);
-            commit("saveNewMessages", state.newMessages + 1); // Notification
+            if (message.userUid.id === state.user.id) return; // I send message, dont notify
+            commit("saveNewMessages", state.newMessages + 1); // Create new notification.
         },
     },
     plugins: [createPersistedState({

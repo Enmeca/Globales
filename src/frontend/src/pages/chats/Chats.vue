@@ -50,20 +50,13 @@
 
                       <b-avatar
                         variant="dark"
-                        :text="userAbbreviatedName"
-                        :src="
-                          'http://localhost:9191/api/v1/userPhoto/photo/' +
-                          chats[actualChat].user.id
-                        "
+                        :text="currentChatUserAbbreviatedName"
+                        :src="currentChatUserPhoto"
                         :size="showChats ? '4em' : '3em'"
                         class="m-2"
                       ></b-avatar>
                       <strong>
-                        <i>
-                          {{ chats[actualChat].user.name }}
-                          {{ chats[actualChat].user.lastName1 }}
-                          {{ chats[actualChat].user.lastName2 }}
-                        </i>
+                        <i> {{ getFullNameChatUser }} </i>
                       </strong>
                     </b-col>
                   </b-row>
@@ -95,8 +88,32 @@
               </b-container>
             </transition>
             <transition enter-active-class="animated fadeInRight">
-              <b-container v-if="actualChat == -1" style="height: 100%" fluid>
-                <b-card style="height: 100%"> A </b-card>
+              <b-container
+                v-if="actualChat == -1"
+                style="height: 100%"
+                class="ml-2"
+                fluid
+              >
+                <b-row
+                  class="bg-pre-chat"
+                  style="height: 100%; width: 100%"
+                  align-v="center"
+                  align-h="center"
+                >
+                  <b-card
+                    class="bg-dark text-white"
+                    style="border-radius: 10px; opacity: 0.7"
+                  >
+                    <h5>
+                      Bienvenido a la sección de chat
+                      <b-icon-emoji-laughing-fill />
+                    </h5>
+                    <p>
+                      Una vez realizado el Match el chat se habilitara <br />
+                      Elige alguno de los chats de la columna izquierda
+                    </p>
+                  </b-card>
+                </b-row>
               </b-container>
             </transition>
           </b-col>
@@ -178,14 +195,30 @@ export default {
     showChats() {
       return this.window.width >= 770 || this.actualChat == -1;
     },
-    userAbbreviatedName() {
-      return (
-        this.chats[this.actualChat].user.name[0] +
-        this.chats[this.actualChat].user.lastName1[0]
-      );
+    currentChatUserAbbreviatedName() {
+      let user =
+        this.$store.state.user.id !== this.chats[this.actualChat].user.id
+          ? this.chats[this.actualChat].user
+          : this.chats[this.actualChat].matchedUser;
+      return user.name[0] + user.lastName1[0];
     },
     user() {
       return this.$store.state.user;
+    },
+    getFullNameChatUser() {
+      let user =
+        this.$store.state.user.id !== this.chats[this.actualChat].user.id
+          ? this.chats[this.actualChat].user
+          : this.chats[this.actualChat].matchedUser;
+      return user.name + " " + user.lastName1 + " " + user.lastName2;
+    },
+    currentChatUserPhoto() {
+      return (
+        "http://localhost:9191/api/v1/userPhoto/photo/" +
+        (this.$store.state.user.id !== this.chats[this.actualChat].user.id
+          ? this.chats[this.actualChat].user.id
+          : this.chats[this.actualChat].matchedUser.id)
+      );
     },
   },
 };
@@ -225,7 +258,9 @@ center {
 }
 
 .bg-chat {
-  background: url("../../assets/background-chats.jpg");
+  background: url("../../assets/background-chat.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
   border-radius: 0px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -235,5 +270,10 @@ center {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   transform: scale(1.5);
+}
+.bg-pre-chat {
+  background: url("../../assets/background-chats.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 </style>

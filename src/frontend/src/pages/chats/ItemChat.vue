@@ -18,7 +18,10 @@
           <b-col cols="12" class="text-left">
             <b-icon-check2
               variant="info"
-              v-if="!this.chatData.messages[0].readed"
+              v-if="
+                !this.chatData.messages[this.chatData.messages.length - 1]
+                  .wasRead
+              "
             />
             <b-icon-check2-all variant="info" v-else />
             {{ getLastMessage }}
@@ -73,30 +76,31 @@ export default {
       }
     },
     getDateLastMessage() {
-      //let today = new Date();
-      let date = new Date(this.chatData.messages[0].dateSent);
-      //if(today.getFullYear() == date.getFullYear()){
-      // filter for create speciall format, similary to whatsapp -> today, yesterday, 3 hours ago, last month
-      //}
+      let today = new Date();
+      let date = new Date(
+        this.chatData.messages[this.chatData.messages.length - 1].dateSent
+      );
+      if (
+        today.getFullYear() == date.getFullYear() &&
+        today.getMonth() == date.getMonth() &&
+        today.getDate() == date.getDate()
+      ) {
+        return date.toLocaleString().split(",")[1];
+      }
       return date.toLocaleString().split(",")[0];
     },
     getNameUser() {
-      let fullName = "";
-      if (this.$store.state.user.id !== this.chatData.user.id) {
-        fullName =
-          this.chatData.user.name.split(" ")[0] +
-          " " +
-          this.chatData.user.lastName1 +
-          " " +
-          this.chatData.user.lastName2[0];
-      } else {
-        fullName =
-          this.chatData.matchedUser.name.split(" ")[0] +
-          " " +
-          this.chatData.matchedUser.lastName1 +
-          " " +
-          this.chatData.matchedUser.lastName2[0];
-      }
+      let user =
+        this.$store.state.user.id !== this.chatData.user.id
+          ? this.chatData.user
+          : this.chatData.matchedUser;
+      let fullName =
+        user.name.split(" ")[0] +
+        " " +
+        user.lastName1 +
+        " " +
+        user.lastName2[0];
+
       if (this.width > 800) {
         return fullName;
       }

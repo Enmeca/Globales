@@ -14,7 +14,7 @@
         </b-col>
         <b-col cols="5" class="text-right">
           {{ getDateMessage }}
-          <b-icon-check2 variant="light" v-if="data.readed" />
+          <b-icon-check2 variant="light" v-if="!data.wasRead" />
           <b-icon-check2-all variant="light" v-else />
         </b-col>
       </b-row>
@@ -36,11 +36,15 @@ export default {
   },
   computed: {
     getDateMessage() {
-      //let today = new Date();
+      let today = new Date();
       let date = new Date(this.data.dateSent);
-      //if(today.getFullYear() == date.getFullYear()){
-
-      //}
+      if (
+        today.getFullYear() == date.getFullYear() &&
+        today.getMonth() == date.getMonth() &&
+        today.getDate() == date.getDate()
+      ) {
+        return date.toLocaleString().split(",")[1];
+      }
       return date.toLocaleString().split(",")[0];
     },
   },
