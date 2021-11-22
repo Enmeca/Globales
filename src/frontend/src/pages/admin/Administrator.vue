@@ -178,7 +178,6 @@
           </b-alert>
         </b-row>
         <b-row v-else align-h="center">
-          <!-- <carousel :per-page="1" :loop="true" :autoplayTimeout="1000">-->
           <b-col
             sm="12"
             md="6"
@@ -187,8 +186,9 @@
             :key="report.id"
             class="mt-2"
           >
-            <customSlice :data="report" :updateReports="UpdateReports" />
-            <!--<slice >-->
+
+          <customSlice :data="report" :updateReports="UpdateReports" />
+
           </b-col>
           <b-col v-if="reports.length === 0">
             <b-card class="second-card" :title="`Sin Reportes`">
@@ -196,8 +196,6 @@
             </b-card>
           </b-col>
         </b-row>
-        <!--</slice>-->
-        <!-- </carousel>-->
       </b-card-body>
     </b-card>
   </center>
@@ -206,7 +204,6 @@
 <script>
 //import { Carousel } from "vue-carousel";
 import CustomSlice from "./ReportItem.vue";
-
 export default {
   data() {
     return {
@@ -313,7 +310,6 @@ export default {
     },
   },
   components: {
-    //Carousel,
     CustomSlice,
   },
 };
