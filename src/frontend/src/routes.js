@@ -37,22 +37,21 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  //document.body.style.overflowY = "hidden";
   const adminAuthRequiredPages = ['/administrator', '/admin']
   const authRequiredPages = ['/matchs', '/chats', '/forums', '/tutors', '/profile'];
-  const loggedIn = store.getters.isLoggedIn
+  const hideScrollBarPages = ['/chats'];
+  const loggedIn = store.getters.isLoggedIn;
+  document.body.style.overflowY = (hideScrollBarPages.includes(to.path)) ? "hidden" : "auto";
   if (loggedIn) {
     if (adminAuthRequiredPages.includes(to.path) && !store.getters.isLoggedInAdmin) {
-      // si require permiso de administrador y no lo tiene
       return next('/notauth');
     }
   } else {
-    if (authRequiredPages.includes(to.path)) { // si require autorizacion
+    if (authRequiredPages.includes(to.path)) {
       return next('/login');
     }
   }
   next();
-  //document.body.style.overflowY = "auto";
 })
 
 

@@ -6,7 +6,11 @@
           <b-col>
             <b-avatar
               v-if="!data.isAnon"
-              variant="info"
+              variant="secondary"
+              :src="
+                'http://localhost:9191/api/v1/userPhoto/photo/' +
+                this.data.authorId.id
+              "
               :text="authorAbbreviatedName"
               size="lg"
             ></b-avatar>
@@ -104,7 +108,7 @@ export default {
     },
     getFormatDate() {
       let dateFix = new Date(this.data.creationDate);
-      dateFix.setHours(dateFix.getHours() - 6);
+      //dateFix.setHours(dateFix.getHours() - 6);
       return dateFix.toLocaleString();
     },
   },

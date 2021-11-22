@@ -60,7 +60,9 @@
         </b-nav-item>
         <b-nav-item v-if="isLoggedIn" class="mr-5" href="#/chats" title="Chats">
           <b-icon-chat-dots-fill />
-          <span v-if="cantChats > 0"> {{ cantChats }} </span>
+          <span v-if="cantNotReaded > 0">
+            {{ cantNotReaded }}
+          </span>
           <template v-if="expanded">Chats</template>
         </b-nav-item>
         <b-nav-item
@@ -99,13 +101,14 @@
         <b-nav-item-dropdown right v-if="isLoggedIn">
           <template #button-content>
             <b-avatar
-              variant="light"
+              variant="secondary"
               :text="userAbbreviatedName"
               :src="profile_pic"
             ></b-avatar>
           </template>
           <b-dropdown-item href="#/profile">
-            <b-icon-person-fill variant="info" /> Perfil</b-dropdown-item
+            <b-icon-person-fill variant="info" /> Ver/Editar
+            Perfil</b-dropdown-item
           >
           <b-dropdown-item @click="logout">
             <b-icon-box-arrow-up-right variant="danger" /> Cerrar
@@ -124,7 +127,6 @@ export default {
 
     return {
       expanded: false,
-      cantChats: 0,
       cantMatchs: 0,
       cantForums: 0,
     };
@@ -159,6 +161,16 @@ export default {
         ? this.$store.state.user.id
         : "";
       return "http://localhost:9191/api/v1/userPhoto/photo/" + idUser;
+    },
+    cantNotReaded() {
+      let total = 0;
+      this.$store.state.chats.forEach((chat) => {
+        total += chat.messages.filter(
+          (message) =>
+            message.userUid.id !== this.$store.state.user.id && !message.wasRead
+        ).length;
+      });
+      return total;
     },
   },
 };
