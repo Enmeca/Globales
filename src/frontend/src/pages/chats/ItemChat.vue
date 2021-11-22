@@ -28,11 +28,11 @@
           </b-col>
           <b-col cols="12" class="text-right">
             <b-badge
-              v-if="this.chatData.cantNotReaded > 0"
+              v-if="cantNotReaded > 0"
               variant="secondary"
               class="cant-not-read"
             >
-              {{ this.chatData.cantNotReaded }}
+              {{ cantNotReaded }}
             </b-badge>
           </b-col>
         </b-row>
@@ -107,10 +107,23 @@ export default {
       return fullName.slice(0, 15) + "...";
     },
     getLastMessage() {
-      if (this.chatData.messages[0].message.length > 20) {
-        return this.chatData.messages[0].message.slice(0, 20) + "...";
+      if (
+        this.chatData.messages[this.chatData.messages.length - 1].message
+          .length > 20
+      ) {
+        return (
+          this.chatData.messages[
+            this.chatData.messages.length - 1
+          ].message.slice(0, 20) + "..."
+        );
       }
-      return this.chatData.messages[0].message;
+      return this.chatData.messages[this.chatData.messages.length - 1].message;
+    },
+    cantNotReaded() {
+      return this.chatData.messages.filter(
+        (message) =>
+          message.userUid.id !== this.$store.state.user.id && !message.wasRead
+      ).length;
     },
   },
 };

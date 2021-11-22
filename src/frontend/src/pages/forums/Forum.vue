@@ -288,7 +288,7 @@ export default {
     },
     getFormatDate() {
       let dateFix = new Date(this.forum.creationDate);
-      dateFix.setHours(dateFix.getHours() - 6);
+      //dateFix.setHours(dateFix.getHours() - 6);
       return dateFix.toLocaleString();
     },
     showReportComment() {

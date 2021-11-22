@@ -159,7 +159,8 @@ export default {
     changeChat(id) {
       this.actualChat = -1;
       setTimeout(() => {
-        this.actualChat = this.chats.findIndex((chat) => chat.id == id);
+        this.actualChat = this.chats.findIndex((chat) => chat.id === id);
+        this.$store.dispatch("updateReadMessages", id);
       }, 100);
     },
     sendMessage() {

@@ -11,7 +11,6 @@ export default new Vuex.Store({
         user: null,
         chats: [],
         stompClient: null,
-        newMessages: 0
     },
     getters: {
         isLoggedIn: state => state.user != null,
@@ -69,13 +68,22 @@ export default new Vuex.Store({
         sendMessage({ state }, message) {
             state.stompClient.send("/app/chat.send", JSON.stringify(message));
         },
-        receiveMessage({ commit, state }, message) {
+        receiveMessage({ state }, message) {
             if (message.chatUid === null) return; // error message
             let chat = state.chats.find(chat => chat.id === message.chatUid.id);
             if (chat === undefined) return; // not for me
             chat.messages.push(message);
-            if (message.userUid.id === state.user.id) return; // I send message, dont notify
-            commit("saveNewMessages", state.newMessages + 1); // Create new notification.
+        },
+        async updateReadMessages({ state }, chat_id) {
+            let chatReaded = state.chats.find(c => c.id === chat_id);
+            if (chatReaded !== undefined) {
+                await fetch(`/api/v1/chatMessages/readMessages/${chat_id}/${state.user.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                });
+                const response = await fetch("/api/v1/chatMessages/chat/" + chat_id);
+                chatReaded.messages = await response.json();
+            }
         },
     },
     plugins: [createPersistedState({

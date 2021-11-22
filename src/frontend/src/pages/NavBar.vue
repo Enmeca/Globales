@@ -60,7 +60,9 @@
         </b-nav-item>
         <b-nav-item v-if="isLoggedIn" class="mr-5" href="#/chats" title="Chats">
           <b-icon-chat-dots-fill />
-          <span v-if="cantChats > 0"> {{ cantChats }} </span>
+          <span v-if="cantNotReaded > 0">
+            {{ cantNotReaded }}
+          </span>
           <template v-if="expanded">Chats</template>
         </b-nav-item>
         <b-nav-item
@@ -125,7 +127,6 @@ export default {
 
     return {
       expanded: false,
-      cantChats: this.$store.state.newMessages,
       cantMatchs: 0,
       cantForums: 0,
     };
@@ -160,6 +161,16 @@ export default {
         ? this.$store.state.user.id
         : "";
       return "http://localhost:9191/api/v1/userPhoto/photo/" + idUser;
+    },
+    cantNotReaded() {
+      let total = 0;
+      this.$store.state.chats.forEach((chat) => {
+        total += chat.messages.filter(
+          (message) =>
+            message.userUid.id !== this.$store.state.user.id && !message.wasRead
+        ).length;
+      });
+      return total;
     },
   },
 };
