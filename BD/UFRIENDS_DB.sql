@@ -346,6 +346,9 @@ insert into TAGS values ('Viajar');
 insert into TAGS values ('Ping-pong');
 insert into TAGS values ('Animales');
 -- Hay que meter un montón de tags despues
+
+insert into USERS values ('11111111','ING-SIS','UNA','admin@gmail','123','Hector','Perez','Arias', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
+				'Administrador del sistema', null, 1, 0, 1);
 				
 insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Javier','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Estudiante de Ingenieria de Sistemas en la UNA. Actualmente en el ultimo semestre', null, 1, 0, 0);
