@@ -52,7 +52,7 @@
               v-model="data.averageRating"
               readonly
               show-value
-              precision="1"
+              precision="2"
               no-border
             ></b-form-rating>
           </b-col>

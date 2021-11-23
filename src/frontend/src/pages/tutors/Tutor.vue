@@ -57,6 +57,7 @@
                     show-value
                     precision="1"
                     no-border
+                    stars="5"
                   ></b-form-rating>
                 </b-col>
               </b-row>
@@ -111,7 +112,7 @@
                   v-model="newReview.score"
                   show-value
                   stars="5"
-                  precision="1"
+                  precision="2"
                   no-border
                 ></b-form-rating>
               </b-input-group>
@@ -209,7 +210,7 @@ export default {
       );
     },
     validForm() {
-      return this.newReview.comments != "";
+      return this.newReview.comments != "" && this.newReview.score > 0;
     },
     averageRating() {
       let a =

@@ -23,7 +23,7 @@
         <b-row class="comment-content">
           <b-col sm="3" lg="3" class="text-justify">
             <h5>
-              {{ data.score }}
+              {{ Number.parseFloat(data.score).toFixed(2) }}
 
               <b-icon-star-fill class="ml-2" variant="warning" scale="1.5" />
             </h5>
