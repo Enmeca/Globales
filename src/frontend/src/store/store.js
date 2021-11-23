@@ -11,7 +11,6 @@ export default new Vuex.Store({
         user: null,
         chats: [],
         stompClient: null,
-        notificationsMatch: 0,
     },
     getters: {
         isLoggedIn: state => state.user != null,
@@ -28,9 +27,6 @@ export default new Vuex.Store({
         saveStomClient(state, stompClient) {
             state.stompClient = stompClient
         },
-        saveNotificationsMatch(state, notificationsMatch) {
-            state.notificationsMatch = notificationsMatch
-        },
         removeUser(state) {
             state.user = null
         },
@@ -39,9 +35,6 @@ export default new Vuex.Store({
         },
         removeStomClient(state) {
             state.stompClient = null
-        },
-        removeNotificationsMatch(state) {
-            state.notificationsMatch = 0
         },
     },
     actions: {

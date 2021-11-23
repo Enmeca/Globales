@@ -7,6 +7,24 @@
           <b-icon-bell-fill />
         </b-card-title>
         <b-card-body>
+          <b-modal
+            :visible="modalNewMatch"
+            title="¡Nuevo Match!"
+            @ok="modalNewMatch = false"
+            ok-title="OK"
+            ok-only
+          >
+            <p>
+              {{
+                newMatchUser.name +
+                " " +
+                newMatchUser.lastName1 +
+                " " +
+                newMatchUser.lastName2
+              }}
+              y tú ahora pueden hablar en la sección de chat
+            </p>
+          </b-modal>
           <div class="example-3d">
             <swiper ref="mySwiper" :options="swiperOption">
               <swiper-slide v-for="match in matchList" :key="match.id">
@@ -34,29 +52,9 @@
                       >{{ compatibilityUser(match.user, match.tags) }}%
                     </p>
                     <p>
-                      <strong>Descripcion:</strong>{{ match.user.description }}
-                    </p>
-                    <p>
-                      <strong>Compatibilidad:</strong
-                      >{{ compatibilityUser(match.user, match.tags) }}%
-                    </p>
-                    <p>
                       <strong>Universidad:</strong
                       >{{ getUniversity(match.user.universityId) }}
                     </p>
-                    >>>>>>> Stashed changes =======
-                    <p>
-                      <strong>Descripcion:</strong>{{ match.user.description }}
-                    </p>
-                    <p>
-                      <strong>Compatibilidad:</strong
-                      >{{ compatibilityUser(match.user, match.tags) }}%
-                    </p>
-                    <p>
-                      <strong>Universidad:</strong
-                      >{{ getUniversity(match.user.universityId) }}
-                    </p>
-                    >>>>>>> main
                     <p>
                       <strong>Tags:</strong>
                       <b-col cols="12" align-self="center">
@@ -158,19 +156,13 @@ export default {
       matches: [],
       careers: [],
       universities: [],
+      modalNewMatch: false,
+      newMatchUser: {
+        name: "",
+        lastName1: "",
+        lastName2: "",
+      },
     };
-  },
-  mounted() {
-    fetch(
-      "/api/v1/userTags/usersForMatch/getUsersByCompatibility/" +
-        this.$store.state.user.id
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        var list = data;
-        list.sort(() => (Math.random() > 0.5 ? 1 : -1));
-        this.matchList = list;
-      });
   },
   mounted() {
     fetch(
@@ -249,10 +241,9 @@ export default {
         let data = await response.json();
         if (data.user === null) {
           // match it!
-          this.$store.commit(
-            "saveNotificationsMatch",
-            this.$store.state.notificationsMatch + 1
-          );
+          this.newMatchUser = data.likedUser;
+          this.modalNewMatch = true;
+          this.$store.dispatch("fetchChats", this.$store.state.user.id);
         }
       } else {
         alert("algo fallo");

@@ -128,6 +128,7 @@ export default {
     return {
       expanded: false,
       cantForums: 0,
+      cantMatchs: 0,
     };
   },
   methods: {
@@ -170,9 +171,6 @@ export default {
         ).length;
       });
       return total;
-    },
-    cantMatchs() {
-      return this.$store.state.notificationsMatch;
     },
   },
 };
