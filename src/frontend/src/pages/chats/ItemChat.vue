@@ -10,7 +10,7 @@
         ></b-avatar>
       </b-col>
       <b-col cols="7">
-        <b-row align-h="between">
+        <b-row v-if="this.chatData.messages.length > 0" align-h="between">
           <b-col cols="12" class="text-right">
             {{ getDateLastMessage }}
           </b-col>
@@ -34,6 +34,13 @@
             >
               {{ cantNotReaded }}
             </b-badge>
+          </b-col>
+        </b-row>
+        <b-row v-else align-h="between">
+          <b-col cols="12" class="text-left"> {{ getNameUser }} </b-col>
+          <b-col cols="12" class="text-left mt-3">
+            Inicia un chat con tu nuevo match
+            <b-icon-emoji-laughing-fill />
           </b-col>
         </b-row>
       </b-col>
