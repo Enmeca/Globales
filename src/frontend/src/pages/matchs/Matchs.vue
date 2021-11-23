@@ -28,6 +28,7 @@
                     ></b-avatar>
                     <p><strong>Descripcion:</strong>{{ match.user.description }}</p>
                     <p><strong>Compatibilidad:</strong>{{ compatibilityUser(match.user,match.tags) }}%</p>
+                    <p><strong>Universidad:</strong>{{ getUniversity(match.user.universityId) }}</p>
                     <p>
                       <strong>Tags:</strong>
                       <b-col cols="12" align-self="center">
@@ -122,8 +123,23 @@ export default {
       careers: [],
       universities: [],
     };
+  },mounted(){
+    fetch("/api/v1/userTags/usersForMatch/getUsersByCompatibility/"+this.$store.state.user.id)
+      .then((response) => response.json())
+      .then((data) => {
+        var list=data
+        list.sort(() => (Math.random() > .5) ? 1 : -1)
+        this.matchList = list;});
+ 
+  
   },
   beforeMount() {
+    fetch("/api/v1/userTags/onlyTags/asStrings/byUserId/"+this.$store.state.user.id)
+      .then((response) => response.json())
+      .then((data) => {
+        this.tags = data
+
+      });   
     fetch("/api/v1/university")
       .then((response) => response.json())
       .then((data) => {
@@ -140,20 +156,12 @@ export default {
           text: career.name,
         }));
       });
-    fetch("/api/v1/userTags/usersForMatch/getUsersByCompatibility/"+this.$store.state.user.id)
-      .then((response) => response.json())
-      .then((data) => {
-        var list=data
-        list.sort(() => (Math.random() > .5) ? 1 : -1)
-        this.matchList = list;});
-      fetch("/api/v1/userTags/onlyTags/asStrings/byUserId/"+this.$store.state.user.id)
-      .then((response) => response.json())
-      .then((data) => {
-        this.tags = data
-      });    
-  }
+  } 
   ,
   methods: {
+    getUniversity(id){
+      return this.universities.find(x=>x.value==id).text
+    },
     omitMatch(id) {
       this.matchList = this.matchList.filter(x=> x.user.id!=id)
     },
@@ -176,7 +184,8 @@ export default {
             if(this.tags.find(x=> x===element)!==undefined)
               compatibility+=1
         }
-        return (compatibility/this.tags.length+1)*100
+        let result= (compatibility/(this.tags.length+1))
+        return result*100
     }
   },
 };
