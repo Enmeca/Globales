@@ -7,6 +7,24 @@
           <b-icon-bell-fill />
         </b-card-title>
         <b-card-body>
+          <b-modal
+            :visible="modalNewMatch"
+            title="¡Nuevo Match!"
+            @ok="modalNewMatch = false"
+            ok-title="OK"
+            ok-only
+          >
+            <p>
+              {{
+                newMatchUser.name +
+                " " +
+                newMatchUser.lastName1 +
+                " " +
+                newMatchUser.lastName2
+              }}
+              y tú ahora pueden hablar en la sección de chat
+            </p>
+          </b-modal>
           <div class="example-3d">
             <swiper ref="mySwiper" :options="swiperOption">
               <swiper-slide v-for="match in matchList" :key="match.id">
@@ -26,9 +44,17 @@
                         match.user.id
                       "
                     ></b-avatar>
-                    <p><strong>Descripcion:</strong>{{ match.user.description }}</p>
-                    <p><strong>Compatibilidad:</strong>{{ compatibilityUser(match.user,match.tags) }}%</p>
-                    <p><strong>Universidad:</strong>{{ getUniversity(match.user.universityId) }}</p>
+                    <p>
+                      <strong>Descripcion:</strong>{{ match.user.description }}
+                    </p>
+                    <p>
+                      <strong>Compatibilidad:</strong
+                      >{{ compatibilityUser(match.user, match.tags) }}%
+                    </p>
+                    <p>
+                      <strong>Universidad:</strong
+                      >{{ getUniversity(match.user.universityId) }}
+                    </p>
                     <p>
                       <strong>Tags:</strong>
                       <b-col cols="12" align-self="center">
@@ -58,10 +84,18 @@
                         </b-input-group>
                       </b-col>
                     </p>
-                    <b-button @click="sendMatch(match.user.id)" variant="danger" class="m-1">
+                    <b-button
+                      @click="sendMatch(match.user.id)"
+                      variant="danger"
+                      class="m-1"
+                    >
                       <b-icon-heart-fill
                     /></b-button>
-                    <b-button @click="omitMatch(match.user.id)" variant="info" class="m-1">
+                    <b-button
+                      @click="omitMatch(match.user.id)"
+                      variant="info"
+                      class="m-1"
+                    >
                       <b-icon-arrow-right
                     /></b-button>
                   </b-card-body>
@@ -122,24 +156,35 @@ export default {
       matches: [],
       careers: [],
       universities: [],
+      modalNewMatch: false,
+      newMatchUser: {
+        name: "",
+        lastName1: "",
+        lastName2: "",
+      },
     };
-  },mounted(){
-    fetch("/api/v1/userTags/usersForMatch/getUsersByCompatibility/"+this.$store.state.user.id)
+  },
+  mounted() {
+    fetch(
+      "/api/v1/userTags/usersForMatch/getUsersByCompatibility/" +
+        this.$store.state.user.id
+    )
       .then((response) => response.json())
       .then((data) => {
-        var list=data
-        list.sort(() => (Math.random() > .5) ? 1 : -1)
-        this.matchList = list;});
- 
-  
+        var list = data;
+        list.sort(() => (Math.random() > 0.5 ? 1 : -1));
+        this.matchList = list;
+      });
   },
   beforeMount() {
-    fetch("/api/v1/userTags/onlyTags/asStrings/byUserId/"+this.$store.state.user.id)
+    fetch(
+      "/api/v1/userTags/onlyTags/asStrings/byUserId/" +
+        this.$store.state.user.id
+    )
       .then((response) => response.json())
       .then((data) => {
-        this.tags = data
-
-      });   
+        this.tags = data;
+      });
     fetch("/api/v1/university")
       .then((response) => response.json())
       .then((data) => {
@@ -156,38 +201,66 @@ export default {
           text: career.name,
         }));
       });
-  } 
-  ,
+    fetch(
+      "/api/v1/userTags/usersForMatch/getUsersByCompatibility/" +
+        this.$store.state.user.id
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        var list = data;
+        list.sort(() => (Math.random() > 0.5 ? 1 : -1));
+        this.matchList = list;
+      });
+    fetch(
+      "/api/v1/userTags/onlyTags/asStrings/byUserId/" +
+        this.$store.state.user.id
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.tags = data;
+      });
+  },
   methods: {
-    getUniversity(id){
-      return this.universities.find(x=>x.value==id).text
+    getUniversity(id) {
+      return this.universities.find((x) => x.value == id).text;
     },
     omitMatch(id) {
-      this.matchList = this.matchList.filter(x=> x.user.id!=id)
+      this.matchList = this.matchList.filter((x) => x.user.id != id);
     },
-    async sendMatch(friend){
-      const response = await fetch("/api/v1/likedUsers",{
-          method:"POST",
-          headers: { "Content-Type": "application/json" },
-          body:JSON.stringify({user:{id:this.$store.state.user.id},likedUser:{id:friend}})});
-      if(response.status===200){
-        this.matchList = this.matchList.filter(x=> x.user.id!=friend)
-      }else{
+    async sendMatch(friend) {
+      const response = await fetch("/api/v1/likedUsers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user: { id: this.$store.state.user.id },
+          likedUser: { id: friend },
+        }),
+      });
+      if (response.status === 200) {
+        this.matchList = this.matchList.filter((x) => x.user.id != friend);
+        let data = await response.json();
+        if (data.user === null) {
+          // match it!
+          this.newMatchUser = data.likedUser;
+          this.modalNewMatch = true;
+          this.$store.dispatch("fetchChats", this.$store.state.user.id);
+        }
+      } else {
         alert("algo fallo");
       }
     },
-    compatibilityUser(user,Utags){
-        let compatibility=0
-        if(user.universityId===this.$store.state.user.universityId)
-          compatibility+=1
-        for(let element of Utags){
-            if(this.tags.find(x=> x===element)!==undefined)
-              compatibility+=1
-        }
-        let result= (compatibility/(this.tags.length+1))
-        result= result*100
-        return  result.toFixed(1) 
-    }
+    compatibilityUser(user, Utags) {
+      let compatibility = 0;
+      if (user.universityId === this.$store.state.user.universityId)
+        compatibility += 1;
+      for (let element of Utags) {
+        if (this.tags.find((x) => x === element) !== undefined)
+          compatibility += 1;
+      }
+      let result = compatibility / (this.tags.length + 1);
+      result = result * 100;
+      return result.toFixed(1);
+    },
   },
 };
 </script>

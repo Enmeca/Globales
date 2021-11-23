@@ -147,6 +147,7 @@ export default {
   created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
+    this.$store.commit("removeNotificationsMatch");
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);

@@ -127,8 +127,8 @@ export default {
 
     return {
       expanded: false,
-      cantMatchs: 0,
       cantForums: 0,
+      cantMatchs: 0,
     };
   },
   methods: {
