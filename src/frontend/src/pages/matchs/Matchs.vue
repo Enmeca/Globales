@@ -185,7 +185,8 @@ export default {
               compatibility+=1
         }
         let result= (compatibility/(this.tags.length+1))
-        return result*100
+        result= result*100
+        return  result.toFixed(1) 
     }
   },
 };
