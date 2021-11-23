@@ -11,6 +11,7 @@ export default new Vuex.Store({
         user: null,
         chats: [],
         stompClient: null,
+        notificationsMatch: 0,
     },
     getters: {
         isLoggedIn: state => state.user != null,

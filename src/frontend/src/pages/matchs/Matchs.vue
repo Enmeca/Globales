@@ -26,7 +26,6 @@
                         match.user.id
                       "
                     ></b-avatar>
-                    <<<<<<< Updated upstream
                     <p>
                       <strong>Descripcion:</strong>{{ match.user.description }}
                     </p>
@@ -34,7 +33,6 @@
                       <strong>Compatibilidad:</strong
                       >{{ compatibilityUser(match.user, match.tags) }}%
                     </p>
-                    =======
                     <p>
                       <strong>Descripcion:</strong>{{ match.user.description }}
                     </p>
@@ -46,7 +44,19 @@
                       <strong>Universidad:</strong
                       >{{ getUniversity(match.user.universityId) }}
                     </p>
-                    >>>>>>> Stashed changes
+                    >>>>>>> Stashed changes =======
+                    <p>
+                      <strong>Descripcion:</strong>{{ match.user.description }}
+                    </p>
+                    <p>
+                      <strong>Compatibilidad:</strong
+                      >{{ compatibilityUser(match.user, match.tags) }}%
+                    </p>
+                    <p>
+                      <strong>Universidad:</strong
+                      >{{ getUniversity(match.user.universityId) }}
+                    </p>
+                    >>>>>>> main
                     <p>
                       <strong>Tags:</strong>
                       <b-col cols="12" align-self="center">
@@ -162,6 +172,18 @@ export default {
         this.matchList = list;
       });
   },
+  mounted() {
+    fetch(
+      "/api/v1/userTags/usersForMatch/getUsersByCompatibility/" +
+        this.$store.state.user.id
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        var list = data;
+        list.sort(() => (Math.random() > 0.5 ? 1 : -1));
+        this.matchList = list;
+      });
+  },
   beforeMount() {
     fetch(
       "/api/v1/userTags/onlyTags/asStrings/byUserId/" +
@@ -245,7 +267,8 @@ export default {
           compatibility += 1;
       }
       let result = compatibility / (this.tags.length + 1);
-      return result * 100;
+      result = result * 100;
+      return result.toFixed(1);
     },
   },
 };
