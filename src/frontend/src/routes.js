@@ -9,6 +9,7 @@ import Chat from './pages/chats/Chats.vue'
 import Forums from './pages/forums/Forums.vue'
 import Forum from './pages/forums/Forum.vue'
 import Tutors from './pages/tutors/Tutors.vue'
+import Tutor from './pages/tutors/Tutor.vue'
 import Login from './pages/session/Login.vue'
 import Signup from './pages/session/Signup.vue'
 import Profile from './pages/profile/Profile.vue'
@@ -28,6 +29,7 @@ const router = new Router({
     { path: '/forums', component: Forums },
     { path: '/forums/:id', component: Forum },
     { path: '/tutors', component: Tutors },
+    { path: '/tutors/:id', component: Tutor },
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
     { path: '/profile', component: Profile },
