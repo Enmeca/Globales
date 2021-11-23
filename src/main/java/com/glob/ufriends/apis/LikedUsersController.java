@@ -50,6 +50,12 @@ public class LikedUsersController {
             newMatchedUsers.setUser(user);
             newMatchedUsers.setMatchedUser(likedUser);
             matchService.saveMatchedUsers(newMatchedUsers);
+
+            LikedUsers lu = service.saveLikedUsers(likedUsers);
+            LikedUsers lu2 = new LikedUsers();
+            lu2.setUser(null);
+            lu2.setLikedUser(lu.getLikedUser());
+            return lu2;
         } // Else return null maybe or a 400 status code maybe if
         // message that says that the user has already liked the other user is needed
 
