@@ -89,7 +89,7 @@ create table USER_TAGS(USER_UID varchar2(20) not null,
 						
 create table FORUM_TOPICS(ID number not null,
 						AUTHOR_ID varchar2(20) not null,
-						TITLE varchar2(50) not null,
+						TITLE varchar2(100) not null,
 						DESCRIPTION varchar2(500) not null,
 						CREATION_DATE date,
 						COMMENTS_QUANTITY number not null,
@@ -294,7 +294,7 @@ create or replace trigger CHAT_MESSAGES_DATE_TRIGGER
  END;
  / 
 
---=================================================
+--==============================================================================================================
 
 -- INSERTS
 
@@ -302,98 +302,220 @@ PROMPT ========================================
 PROMPT INSERTS INTO TABLES TO HAVE INITIAL DATA 
 PROMPT ======================================== 
 
+--CAREERS
 
-insert into CAREERS values ('ING-SIS', 'Ingenieria de Sistemas');
 insert into CAREERS values ('ADM', 'Administracion de Empresas');
-insert into CAREERS values ('MECTR', 'Mecatronica');
+insert into CAREERS values ('ARQ', 'Arquitectura');
 insert into CAREERS values ('BIO', 'Biologia');
-insert into CAREERS values ('VET', 'Veterinaria');
 insert into CAREERS values ('CMOVH', 'C. Movimiento Humano');
 insert into CAREERS values ('DER', 'Derecho');
 insert into CAREERS values ('ECON', 'Economia');
+insert into CAREERS values ('HIS', 'Historia');
 insert into CAREERS values ('ING-IND', 'Ingenieria Industrial');
+insert into CAREERS values ('ING-SIS', 'Ingenieria de Sistemas');
+insert into CAREERS values ('MECTR', 'Mecatronica');
+insert into CAREERS values ('MED', 'Medicina y Cirugia');
+insert into CAREERS values ('RELINT', 'Relaciones Internacionales');
+insert into CAREERS values ('VET', 'Veterinaria');
 
-insert into UNIVERSITIES values ('UCR', 'Universidad de Costa Rica');
-insert into UNIVERSITIES values ('UNA', 'Universidad Nacional de Costa Rica');
+--==============================================================================================================
+
+--UNIVERSITIES
 insert into UNIVERSITIES values ('TEC', 'Instituto Tecnologico de Costa Rica');
+insert into UNIVERSITIES values ('UACA', 'Universidad Autonoma de Centro America');
+insert into UNIVERSITIES values ('UCR', 'Universidad de Costa Rica');
+insert into UNIVERSITIES values ('ULATINA', 'Universidad Latina de Costa Rica');
+insert into UNIVERSITIES values ('UNA', 'Universidad Nacional de Costa Rica');
 insert into UNIVERSITIES values ('UNED', 'Universidad Estatal a Distancia');
 
-insert into TAGS values ('Python');
-insert into TAGS values ('Deportes');
-insert into TAGS values ('Videojuegos');
-insert into TAGS values ('Fotografia');
-insert into TAGS values ('Cine');
-insert into TAGS values ('Teatro');
-insert into TAGS values ('Tecnologia');
-insert into TAGS values ('Naturaleza');
-insert into TAGS values ('Futbol');
+--==============================================================================================================
+
+--TAGS
+insert into TAGS values ('Animales');
+insert into TAGS values ('Artes Marciales');
+insert into TAGS values ('Ajedrez');
+insert into TAGS values ('Baile');
 insert into TAGS values ('Basketbol');
-insert into TAGS values ('Jardineria');
-insert into TAGS values ('Cocina');
-insert into TAGS values ('Series animadas');
-insert into TAGS values ('Comics');
 insert into TAGS values ('Boxeo');
-insert into TAGS values ('Lectura');
-insert into TAGS values ('Musica');
+insert into TAGS values ('Canto');
+insert into TAGS values ('Ciclismo');
+insert into TAGS values ('Cine');
+insert into TAGS values ('Cocina');
+insert into TAGS values ('Comics');
+insert into TAGS values ('Criptomonedas');
+insert into TAGS values ('Deportes');
+insert into TAGS values ('Dibujo');
+insert into TAGS values ('Escritura');
+insert into TAGS values ('Fotografia');
+insert into TAGS values ('Futbol');
 insert into TAGS values ('Historia');
 insert into TAGS values ('Idiomas');
-insert into TAGS values ('Ciclismo');
+insert into TAGS values ('Jardineria');
+insert into TAGS values ('Lectura');
+insert into TAGS values ('Musica');
 insert into TAGS values ('Natacion');
-insert into TAGS values ('Canto');
-insert into TAGS values ('Baile');
-insert into TAGS values ('Dibujo');
-insert into TAGS values ('Viajar');
+insert into TAGS values ('Naturaleza');
+insert into TAGS values ('Patinar');
 insert into TAGS values ('Ping-pong');
-insert into TAGS values ('Animales');
--- Hay que meter un montón de tags despues
+insert into TAGS values ('Series animadas');
+insert into TAGS values ('Teatro');
+insert into TAGS values ('Tecnologia');
+insert into TAGS values ('Viajar');
+insert into TAGS values ('Videojuegos');
+insert into TAGS values ('Yoga');
 
-insert into USERS values ('11111111','ING-SIS','UNA','admin@gmail','123','Hector','Perez','Arias', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
-				'Administrador del sistema', null, 1, 0, 1);
+
+--==============================================================================================================
+
+--USERS
+
+
+-- THIS NEXT ONE IS THE ADMIN
+insert into USERS values ('11111111','ING-SIS','UNA','admin-hector-p@gmail.com','123','Hector','Perez','Arias', TO_DATE('1988/03/24', 'yyyy/mm/dd'),
+				'Administrador Principal del Sistema UFriends', null, 1, 0, 1);
+
+
+
+-- THE NEXT ONES ARE TUTORS			
+
+insert into USERS values ('212283905','ADM','TEC','mirAS-tutor@gmail.com','123','Miranda','Azofeifa','Solano', TO_DATE('2001/10/04', 'yyyy/mm/dd'),
+				'Estudiante de Administracion de Empresas en el TEC. Siempre feliz de ayudar', null, 1, 1, 0);
 				
-insert into USERS values ('117780905','ING-SIS','UNA','java6464@gmail','123','Javier','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
+insert into USERS values ('613253965','MED','UCR','tutor2PabloFC@gmail.com','123','Pablo','Ferrer','Castro', TO_DATE('1999/02/14', 'yyyy/mm/dd'),
+				'Fan de la NBA. Tutor de varios cursos de la carrera de medicina.', null, 1, 1, 0);
+				
+insert into USERS values ('542937563','ECON','UNA','tutGabriel99@gmail.com','123','Gabriel','Fernandez','Sanchez', TO_DATE('2002/04/25', 'yyyy/mm/dd'),
+				'Inversionista en Criptomonedas. Tutor de varios cursos de Economia.', null, 1, 1, 0);
+
+
+
+-- THE NEXT ONES ARE NORMAL USERS
+
+				
+insert into USERS values ('117780905','ING-SIS','UNA','alb3232@gmail.com','123','Alberto','Achio','Badilla', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
 				'Estudiante de Ingenieria de Sistemas en la UNA. Actualmente en el ultimo semestre', null, 1, 0, 0);
 				
-insert into USERS values ('615283905','ADM','TEC','javo64@gmail','123','Alberto','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
-				'Deprecado', null, 1, 0, 0);
+insert into USERS values ('615283905','ADM','UACA','jovs64@gmail.com','123','Joselyn','Vargas','Salazar', TO_DATE('2002/06/08', 'yyyy/mm/dd'),
+				'Deseando que se termine el semestre para tener vacaciones.', null, 1, 0, 0);
+				
+insert into USERS values ('145678910','ARQ','ULATINA','dan23@gmail.com','123','Daniela','Lobo','Lara', TO_DATE('2001/11/15', 'yyyy/mm/dd'),
+				'Me gusta leer y escribir poesia, me encanta conocer gente nueva.', null, 1, 0, 0);
+				
 
-insert into USERS values ('212283905','ADM','TEC','tutor1@gmail','123','Gerardo','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
-				'Deprecado', null, 1, 1, 0);
+--==============================================================================================================
 				
-insert into USERS values ('613253965','ADM','TEC','tutor2@gmail','123','Pablo','Amador','Delgado', TO_DATE('2000/05/30', 'yyyy/mm/dd'),
-				'Deprecado', null, 1, 1, 0);
-				
-insert into USERS values ('2222222','ADM','TEC','tutor19@gmail','123','Gabriel','Fernandez','Sanchez', TO_DATE('2002/04/25', 'yyyy/mm/dd'),
-				'Sin mucho que decir', null, 1, 1, 0);
+-- USER TAGS
 
-insert into USERS values ('3333333','ADM','UNA','dan23@gmail','123','Daniel','Lobo','Lara', TO_DATE('2001/11/15', 'yyyy/mm/dd'),
-				'Un poco mas que decir', null, 1, 1, 0);
+-- TAGS FOR USER '11111111'	Hector Perez - Admin
+insert into USER_TAGS values ('11111111','Deportes');
+insert into USER_TAGS values ('11111111','Viajar');
+insert into USER_TAGS values ('11111111','Cine');	
+
+
+-- TAGS FOR USER '212283905' Miranda Azofeifa - Tutor
+insert into USER_TAGS values ('212283905','Naturaleza');
+insert into USER_TAGS values ('212283905','Teatro');
+insert into USER_TAGS values ('212283905','Ping-pong');	
+insert into USER_TAGS values ('212283905','Yoga');	
+insert into USER_TAGS values ('212283905','Viajar');	
+insert into USER_TAGS values ('212283905','Cine');	
+
+
+-- TAGS FOR USER '613253965' Pablo Ferrer - Tutor
+insert into USER_TAGS values ('613253965','Ciclismo');	
+insert into USER_TAGS values ('613253965','Naturaleza');	
+insert into USER_TAGS values ('613253965','Musica');	
+insert into USER_TAGS values ('613253965','Boxeo');	
+insert into USER_TAGS values ('613253965','Basketbol');	
+insert into USER_TAGS values ('613253965','Cine');	
+insert into USER_TAGS values ('613253965','Viajar');	
+
+
+-- TAGS FOR USER '542937563' Gabriel Fernandez - Tutor
+insert into USER_TAGS values ('542937563','Natacion');	
+insert into USER_TAGS values ('542937563','Lectura');	
+insert into USER_TAGS values ('542937563','Musica');	
+insert into USER_TAGS values ('542937563','Criptomonedas');		
+insert into USER_TAGS values ('542937563','Teatro');	
+insert into USER_TAGS values ('542937563','Cine');		
 				
--- PARA PROBAR UN METODO DEL API DE TUTOR REVIEWS
---insert into TUTOR_REVIEWS values ('615283905','212283905',5,'Sin comentarios');
---insert into TUTOR_REVIEWS values ('117780905','212283905',4,'Sin comentarios');
---insert into TUTOR_REVIEWS values ('615283905','613253965',5,'Sin comentarios');
---insert into TUTOR_REVIEWS values ('117780905','613253965',2,'Sin comentarios');
-				
+							
+-- TAGS FOR USER '117780905' Alberto Achio - Normal User
 insert into USER_TAGS values ('117780905','Videojuegos');
 insert into USER_TAGS values ('117780905','Idiomas');
-insert into USER_TAGS values ('117780905','Cine');		
-
+insert into USER_TAGS values ('117780905','Dibujo');
+insert into USER_TAGS values ('117780905','Cine');	
+insert into USER_TAGS values ('117780905','Cocina');	
 insert into USER_TAGS values ('117780905','Natacion');
 insert into USER_TAGS values ('117780905','Series animadas');
-insert into USER_TAGS values ('117780905','Ping-pong');		
+insert into USER_TAGS values ('117780905','Ping-pong');	
+insert into USER_TAGS values ('117780905','Viajar');	
 
 
-insert into USER_TAGS values ('212283905','Series animadas');
-insert into USER_TAGS values ('212283905','Ping-pong');	
+-- TAGS FOR USER '615283905' Joselyn Vargas - Normal User
+insert into USER_TAGS values ('615283905','Videojuegos');
+insert into USER_TAGS values ('615283905','Idiomas');
+insert into USER_TAGS values ('615283905','Cine');	
+insert into USER_TAGS values ('615283905','Naturaleza');	
+insert into USER_TAGS values ('615283905','Animales');	
+insert into USER_TAGS values ('615283905','Cocina');
+insert into USER_TAGS values ('615283905','Viajar');
+insert into USER_TAGS values ('615283905','Fotografia');
+insert into USER_TAGS values ('615283905','Canto');
+insert into USER_TAGS values ('615283905','Jardineria');
 
-insert into USER_TAGS values ('613253965','Videojuegos');
-insert into USER_TAGS values ('613253965','Idiomas');
-insert into USER_TAGS values ('613253965','Cine');	
+-- TAGS FOR USER '145678910' Daniela Lobo - Tutor
+insert into USER_TAGS values ('145678910','Escritura');	
+insert into USER_TAGS values ('145678910','Naturaleza');	
+insert into USER_TAGS values ('145678910','Lectura');	
+insert into USER_TAGS values ('145678910','Historia');	
+insert into USER_TAGS values ('145678910','Baile');	
+insert into USER_TAGS values ('145678910','Cine');	
+insert into USER_TAGS values ('145678910','Viajar');	
 
--- El siguiente insert es para probar el trigger de actualizar el campo de # de comentarios de un foro
-insert into FORUM_TOPICS values (SEQ_ID_FORUM_TOPICS.nextval,'117780905','TEST 1','TEST FORUM TOPIC TO TRY THINGS',null,0,0);
+--==============================================================================================================
+
+-- FORUM TOPICS 
+insert into FORUM_TOPICS values (SEQ_ID_FORUM_TOPICS.nextval,'117780905','UNA - Busco gente para proyecto 2 de Progra III','Buenas gente, ando buscando miembros de grupo para el proyecto 2 de Progra III. Favor los interesados dejar un comentario',null,0,0);
+insert into FORUM_TOPICS values (SEQ_ID_FORUM_TOPICS.nextval,'542937563','Consideran que se deberia regresar a la presencialidad el siguiente semestre ?','En mi opinion creo que no, dado que aun siguen habiendo incrementos de los casos. Pero quisiera conocer mas opiniones',null,0,0);
+insert into FORUM_TOPICS values (SEQ_ID_FORUM_TOPICS.nextval,'145678910','ULATINA - Noches de cuentos y poesia','Hola a todos, queria comentar por esta red que en la ULATINA se van a estar haciendo noches de cuento y poesia todos los jueves a las 6 pm en el aula 203 del Edificio 1. Se daran snacks a aquellos participantes frecuentes !',null,0,0);
 				
 				
+--==============================================================================================================
 				
+-- FORUM COMMENTS
+
+-- FORUM TOPIC 1 UNA - Busco gente ...
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,1,'11111111','Hola Alberto, yo estoy interesado. Ambos estamos en el mismo grupo con el profesor Enrique G.', null, 0);
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,1,'542937563','Yo no estoy interesado pero conozco gente que ocupa grupo. Aun queda campo ?', null, 0);
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,1,'117780905','Aun queda campo en el grupo, hacen falta 2 personas', null, 0);
+
+
+-- FORUM TOPIC 2 Consideran que..
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,2,'613253965','Considero que si se deberia volver a la presencialidad, hay que empezar a volver a la normalidad en algun momento y mejor desde ya', null, 0);
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,2,'615283905','Es un tema delicado, yo en lo personal prefiero las clases remotas. Me ahorro tener que viajar y tengo mas tiempo.', null, 1);
+
+
+-- FORUM TOPIC 3 ULATINA - Noches de ....
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,3,'212283905','Que bonito ! Pueden asistir personas que no sean de la universidad ?', null, 0);
+insert into FORUM_COMMENTS values (SEQ_ID_FORUM_COMMENTS.nextval,3,'542937563','Interesado en ganar Bitcoins ? En la siguiente pagina puede aprender todos los secretos para ganar bitcoins: www.estafaObvia.com', null, 1);
+
+
+--==============================================================================================================
+
+-- TUTOR Reviews
+insert into TUTOR_REVIEWS values ('615283905','212283905',4,'Muy buena tutora, siempre fue amable y me ayudo a entender la materia');
+insert into TUTOR_REVIEWS values ('117780905','212283905',5,'Excelente tutora, los resumenes que hace son los mejores');
+
+
+insert into TUTOR_REVIEWS values ('615283905','613253965',4,'Me ayudo mucho');
+insert into TUTOR_REVIEWS values ('145678910','613253965',4,'Sabe bastante de los temas y hace practicas');
+
+
+insert into TUTOR_REVIEWS values ('117780905','542937563',3,'Buena persona pero le suele costar explicar ideas complejas');
+insert into TUTOR_REVIEWS values ('145678910','542937563',3,'Muchas veces no se econtraba disponible para ayudar');
+								
 
 commit;
+
+-- THE TWO MOST COMPATIBLE USERS ARE '117780905' Alberto Achio and '615283905' Joselyn Vargas
