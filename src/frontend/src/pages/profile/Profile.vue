@@ -417,8 +417,8 @@ export default {
             // Do not send it with 'data:image/*;base64,'
             base64Photo: this.user_photo.base64Photo.split(",")[1],
           };
-          await fetch("api/v1/userPhoto/updatePhoto", {
-            method: "PUT",
+          await fetch("api/v1/userPhoto", {
+            method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user_photo),
           });

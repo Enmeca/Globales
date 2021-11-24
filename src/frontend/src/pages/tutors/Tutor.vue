@@ -80,7 +80,7 @@
         </b-row>
         <b-alert :show="registerSuccess" variant="success" fade dismissible>
           <h4>
-            Calificacion publicada
+            Calificación realizada
             <b-icon-emoji-laughing scale="1" />
           </h4>
         </b-alert>

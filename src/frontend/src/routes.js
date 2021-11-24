@@ -40,7 +40,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const adminAuthRequiredPages = ['/administrator', '/admin']
-  const authRequiredPages = ['/matchs', '/chats', '/forums', '/tutors', '/profile'];
+  const authRequiredPages = ['/administrator', '/admin', '/matchs', '/chats', '/forums', '/forums/:id', '/tutors', '/tutors/:id', '/profile'];
   const hideScrollBarPages = ['/chats'];
   const loggedIn = store.getters.isLoggedIn;
   document.body.style.overflowY = (hideScrollBarPages.includes(to.path)) ? "hidden" : "auto";
