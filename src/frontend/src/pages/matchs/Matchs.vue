@@ -40,7 +40,7 @@
                       size="18rem"
                       :text="match.user.name[0] + match.user.lastName1[0]"
                       :src="
-                        'http://localhost:8080/api/v1/userPhoto/photo/' +
+                        'http://localhost:9191/api/v1/userPhoto/photo/' +
                         match.user.id
                       "
                     ></b-avatar>

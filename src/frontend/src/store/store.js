@@ -43,7 +43,11 @@ export default new Vuex.Store({
             let chats = await response.json();
             for (let chat of chats) {
                 const response = await fetch("/api/v1/chatMessages/chat/" + chat.id);
-                chat.messages = await response.json();
+                let messages = await response.json();
+                messages.sort(function (a, b) {
+                    return new Date(b.dateSent) - new Date(a.dateSent);
+                });
+                chat.messages = messages;
             }
             commit("saveChats", chats);
         },
